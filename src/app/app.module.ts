@@ -1,6 +1,8 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 
+import 'hammerjs';
+
 import {AppComponent} from './app.component';
 import {HomeComponent} from './home/home.component';
 import {RouterModule, Routes} from "@angular/router";
