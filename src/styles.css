@@ -1,1 +1,8 @@
-body {background-color: #EEEEEE}
+body {
+    background-color: #EEEEEE;
+}
+
+mat-card {
+    background-color: #FFFFFF;
+    margin: 5px;
+}
