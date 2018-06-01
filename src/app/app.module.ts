@@ -6,6 +6,7 @@ import 'hammerjs';
 import {AppComponent} from './app.component';
 import {HomeComponent} from './home/home.component';
 import {RouterModule, Routes} from "@angular/router";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 const routes: Routes = [ // Array of all routes - modify when adding routes
     {path: '**', component: HomeComponent} // Default route
@@ -19,6 +20,7 @@ const routes: Routes = [ // Array of all routes - modify when adding routes
     ],
     imports: [
         BrowserModule,
+        BrowserAnimationsModule,
         RouterModule.forRoot(routes)
     ],
     providers: [],
