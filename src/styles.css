@@ -6,3 +6,8 @@ mat-card {
     background-color: #FFFFFF;
     margin: 5px;
 }
+
+mat-expansion-panel {
+    background-color: #FFFFFF;
+    margin: 5px !important;
+}

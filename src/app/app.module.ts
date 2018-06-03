@@ -8,7 +8,16 @@ import {HomeComponent} from './home/home.component';
 import {RouterModule, Routes} from "@angular/router";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {FormsModule} from "@angular/forms";
-import {MatCardModule, MatFormFieldModule, MatIconModule, MatSelectModule} from "@angular/material";
+import {
+    MatButtonModule,
+    MatCardModule,
+    MatExpansionModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatSelectModule,
+    MatTabsModule
+} from "@angular/material";
+import {HttpClientModule} from "@angular/common/http";
 
 const routes: Routes = [ // Array of all routes - modify when adding routes
     {path: '**', component: HomeComponent} // Default route
@@ -23,11 +32,15 @@ const routes: Routes = [ // Array of all routes - modify when adding routes
     imports: [
         BrowserModule,
         BrowserAnimationsModule,
+        HttpClientModule,
         FormsModule,
         MatCardModule,
         MatFormFieldModule,
         MatIconModule,
         MatSelectModule,
+        MatExpansionModule,
+        MatTabsModule,
+        MatButtonModule,
         RouterModule.forRoot(routes)
     ],
     providers: [],

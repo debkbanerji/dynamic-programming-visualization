@@ -1,0 +1,38 @@
+/*DP Table*/
+
+.dp-table {
+    width: 90%;
+}
+
+.dp-tr {
+    height: 5vw;
+}
+
+.dp-td {
+    width: 5vw;
+    height: 5vw;
+    padding: 0;
+    border: 1px solid #AAAAAA;
+    text-align: center;
+}
+
+.dp-td:after {
+}
+
+.dp-table-data {
+    position: absolute;
+    /*top: 0;*/
+    /*bottom: 0;*/
+    /*left: 0;*/
+    /*right: 0;*/
+    height: 100%;
+}
+
+.test-case-expected-label {
+    margin-top: 5px;
+    font-weight: 600;
+}
+
+.transpose-button {
+    margin: 5px;
+}
