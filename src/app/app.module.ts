@@ -14,6 +14,7 @@ import {
     MatExpansionModule,
     MatFormFieldModule,
     MatIconModule,
+    MatInputModule,
     MatSelectModule,
     MatTabsModule
 } from "@angular/material";
@@ -36,6 +37,7 @@ const routes: Routes = [ // Array of all routes - modify when adding routes
         FormsModule,
         MatCardModule,
         MatFormFieldModule,
+        MatInputModule,
         MatIconModule,
         MatSelectModule,
         MatExpansionModule,

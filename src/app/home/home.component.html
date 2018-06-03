@@ -3,13 +3,36 @@
         <mat-card>
             <mat-card-header>
             </mat-card-header>
+            <b>Solution</b>
             <mat-card-content>
-                <mat-form-field class="full-width">
-                    <mat-select [(ngModel)]="tableSize">
-                        <mat-option value="1d">1 Dimensional Table</mat-option>
-                        <mat-option value="2d">2 Dimensional Table</mat-option>
+                <mat-form-field>
+                    <label for="table-shape-select">Table Shape</label>
+                    <mat-select [(ngModel)]="tableShape" id="table-shape-select">
+                        <mat-option value="1d">1 Dimensional</mat-option>
+                        <mat-option value="2d">2 Dimensional</mat-option>
                     </mat-select>
                 </mat-form-field>
+                <mat-form-field>
+                    <label for="table-data-type-select">Data Type</label>
+                    <mat-select [(ngModel)]="tableDataType" id="table-data-type-select">
+                        <mat-option value="number">Numbers</mat-option>
+                        <mat-option value="boolean">Booleans</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <form>
+                    <mat-form-field *ngIf="tableShape === '1d'">
+                        <input matInput placeholder="Table Size"
+                               [(ngModel)]="tableDimension1" name="tableDimension1">
+                    </mat-form-field>
+                    <mat-form-field *ngIf="tableShape === '2d'">
+                        <input matInput placeholder="Number of Rows"
+                               [(ngModel)]="tableDimension1" name="tableDimension1">
+                    </mat-form-field>
+                    <mat-form-field *ngIf="tableShape === '2d'">
+                        <input matInput placeholder="Number of Columns"
+                               [(ngModel)]="tableDimension2" name="tableDimension2">
+                    </mat-form-field>
+                </form>
             </mat-card-content>
         </mat-card>
     </div>
@@ -31,32 +54,32 @@
                     <!--<mat-tab label="Custom test case">-->
                     <!--&lt;!&ndash;TODO: Implement custom input&ndash;&gt;-->
                     <!--</mat-tab>-->
-                    <mat-tab *ngFor="let testCase of testCases" label="{{testCase['name']}}">
+                    <mat-tab *ngFor="let testCase of testCases; let testCaseIndex = index" label="{{testCase['name']}}">
                         <mat-expansion-panel [expanded]="true">
                             <mat-expansion-panel-header>
                                 <mat-panel-title class="slightly-bold-label">Input Values</mat-panel-title>
                             </mat-expansion-panel-header>
                             <div *ngFor="let input of objectKeys(problem['input'])">
                                 <span class="slightly-bold-label">{{input}}:</span>
-                                <span *ngIf="problem['input'][input]['type'] !== 'array'">
-                                    {{getDisplayedValue(testCase['input'][input], problem['input'][input]['type'])}}
+                                <span *ngIf="problem['input'][input]['type'] !== 'array'"
+                                      [innerHTML]="' ' + getDisplayedValue(testCase['input'][input], problem['input'][input]['type'])">
                                 </span>
                                 <div *ngIf="problem['input'][input]['type'] === 'array'">
-                                    <table class="dp-table" *ngIf="problem['input'][input]['dimensions'] === '1d'">
+                                    <table class="dp-table" *ngIf="problem['input'][input]['shape'] === '1d'">
                                         <tr class="dp-tr">
                                             <td class="dp-td" *ngFor="let i of range(testCase['input'][input].length);">
-                                            <span class="dp-table-cell">
-                                                {{getDisplayedValue(testCase['input'][input][i], problem['input'][input]['entry-type'])}}
+                                            <span class="dp-table-cell"
+                                                  [innerHTML]="getDisplayedValue(testCase['input'][input][i], problem['input'][input]['entry-type'])">
                                             </span>
                                             </td>
                                         </tr>
                                     </table>
-                                    <table class="dp-table" *ngIf="problem['input'][input]['dimensions'] === '2d'">
+                                    <table class="dp-table" *ngIf="problem['input'][input]['shape'] === '2d'">
                                         <tr class="dp-tr" *ngFor="let i of range(testCase['input'][input].length);">
                                             <td class="dp-td"
                                                 *ngFor="let j of range(testCase['input'][input][0].length);">
-                                            <span class="dp-table-cell">
-                                                {{getDisplayedValue(testCase['input'][input][i][j], problem['input'][input]['entry-type'])}}
+                                            <span class="dp-table-cell"
+                                                  [innerHTML]="getDisplayedValue(testCase['input'][input][i][j], problem['input'][input]['entry-type'])">
                                             </span>
                                             </td>
                                         </tr>
@@ -69,37 +92,47 @@
                                 <mat-panel-title class="slightly-bold-label">Expected Results</mat-panel-title>
                             </mat-expansion-panel-header>
                             <span class="slightly-bold-label">Table</span>
-                            <button mat-button class="transpose-button" *ngIf="solution['table-size'] === '2d'"
+                            <button mat-button class="transpose-button" *ngIf="solution['table-shape'] === '2d'"
                                     (click)="transposeTable()">
                                 Transpose
                             </button>
-                            <table class="dp-table" *ngIf="solution['table-size'] === '2d' && !transpose2dTable">
+                            <table class="dp-table" *ngIf="solution['table-shape'] === '2d' && !transpose2dTable">
                                 <tr class="dp-tr" *ngFor="let i of range(testCase['expected-table'].length);">
                                     <td class="dp-td" *ngFor="let j of range(testCase['expected-table'][0].length);">
-                                    <span class="dp-table-cell">
-                                        {{getDisplayedValue(testCase['expected-table'][i][j], solution['table-data-type'])}}
+                                    <span class="dp-table-cell"
+                                          [innerHTML]="getDisplayedValue(testCase['expected-table'][i][j], solution['table-data-type'])">
                                     </span>
                                     </td>
                                 </tr>
                             </table>
-                            <table class="dp-table" *ngIf="solution['table-size'] === '2d' && transpose2dTable">
+                            <table class="dp-table" *ngIf="solution['table-shape'] === '2d' && transpose2dTable">
                                 <tr class="dp-tr" *ngFor="let i of range(testCase['expected-table'][0].length);">
                                     <td class="dp-td" *ngFor="let j of range(testCase['expected-table'].length);">
-                                    <span class="dp-table-cell">
-                                        {{getDisplayedValue(testCase['expected-table'][j][i], solution['table-data-type'])}}
+                                    <span class="dp-table-cell"
+                                          [innerHTML]="getDisplayedValue(testCase['expected-table'][j][i], solution['table-data-type'])">
                                     </span>
                                     </td>
                                 </tr>
                             </table>
-                            <table class="dp-table" *ngIf="solution['table-size'] === '1d'">
+                            <table class="dp-table" *ngIf="solution['table-shape'] === '1d'">
                                 <tr class="dp-tr">
                                     <td class="dp-td" *ngFor="let i of range(testCase['expected-table'].length);">
-                                    <span class="dp-table-cell">
-                                        {{getDisplayedValue(testCase['expected-table'][i], solution['table-data-type'])}}
+                                    <span class="dp-table-cell"
+                                          [innerHTML]="getDisplayedValue(testCase['expected-table'][i], solution['table-data-type'])">
                                     </span>
                                     </td>
                                 </tr>
                             </table>
+                            <br>
+                            <span class="slightly-bold-label">Final Answer</span>
+                            <span
+                                [innerHTML]="' ' + getDisplayedValue(testCase['expected-result'], problem['result-type'])">
+                                </span>
+                        </mat-expansion-panel>
+                        <mat-expansion-panel *ngIf="testResults[testCaseIndex]">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title class="slightly-bold-label">Test Results</mat-panel-title>
+                            </mat-expansion-panel-header>
                         </mat-expansion-panel>
                     </mat-tab>
                 </mat-tab-group>

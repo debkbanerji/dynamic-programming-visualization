@@ -8,3 +8,18 @@ $app-warn:    mat-palette($mat-red);
 $app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
 
 @include angular-material-theme($app-theme);
+
+//$primary: mat-palette($mat-deep-purple);
+//$accent:  mat-palette($mat-amber, A200, A100, A400);
+//
+//$theme: mat-light-theme($primary, $accent);
+//
+//@include angular-material-theme($theme);
+//
+//$dark-primary: mat-palette($mat-pink, 700, 500, 900);
+//$dark-accent:  mat-palette($mat-blue-grey, A200, A100, A400);
+//$dark-warn:    mat-palette($mat-deep-orange);
+//
+//$dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+//
+//@include angular-material-theme($dark-theme);
