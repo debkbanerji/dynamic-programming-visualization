@@ -1,3 +1,11 @@
+/*#editor-container {*/
+    /*padding-right: 0;*/
+/*}*/
+
+/*#input-and-table-container {*/
+    /*padding-left: 0;*/
+/*}*/
+
 /*DP Table*/
 
 .dp-table {
@@ -28,8 +36,7 @@
     height: 100%;
 }
 
-.test-case-expected-label {
-    margin-top: 5px;
+.slightly-bold-label {
     font-weight: 600;
 }
 

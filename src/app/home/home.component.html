@@ -13,11 +13,11 @@
             </mat-card-content>
         </mat-card>
     </div>
-    <div id="input-and-table-container" class="col-xs-12 col-md-7">
-        <mat-expansion-panel [expanded]="true" *ngIf="problemDefined">
+    <div id="input-and-table-container" class="col-xs-12 col-md-7" *ngIf="problemDefined">
+        <mat-expansion-panel [expanded]="true">
             <mat-expansion-panel-header>
                 <mat-panel-title>
-                    {{problem['name']}}
+                    <b>{{problem['name']}}</b>
                 </mat-panel-title>
                 <!--<mat-panel-description>-->
                 <!--{{problem['name']}}-->
@@ -29,42 +29,78 @@
             <mat-card-content>
                 <mat-tab-group id="test-case-group">
                     <!--<mat-tab label="Custom test case">-->
-                    <!--&lt;!&ndash;TODO: Implement custom inputs&ndash;&gt;-->
+                    <!--&lt;!&ndash;TODO: Implement custom input&ndash;&gt;-->
                     <!--</mat-tab>-->
                     <mat-tab *ngFor="let testCase of testCases" label="{{testCase['name']}}">
-                        <br>
-                        <span class="test-case-expected-label">Expected Table</span>
-                        <button mat-button class="transpose-button" *ngIf="solution['table-size'] === '2d'"
-                                (click)="transposeTable()">
-                            Transpose
-                        </button>
-                        <table class="dp-table" *ngIf="solution['table-size'] === '2d' && !transpose2dTable">
-                            <tr class="dp-tr" *ngFor="let i of range(testCase['expected-table'].length);">
-                                <td class="dp-td" *ngFor="let j of range(testCase['expected-table'][0].length);">
+                        <mat-expansion-panel [expanded]="true">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title class="slightly-bold-label">Input Values</mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <div *ngFor="let input of objectKeys(problem['input'])">
+                                <span class="slightly-bold-label">{{input}}:</span>
+                                <span *ngIf="problem['input'][input]['type'] !== 'array'">
+                                    {{getDisplayedValue(testCase['input'][input], problem['input'][input]['type'])}}
+                                </span>
+                                <div *ngIf="problem['input'][input]['type'] === 'array'">
+                                    <table class="dp-table" *ngIf="problem['input'][input]['dimensions'] === '1d'">
+                                        <tr class="dp-tr">
+                                            <td class="dp-td" *ngFor="let i of range(testCase['input'][input].length);">
+                                            <span class="dp-table-cell">
+                                                {{getDisplayedValue(testCase['input'][input][i], problem['input'][input]['entry-type'])}}
+                                            </span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table class="dp-table" *ngIf="problem['input'][input]['dimensions'] === '2d'">
+                                        <tr class="dp-tr" *ngFor="let i of range(testCase['input'][input].length);">
+                                            <td class="dp-td"
+                                                *ngFor="let j of range(testCase['input'][input][0].length);">
+                                            <span class="dp-table-cell">
+                                                {{getDisplayedValue(testCase['input'][input][i][j], problem['input'][input]['entry-type'])}}
+                                            </span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </mat-expansion-panel>
+                        <mat-expansion-panel>
+                            <mat-expansion-panel-header>
+                                <mat-panel-title class="slightly-bold-label">Expected Results</mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <span class="slightly-bold-label">Table</span>
+                            <button mat-button class="transpose-button" *ngIf="solution['table-size'] === '2d'"
+                                    (click)="transposeTable()">
+                                Transpose
+                            </button>
+                            <table class="dp-table" *ngIf="solution['table-size'] === '2d' && !transpose2dTable">
+                                <tr class="dp-tr" *ngFor="let i of range(testCase['expected-table'].length);">
+                                    <td class="dp-td" *ngFor="let j of range(testCase['expected-table'][0].length);">
                                     <span class="dp-table-cell">
-                                        {{testCase['expected-table'][i][j]}}
+                                        {{getDisplayedValue(testCase['expected-table'][i][j], solution['table-data-type'])}}
                                     </span>
-                                </td>
-                            </tr>
-                        </table>
-                        <table class="dp-table" *ngIf="solution['table-size'] === '2d' && transpose2dTable">
-                            <tr class="dp-tr" *ngFor="let i of range(testCase['expected-table'][0].length);">
-                                <td class="dp-td" *ngFor="let j of range(testCase['expected-table'].length);">
+                                    </td>
+                                </tr>
+                            </table>
+                            <table class="dp-table" *ngIf="solution['table-size'] === '2d' && transpose2dTable">
+                                <tr class="dp-tr" *ngFor="let i of range(testCase['expected-table'][0].length);">
+                                    <td class="dp-td" *ngFor="let j of range(testCase['expected-table'].length);">
                                     <span class="dp-table-cell">
-                                        {{testCase['expected-table'][j][i]}}
+                                        {{getDisplayedValue(testCase['expected-table'][j][i], solution['table-data-type'])}}
                                     </span>
-                                </td>
-                            </tr>
-                        </table>
-                        <table class="dp-table" *ngIf="solution['table-size'] === '1d'">
-                            <tr class="dp-tr">
-                                <td class="dp-td" *ngFor="let i of range(testCase['expected-table'].length);">
+                                    </td>
+                                </tr>
+                            </table>
+                            <table class="dp-table" *ngIf="solution['table-size'] === '1d'">
+                                <tr class="dp-tr">
+                                    <td class="dp-td" *ngFor="let i of range(testCase['expected-table'].length);">
                                     <span class="dp-table-cell">
-                                        {{testCase['expected-table'][i]}}
+                                        {{getDisplayedValue(testCase['expected-table'][i], solution['table-data-type'])}}
                                     </span>
-                                </td>
-                            </tr>
-                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </mat-expansion-panel>
                     </mat-tab>
                 </mat-tab-group>
             </mat-card-content>

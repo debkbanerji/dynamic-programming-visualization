@@ -1,13 +1,13 @@
 {
     "name": "Knapsack without repetition",
     "problem-statement": "Description of the knapsack optimization problem with repetition",
-    "inputs": {
+    "input": {
         "b": {
             "description": "Maximum Capacity",
             "type": "int",
             "non-negative": true
         },
-        "n:": {
+        "n": {
             "description": "Number of Items",
             "type": "int",
             "non-negative": true
@@ -15,6 +15,7 @@
         "weights": {
             "description": "array of item weights, where entry <em>i</em> represents the weight of item <em>i</em>",
             "type": "array",
+            "dimensions": "1d",
             "entry-type": "int",
             "length": "n",
             "non-negative": true
@@ -22,6 +23,7 @@
         "values": {
             "description": "array of item values, where entry <em>i</em> represents the value of item <em>i</em>",
             "type": "array",
+            "dimensions": "1d",
             "entry-type": "float",
             "length": "n",
             "non-negative": true
@@ -29,6 +31,7 @@
     },
     "solution": {
         "table-size": "2d",
+        "table-data-type": "float",
         "table-entry-definition": "T[<em>i</em>][<em>j</em>] Is the maximum value obtainable with a knapsack of capacity <em>i</em> using the first <em>j</em> items."
     },
     "test-cases": [
@@ -54,9 +57,9 @@
             "expected-result": 432342,
             "expected-table": [
                 [
-                    1,
-                    2,
-                    4,
+                    1.135,
+                    2.12,
+                    4.5,
                     6
                 ],
                 [
