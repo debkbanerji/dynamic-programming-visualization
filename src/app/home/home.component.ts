@@ -26,15 +26,26 @@ export class HomeComponent implements OnInit {
 
     for1Variable: string = 'i';
     for1Init: string = '0';
-    for1Condition: string = 'i < ?';
+    for1Condition: string = 'i < (TODO: Define)';
     for1Update: string = 'i = i + 1';
 
     for2Variable: string = 'j';
     for2Init: string = '0';
-    for2Condition: string = 'j < ?';
+    for2Condition: string = 'j < (TODO: Define)';
     for2Update: string = 'j = j + 1';
 
-    setNextEntryCode: string = '';
+    setNextEntryCode: string = `// TODO: Set entry = (whatever the next entry should be)
+
+// You can use existing table entries with the following syntax:
+
+// T[42] for one dimensional tables
+// T[4][2] for two dimensional tables
+
+
+// Note: The language used is Javascript
+
+// You can resize this text area using the handle at the bottom right (or whatever your browser supports)
+`;
     defaultTableEntry: string = '';
     useDefaultTableEntry: boolean = false;
 

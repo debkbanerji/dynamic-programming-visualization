@@ -55,7 +55,7 @@
                            class="input-field-small" value="0">;
                     <input [(ngModel)]="for1Condition"
                            title="for1Condition"
-                           class="input-field-small" value="i < ?">;
+                           class="input-field-small" value="i < (TODO: Define)">;
                     <input [(ngModel)]="for1Update"
                            title="for1Update"
                            class="input-field-small" value="i = i + 1">) {{'{'}}</p>
@@ -68,7 +68,7 @@
                            class="input-field-small" value="0">;
                     <input [(ngModel)]="for2Condition"
                            title="for2Condition"
-                           class="input-field-small" value="j < ?">;
+                           class="input-field-small" value="j < (TODO: Define)">;
                     <input [(ngModel)]="for2Update"
                            title="for2Update"
                            class="input-field-small" value="j = j + 1">) {{'{'}}</p>
@@ -84,8 +84,8 @@
                                                               class="input-field-small" value="">
                         </span>
                         <span *ngIf="!useDefaultTableEntry">null</span>;
-                        &nbsp;
-                        <mat-checkbox [(ngModel)]="useDefaultTableEntry">Use default value</mat-checkbox>
+                        &nbsp;&nbsp;
+                        <mat-checkbox [(ngModel)]="useDefaultTableEntry">Set a default value</mat-checkbox>
                         <!--<input type="checkbox" [(ngModel)]="useDefaultTableEntry"-->
                         <!--title="useDefaultTableEntry"> Use default value-->
                     </div>
@@ -132,6 +132,7 @@
         </mat-expansion-panel>
         <mat-card>
             <mat-card-content>
+                <b>Test Cases</b>
                 <mat-tab-group id="test-case-group">
                     <!--<mat-tab label="Custom test case">-->
                     <!--&lt;!&ndash;TODO: Implement custom input&ndash;&gt;-->
