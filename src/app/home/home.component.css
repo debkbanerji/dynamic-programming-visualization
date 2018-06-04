@@ -2,10 +2,41 @@
     margin-left: 0;
     margin-right: 0;
 }
+
 .row.no-gutter [class*='col-']:not(:first-child),
 .row.no-gutter [class*='col-']:not(:last-child) {
     padding-right: 0;
     padding-left: 0;
+}
+
+#code-card {
+    padding: 5px;
+}
+
+.code {
+    font-family: Consolas, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, sans-serif;
+}
+
+/*.input-field-very-small {*/
+    /*width: 20px;*/
+/*}*/
+
+/*.input-field-small {*/
+    /*width: 100px;*/
+/*}*/
+
+#set-next-value-container {
+    width: 80%;
+}
+
+#set-next-value-textarea {
+    width: 90%;
+    max-width: 90%;
+    min-width: 90%;
+}
+
+.full-width {
+    width: 100%;
 }
 
 /*DP Table*/

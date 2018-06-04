@@ -25,14 +25,16 @@ export class HomeComponent implements OnInit {
     tableDataType: string = 'number';
 
     for1Variable: string = 'i';
-    for1Init: string = '1';
-    for1Condition: string = 'i <= ?';
-    for1Update: string = 'i = j + 1';
+    for1Init: string = '0';
+    for1Condition: string = 'i < ?';
+    for1Update: string = 'i = i + 1';
 
     for2Variable: string = 'j';
-    for2Init: string = '1';
-    for2Condition: string = 'j <= ?';
+    for2Init: string = '0';
+    for2Condition: string = 'j < ?';
     for2Update: string = 'j = j + 1';
+
+    setNextValueCode: string = '';
 
     testResults: any = {};
 
@@ -43,6 +45,11 @@ export class HomeComponent implements OnInit {
 
     ngOnInit() {
         this.loadProblem('knapsack-without-repitition.dp.json');
+        const smallInputFields = document.getElementsByClassName('input-field-small');
+        for (let i = 0; i < smallInputFields.length; i++) {
+            const el = smallInputFields[i];
+            this.makeResizable(el, 7.5);
+        }
     }
 
     loadProblem(problemFileName: string): void {
@@ -57,8 +64,12 @@ export class HomeComponent implements OnInit {
 
     // Returns result of running the test case, as well as the table
     runTest(testCase: string) {
+        const code = this.getGeneratedCode();
+    }
+
+    getGeneratedCode(): string {
         const code = [];
-        const joinedCode = code.join('');
+        return code.join('')
     }
 
     transposeTable(): void {
@@ -67,9 +78,6 @@ export class HomeComponent implements OnInit {
     }
 
     getDisplayedValue(value: any, type: string): string {
-        // console.log('type', type);
-        // console.log('value', JSON.stringify(value));
-        // return type + '_' + value.toString();
         if (value === null || value === undefined) {
             return '?';
         }
@@ -104,5 +112,19 @@ export class HomeComponent implements OnInit {
         }
 
         return t;
+    }
+
+    makeResizable(el, factor) {
+        let int = Number(factor) || 7.7;
+
+        function resize() {
+            el.style.width = ((el.value.length + 1) * int) + 'px'
+        }
+
+        let e = 'keyup,keypress,focus,blur,change'.split(',');
+        for (let i in e) {
+            el.addEventListener(e[i], resize, false);
+        }
+        resize();
     }
 }

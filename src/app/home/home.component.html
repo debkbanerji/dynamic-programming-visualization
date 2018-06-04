@@ -33,6 +33,58 @@
                                [(ngModel)]="tableDimension2" name="tableDimension2">
                     </mat-form-field>
                 </form>
+                <b>Solution Code</b>
+                <br>
+                <p>
+                    <small>
+                        <em>// Note: All solution code is in Javascript
+                        </em>
+                    </small>
+                </p>
+                <!--<mat-card id="code-card">-->
+                <!--<mat-card-content>-->
+                <p class="code">T = <span *ngIf="tableShape === '2d'">[</span>[{{tableDimension1}}]<span
+                    *ngIf="tableShape === '2d'">,[{{tableDimension2}}]]</span></p>
+                <p class="code">for (
+                    <input [(ngModel)]="for1Variable"
+                           title="for1Variable"
+                           class="input-field-small" value="i"> =
+                    <input [(ngModel)]="for1Init"
+                           title="for1Init"
+                           class="input-field-small" value="0">;
+                    <input [(ngModel)]="for1Condition"
+                           title="for1Condition"
+                           class="input-field-small" value="i < ?">;
+                    <input [(ngModel)]="for1Update"
+                           title="for1Update"
+                           class="input-field-small" value="i = i + 1">) {{'{'}}</p>
+                <p class="code" [hidden]="tableShape === '1d'">&nbsp;&nbsp;for (
+                    <input [(ngModel)]="for2Variable"
+                           title="for2Variable"
+                           class="input-field-small" value="j"> =
+                    <input [(ngModel)]="for2Init"
+                           title="for2Init"
+                           class="input-field-small" value="0">;
+                    <input [(ngModel)]="for2Condition"
+                           title="for2Condition"
+                           class="input-field-small" value="j < ?">;
+                    <input [(ngModel)]="for2Update"
+                           title="for2Update"
+                           class="input-field-small" value="j = j + 1">) {{'{'}}</p>
+
+                <div>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <span *ngIf="tableShape === '2d'">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <span class="set-next-value-container">
+                    <textarea id="set-next-value-textarea" class="code"
+                              [(ngModel)]="setNextValueCode"
+                              title="setNextValueCode" rows="15"></textarea>
+                    </span>
+                </div>
+                <p class="code" [hidden]="tableShape === '1d'">&nbsp;{{'}'}}</p>
+                <p class="code">{{'}'}}</p>
+                <!--</mat-card-content>-->
+                <!--</mat-card>-->
             </mat-card-content>
         </mat-card>
     </div>
