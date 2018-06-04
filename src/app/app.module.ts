@@ -11,6 +11,7 @@ import {FormsModule} from "@angular/forms";
 import {
     MatButtonModule,
     MatCardModule,
+    MatCheckboxModule,
     MatExpansionModule,
     MatFormFieldModule,
     MatIconModule,
@@ -43,6 +44,7 @@ const routes: Routes = [ // Array of all routes - modify when adding routes
         MatExpansionModule,
         MatTabsModule,
         MatButtonModule,
+        MatCheckboxModule,
         RouterModule.forRoot(routes)
     ],
     providers: [],

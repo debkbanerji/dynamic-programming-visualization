@@ -34,7 +34,14 @@ export class HomeComponent implements OnInit {
     for2Condition: string = 'j < ?';
     for2Update: string = 'j = j + 1';
 
-    setNextValueCode: string = '';
+    setNextEntryCode: string = '';
+    defaultTableEntry: string = '';
+    useDefaultTableEntry: boolean = false;
+
+    returnValueCode: string = 'return 0; // TODO: return correct value';
+
+    nextEntryIndex1: string = 'i';
+    nextEntryIndex2: string = 'j';
 
     testResults: any = {};
 
@@ -118,7 +125,7 @@ export class HomeComponent implements OnInit {
         let int = Number(factor) || 7.7;
 
         function resize() {
-            el.style.width = ((el.value.length + 1) * int) + 'px'
+            el.style.width = ((Math.max(el.value.length, 1) + 1) * int) + 'px'
         }
 
         let e = 'keyup,keypress,focus,blur,change'.split(',');

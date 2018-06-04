@@ -17,12 +17,16 @@
     font-family: Consolas, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, sans-serif;
 }
 
+#default-entry-container {
+    padding-bottom: 10px;
+}
+
 /*.input-field-very-small {*/
-    /*width: 20px;*/
+/*width: 20px;*/
 /*}*/
 
 /*.input-field-small {*/
-    /*width: 100px;*/
+/*width: 100px;*/
 /*}*/
 
 #set-next-value-container {
@@ -33,6 +37,12 @@
     width: 90%;
     max-width: 90%;
     min-width: 90%;
+}
+
+#return-value-textarea {
+    width: calc(90% + 32px);
+    max-width: calc(90% + 32px);
+    min-width: calc(90% + 32px);
 }
 
 .full-width {

@@ -3,7 +3,7 @@
         <mat-card>
             <mat-card-header>
             </mat-card-header>
-            <b>Solution</b>
+            <b>Table Contents</b>
             <mat-card-content>
                 <mat-form-field>
                     <label for="table-shape-select">Table Shape</label>
@@ -33,14 +33,15 @@
                                [(ngModel)]="tableDimension2" name="tableDimension2">
                     </mat-form-field>
                 </form>
-                <b>Solution Code</b>
-                <br>
                 <p>
-                    <small>
-                        <em>// Note: All solution code is in Javascript
-                        </em>
-                    </small>
+                    <b>Solution Code</b>
                 </p>
+                <!--<p>-->
+                <!--<small>-->
+                <!--<em>// Note: All solution code is in Javascript-->
+                <!--</em>-->
+                <!--</small>-->
+                <!--</p>-->
                 <!--<mat-card id="code-card">-->
                 <!--<mat-card-content>-->
                 <p class="code">T = <span *ngIf="tableShape === '2d'">[</span>[{{tableDimension1}}]<span
@@ -73,16 +74,45 @@
                            class="input-field-small" value="j = j + 1">) {{'{'}}</p>
 
                 <div>
+                    <div id="default-entry-container">
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <span *ngIf="tableShape === '2d'">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <!--<span *ngIf="!useDefaultTableEntry">// </span>-->
+                        <span class="code">let entry = <input [(ngModel)]="defaultTableEntry"
+                                                              [hidden]="!useDefaultTableEntry"
+                                                              title="defaultTableEntry"
+                                                              class="input-field-small" value="">
+                        </span>
+                        <span *ngIf="!useDefaultTableEntry">null</span>;
+                        &nbsp;
+                        <mat-checkbox [(ngModel)]="useDefaultTableEntry">Use default value</mat-checkbox>
+                        <!--<input type="checkbox" [(ngModel)]="useDefaultTableEntry"-->
+                        <!--title="useDefaultTableEntry"> Use default value-->
+                    </div>
                     <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                     <span *ngIf="tableShape === '2d'">&nbsp;&nbsp;&nbsp;&nbsp;</span>
                     <span class="set-next-value-container">
                     <textarea id="set-next-value-textarea" class="code"
-                              [(ngModel)]="setNextValueCode"
+                              [(ngModel)]="setNextEntryCode"
                               title="setNextValueCode" rows="15"></textarea>
                     </span>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <span *ngIf="tableShape === '2d'">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <span class="code">T<span *ngIf="tableShape === '2d'"></span>[<input [(ngModel)]="nextEntryIndex1"
+                                                                                         title="nextEntryIndex1"
+                                                                                         class="input-field-small"
+                                                                                         value="i">]<span
+                        [hidden]="tableShape === '1d'">[<input
+                        [(ngModel)]="nextEntryIndex2"
+                        title="nextEntryIndex2"
+                        class="input-field-small"
+                        value="j">]</span> = entry;</span>
                 </div>
                 <p class="code" [hidden]="tableShape === '1d'">&nbsp;{{'}'}}</p>
                 <p class="code">{{'}'}}</p>
+                <textarea id="return-value-textarea" class="code"
+                          [(ngModel)]="returnValueCode"
+                          title="returnValueCode" rows="6"></textarea>
                 <!--</mat-card-content>-->
                 <!--</mat-card>-->
             </mat-card-content>
