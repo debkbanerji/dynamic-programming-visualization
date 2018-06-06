@@ -96,17 +96,18 @@
                               [(ngModel)]="setNextEntryCode"
                               title="setNextValueCode" rows="15"></textarea>
                     </span>
+                    <br>
                     <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                     <span *ngIf="tableShape === '2d'">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    <span class="code">T<span *ngIf="tableShape === '2d'"></span>[<input [(ngModel)]="nextEntryIndex1"
+                    <span class="code">T<span *ngIf="tableShape === '2d'"></span>(<input [(ngModel)]="nextEntryIndex1"
                                                                                          title="nextEntryIndex1"
                                                                                          class="input-field-small"
-                                                                                         value="i">]<span
-                        [hidden]="tableShape === '1d'">[<input
+                                                                                         value="i"><span
+                        [hidden]="tableShape === '1d'">,<input
                         [(ngModel)]="nextEntryIndex2"
                         title="nextEntryIndex2"
                         class="input-field-small"
-                        value="j">]</span> = entry;</span>
+                        value="j"></span>) = entry;</span>
                 </div>
                 <p class="code" [hidden]="tableShape === '1d'">&nbsp;{{'}'}}</p>
                 <p class="code">{{'}'}}</p>
@@ -115,6 +116,10 @@
                           title="returnValueCode" rows="6"></textarea>
                 <!--</mat-card-content>-->
                 <!--</mat-card>-->
+                <button mat-button class="run-tests"
+                        (click)="runAllTests()">
+                    Run Tests
+                </button>
             </mat-card-content>
         </mat-card>
     </div>

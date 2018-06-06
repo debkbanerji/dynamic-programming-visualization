@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 
+const encodedTableName = '___TABLE___';
+
 @Component({
     selector: 'app-home',
     templateUrl: './home.component.html',
@@ -36,13 +38,13 @@ export class HomeComponent implements OnInit {
 
     setNextEntryCode: string = `// TODO: Set entry = (whatever the next entry should be)
 
-// You can use existing table entries with the following syntax:
+// You can access existing table entries with the following syntax:
 
-// T[42] for one dimensional tables
-// T[4][2] for two dimensional tables
+// T(42) for one dimensional tables
+// T(4,2) for two dimensional tables
 
 
-// Note: The language used is Javascript
+// Everything else is Javascript
 
 // You can resize this text area using the handle at the bottom right (or whatever your browser supports)
 `;
@@ -81,13 +83,69 @@ export class HomeComponent implements OnInit {
     }
 
     // Returns result of running the test case, as well as the table
-    runTest(testCase: string) {
-        const code = this.getGeneratedCode();
+    runTest(testCase: string, code: string) {
     }
 
-    getGeneratedCode(): string {
+    // Returns result of running the test case, as well as the table
+    runAllTests(): void {
+        const code = this.getPlainRunnableCode();
+        console.log(code);
+    }
+
+    getPlainRunnableCode(): string {
+        const result = [];
+        const is2d = this.tableShape === this.tableShapes[1];
+        result.push(
+            HomeComponent.getPlainGetTableFunction(is2d),
+            '\n\n',
+            HomeComponent.getPlainSetTableFunction(is2d),
+            '\n\n',
+            this.getAlgorithmCode()
+        );
+        return result.join('');
+    }
+
+    // Generate code that returns the table and result without altering the UI
+    // Note: code takes in inputs in alphabetical order
+    getAlgorithmCode(): string {
         const code = [];
+        const component = this;
+
+        const is2d = component.tableShape === component.tableShapes[2];
+
         return code.join('')
+    }
+
+    // Returns a function that gets from the table without altering UI
+    static getPlainGetTableFunction(is2d: boolean): string {
+        const code = [];
+        code.push('T = function(i');
+        if (is2d) {
+            code.push(',j');
+        }
+        code.push(') {\n\treturn ', encodedTableName, '[i]');
+        if (is2d) {
+            code.push('[j]')
+        }
+        code.push(';\n}');
+        return code.join('');
+    }
+
+    // Returns a function that sets a table entry without altering UI
+    static getPlainSetTableFunction(is2d: boolean): string {
+        const code = [];
+        code.push('set');
+        code.push(encodedTableName);
+        code.push(' = function(val,i');
+        if (is2d) {
+            code.push(',j');
+        }
+        code.push(') {\n\t', encodedTableName, '[i]');
+        if (is2d) {
+            code.push('[j]')
+        }
+        code.push(' = val;\n}');
+        return code.join('');
     }
 
     transposeTable(): void {
@@ -131,6 +189,15 @@ export class HomeComponent implements OnInit {
 
         return t;
     }
+
+    // static makeRandomVarName(): string {
+    //     const result = ['_'];
+    //     const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    //     for (let i = 0; i < 5; i++)
+    //         result.push(possible.charAt(Math.floor(Math.random() * possible.length)));
+    //
+    //     return result.join('');
+    // }
 
     makeResizable(el, factor) {
         let int = Number(factor) || 7.7;
