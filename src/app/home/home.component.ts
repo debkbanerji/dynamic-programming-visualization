@@ -48,6 +48,8 @@ export class HomeComponent implements OnInit {
 // Everything else is Javascript
 
 // You can resize this text area using the handle at the bottom right (or whatever your browser supports)
+
+entry = T(i,j);
 `;
     defaultTableEntry: string = '';
     useDefaultTableEntry: boolean = false;
@@ -84,23 +86,80 @@ export class HomeComponent implements OnInit {
     }
 
     // Returns result of running the test case, as well as the table
-    runTest(testCase: string, code: string) {
+    runTest(testCaseIndex: number, plainFunctionCode: string) {
+        const code = [];
+
+        const inputMap = this.problem.input;
+        const inputs = Object.keys(inputMap).sort();
+        const inputVals = this.testCases[testCaseIndex]['input'];
+
+        for (let i = 0; i < inputs.length; i++) {
+            code.push('const ', inputs[i], ' = ');
+            const inputVal = inputVals[inputs[i]];
+            code.push(JSON.stringify(inputVal));
+            code.push(';\n')
+        }
+
+        code.push('\n');
+        code.push(plainFunctionCode);
+
+        code.push('\n\nalgResult = algorithm(');
+
+        for (let i = 0; i < inputs.length; i++) {
+            code.push(inputs[i]);
+            // if (i < inputs.length - 1) {
+            code.push(', ');
+            // }
+        }
+
+        code.push(encodedTableName);
+
+        code.push(');\ntable = ', encodedTableName, ';\n');
+        code.push('result = [];\n\nresult.push(algResult, table);\n\n');
+        code.push('return result;');
+
+        console.log(code.join(''));
+
+        try {
+            const testFunction = Function(code.join(''));
+            const testResult = testFunction();
+            const result = testResult[0];
+            const table = testResult[1];
+            console.log(result);
+            console.log(table);
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     // Returns result of running the test case, as well as the table
     runAllTests(): void {
         const code = this.getPlainRunnableCode();
-        console.log(code);
+        this.runTest(0, code);
     }
 
     getPlainRunnableCode(): string {
         const result = [];
         const is2d = this.tableShape === this.tableShapes[1];
+
+        let initializationCode = [];
+        if (is2d) {
+            initializationCode.push('const ', encodedTableName, ' = [];\n');
+            initializationCode.push('for (let i = 0; i < ', this.tableDimension1, '; i++) {\n');
+            initializationCode.push('\t', encodedTableName, '.push(Array(', this.tableDimension2, '));\n');
+            initializationCode.push('}');
+        } else {
+            initializationCode.push('const ',
+                encodedTableName,
+                ' = [',
+                this.tableDimension1,
+                '];')
+        }
         result.push(
-            encodedTableName,
-            ' = [',
-            is2d ? '[],[]' : '',
-            '];\n\n',
+            initializationCode.join(''),
+            '\n\n',
+            HomeComponent.getWrappedGetTableFunction(is2d),
+            '\n\n',
             HomeComponent.getPlainGetTableFunction(is2d),
             '\n\n',
             HomeComponent.getPlainSetTableFunction(is2d),
@@ -117,16 +176,18 @@ export class HomeComponent implements OnInit {
         const component = this;
         const is2d = component.tableShape === component.tableShapes[1];
 
-        outerCode.push('algorithm = function(');
+        outerCode.push('const algorithm = function(');
 
         const inputMap = component.problem.input;
         const inputs = Object.keys(inputMap).sort();
         for (let i = 0; i < inputs.length; i++) {
             outerCode.push(inputs[i]);
-            if (i < outerCode.length - 1) {
-                outerCode.push(', ');
-            }
+            // if (i < inputs.length - 1) {
+            outerCode.push(', ');
+            // }
         }
+
+        outerCode.push(encodedTableName);
 
         outerCode.push(') {\n\n');
 
@@ -148,15 +209,20 @@ export class HomeComponent implements OnInit {
             innerCode.push('\t');
             if (component.useDefaultTableEntry) {
                 innerCode.push('let entry = ', component.defaultTableEntry, ';\n\n\t\t');
+            } else {
+                innerCode.push('let entry = null;\n\t\t');
             }
             innerCode.push(setNextEntryCode.replace(/(?:\r\n|\r|\n)/g, '\n\t\t'));
         } else {
             if (component.useDefaultTableEntry) {
                 innerCode.push('let entry = ', component.defaultTableEntry, ';\n\n\t');
+            } else {
+                innerCode.push('let entry = null;\n\n\t');
             }
             innerCode.push(setNextEntryCode.replace(/(?:\r\n|\r|\n)/g, '\n\t'));
         }
-        innerCode.push('\n');
+        innerCode.push('\n\n\t', is2d ? '\t' : '', 'set', encodedTableName, '(entry, ', this.nextEntryIndex1,
+            ', ', this.nextEntryIndex2, ', ', encodedTableName, ');\n');
         if (is2d) {
             innerCode.push('\t}\n\n');
         }
@@ -164,40 +230,59 @@ export class HomeComponent implements OnInit {
         innerCode.push(component.returnValueCode);
 
         outerCode.push(innerCode.join('').replace(/(?:\r\n|\r|\n)/g, '\n\t'));
-        outerCode.push('\n\n}');
+        outerCode.push('\n\n};');
 
         return outerCode.join('')
     }
 
     // Returns a function that gets from the table without altering UI
-    static getPlainGetTableFunction(is2d: boolean): string {
+    static getWrappedGetTableFunction(is2d: boolean): string {
         const code = [];
-        code.push('T = function(i');
+        code.push('const get');
+        code.push(encodedTableName);
+        code.push(' = function(i');
         if (is2d) {
-            code.push(',j');
+            code.push(', j');
         }
+        code.push(', ', encodedTableName);
         code.push(') {\n\treturn ', encodedTableName, '[i]');
         if (is2d) {
             code.push('[j]')
         }
-        code.push(';\n}');
+        code.push(';\n};');
         return code.join('');
     }
 
-    // Returns a function that sets a table entry without altering UI
+    // Returns a function that gets from the table without altering UI
+    static getPlainGetTableFunction(is2d: boolean): string {
+        const code = [];
+
+        code.push('const T = function(i');
+        if (is2d) {
+            code.push(', j');
+        }
+        code.push(') {\n\treturn get', encodedTableName, '(i, ');
+        if (is2d) {
+            code.push('j, ')
+        }
+        code.push(encodedTableName, ');\n};');
+        return code.join('');
+    }
+
     static getPlainSetTableFunction(is2d: boolean): string {
         const code = [];
-        code.push('set');
+        code.push('const set');
         code.push(encodedTableName);
-        code.push(' = function(val,i');
+        code.push(' = function(val, i');
         if (is2d) {
-            code.push(',j');
+            code.push(', j');
         }
+        code.push(', ', encodedTableName);
         code.push(') {\n\t', encodedTableName, '[i]');
         if (is2d) {
             code.push('[j]')
         }
-        code.push(' = val;\n}');
+        code.push(' = val;\n};');
         return code.join('');
     }
 
