@@ -48,8 +48,6 @@ export class HomeComponent implements OnInit {
 // Everything else is Javascript
 
 // You can resize this text area using the handle at the bottom right (or whatever your browser supports)
-
-entry = T(i,j);
 `;
     defaultTableEntry: string = '';
     useDefaultTableEntry: boolean = false;
@@ -134,26 +132,26 @@ entry = T(i,j);
 
     // Returns result of running the test case, as well as the table
     runAllTests(): void {
-        const code = this.getPlainRunnableCode();
+        const code = HomeComponent.getPlainRunnableCode(this);
         this.runTest(0, code);
     }
 
-    getPlainRunnableCode(): string {
+    static getPlainRunnableCode(component: any): string {
         const result = [];
-        const is2d = this.tableShape === this.tableShapes[1];
+        const is2d = component.tableShape === component.tableShapes[1];
 
         let initializationCode = [];
         if (is2d) {
             initializationCode.push('const ', encodedTableName, ' = [];\n');
-            initializationCode.push('for (let i = 0; i < ', this.tableDimension1, '; i++) {\n');
-            initializationCode.push('\t', encodedTableName, '.push(Array(', this.tableDimension2, '));\n');
+            initializationCode.push('for (let i = 0; i < ', component.tableDimension1, '; i++) {\n');
+            initializationCode.push('\t', encodedTableName, '.push(Array(', component.tableDimension2, '));\n');
             initializationCode.push('}');
         } else {
             initializationCode.push('const ',
                 encodedTableName,
-                ' = [',
-                this.tableDimension1,
-                '];')
+                ' = Array(',
+                component.tableDimension1,
+                ');')
         }
         result.push(
             initializationCode.join(''),
@@ -164,16 +162,15 @@ entry = T(i,j);
             '\n\n',
             HomeComponent.getPlainSetTableFunction(is2d),
             '\n\n',
-            this.getAlgorithmCode()
+            HomeComponent.getAlgorithmCode(component)
         );
         return result.join('');
     }
 
     // Generate code that returns the table and result without altering the UI
     // Note: code takes in inputs in alphabetical order
-    getAlgorithmCode(): string {
+    static getAlgorithmCode(component: any): string {
         const outerCode = [];
-        const component = this;
         const is2d = component.tableShape === component.tableShapes[1];
 
         outerCode.push('const algorithm = function(');
@@ -198,9 +195,9 @@ entry = T(i,j);
         //     innerCode.push('[],[]');
         // }
         // innerCode.push('];\n\n');
-        innerCode.push('for(let ', component.for1Variable, ' = ', component.for1Init, '; ', this.for1Condition, '; ', this.for1Update, ') {\n\n');
+        innerCode.push('for(let ', component.for1Variable, ' = ', component.for1Init, '; ', component.for1Condition, '; ', component.for1Update, ') {\n\n');
         if (is2d) {
-            innerCode.push('\tfor(let ', component.for2Variable, ' = ', component.for2Init, '; ', this.for2Condition, '; ', this.for2Update, ') {\n\n');
+            innerCode.push('\tfor(let ', component.for2Variable, ' = ', component.for2Init, '; ', component.for2Condition, '; ', component.for2Update, ') {\n\n');
         }
 
         const setNextEntryCode = component.setNextEntryCode;
@@ -221,8 +218,11 @@ entry = T(i,j);
             }
             innerCode.push(setNextEntryCode.replace(/(?:\r\n|\r|\n)/g, '\n\t'));
         }
-        innerCode.push('\n\n\t', is2d ? '\t' : '', 'set', encodedTableName, '(entry, ', this.nextEntryIndex1,
-            ', ', this.nextEntryIndex2, ', ', encodedTableName, ');\n');
+        innerCode.push('\n\n\t', is2d ? '\t' : '', 'set', encodedTableName, '(entry, ', component.nextEntryIndex1);
+        if (is2d) {
+            innerCode.push(', ', component.nextEntryIndex2);
+        }
+        innerCode.push(', ', encodedTableName, ');\n');
         if (is2d) {
             innerCode.push('\t}\n\n');
         }
