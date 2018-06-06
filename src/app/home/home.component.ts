@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
+import {forEach} from "@angular/router/src/utils/collection";
 
 const encodedTableName = '___TABLE___';
 
@@ -96,6 +97,10 @@ export class HomeComponent implements OnInit {
         const result = [];
         const is2d = this.tableShape === this.tableShapes[1];
         result.push(
+            encodedTableName,
+            ' = [',
+            is2d ? '[],[]' : '',
+            '];\n\n',
             HomeComponent.getPlainGetTableFunction(is2d),
             '\n\n',
             HomeComponent.getPlainSetTableFunction(is2d),
@@ -108,12 +113,60 @@ export class HomeComponent implements OnInit {
     // Generate code that returns the table and result without altering the UI
     // Note: code takes in inputs in alphabetical order
     getAlgorithmCode(): string {
-        const code = [];
+        const outerCode = [];
         const component = this;
+        const is2d = component.tableShape === component.tableShapes[1];
 
-        const is2d = component.tableShape === component.tableShapes[2];
+        outerCode.push('algorithm = function(');
 
-        return code.join('')
+        const inputMap = component.problem.input;
+        const inputs = Object.keys(inputMap).sort();
+        for (let i = 0; i < inputs.length; i++) {
+            outerCode.push(inputs[i]);
+            if (i < outerCode.length - 1) {
+                outerCode.push(', ');
+            }
+        }
+
+        outerCode.push(') {\n\n');
+
+        const innerCode = [];
+        innerCode.push('\t');
+        // innerCode.push(encodedTableName, ' = [');
+        // if (is2d) {
+        //     innerCode.push('[],[]');
+        // }
+        // innerCode.push('];\n\n');
+        innerCode.push('for(let ', component.for1Variable, ' = ', component.for1Init, '; ', this.for1Condition, '; ', this.for1Update, ') {\n\n');
+        if (is2d) {
+            innerCode.push('\tfor(let ', component.for2Variable, ' = ', component.for2Init, '; ', this.for2Condition, '; ', this.for2Update, ') {\n\n');
+        }
+
+        const setNextEntryCode = component.setNextEntryCode;
+        innerCode.push('\t');
+        if (is2d) {
+            innerCode.push('\t');
+            if (component.useDefaultTableEntry) {
+                innerCode.push('let entry = ', component.defaultTableEntry, ';\n\n\t\t');
+            }
+            innerCode.push(setNextEntryCode.replace(/(?:\r\n|\r|\n)/g, '\n\t\t'));
+        } else {
+            if (component.useDefaultTableEntry) {
+                innerCode.push('let entry = ', component.defaultTableEntry, ';\n\n\t');
+            }
+            innerCode.push(setNextEntryCode.replace(/(?:\r\n|\r|\n)/g, '\n\t'));
+        }
+        innerCode.push('\n');
+        if (is2d) {
+            innerCode.push('\t}\n\n');
+        }
+        innerCode.push('}\n\n');
+        innerCode.push(component.returnValueCode);
+
+        outerCode.push(innerCode.join('').replace(/(?:\r\n|\r|\n)/g, '\n\t'));
+        outerCode.push('\n\n}');
+
+        return outerCode.join('')
     }
 
     // Returns a function that gets from the table without altering UI

@@ -116,7 +116,7 @@
                           title="returnValueCode" rows="6"></textarea>
                 <!--</mat-card-content>-->
                 <!--</mat-card>-->
-                <button mat-button class="run-tests"
+                <button mat-raised-button class="run-tests"
                         (click)="runAllTests()">
                     Run Tests
                 </button>
@@ -180,7 +180,7 @@
                                 <mat-panel-title class="slightly-bold-label">Expected Results</mat-panel-title>
                             </mat-expansion-panel-header>
                             <span class="slightly-bold-label">Table</span>
-                            <button mat-button class="transpose-button" *ngIf="solution['table-shape'] === '2d'"
+                            <button mat-raised-button class="transpose-button" *ngIf="solution['table-shape'] === '2d'"
                                     (click)="transposeTable()">
                                 Transpose
                             </button>
