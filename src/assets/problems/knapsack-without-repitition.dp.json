@@ -30,7 +30,7 @@
         }
     },
     "result-type": "float",
-    "solution": {
+    "provided-solution": {
         "table-shape": "2d",
         "table-data-type": "float",
         "table-entry-definition": "T[<em>i</em>][<em>j</em>] Is the maximum value obtainable with a knapsack of capacity <em>i</em> using the first <em>j</em> items."

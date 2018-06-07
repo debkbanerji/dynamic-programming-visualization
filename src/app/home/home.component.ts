@@ -14,30 +14,31 @@ export class HomeComponent implements OnInit {
     objectKeys = Object.keys;
 
     tableShapes: Array<string> = ['1d', '2d'];
-    tableShape = this.tableShapes[1];
 
     problemDefined: boolean = false;
 
     problem: any;
-    solution: any;
+    providedSolution: any;
     testCases: any;
 
-    tableDimension1: string = '';
-    tableDimension2: string = '';
+    solution: any = {
+        tableShape: this.tableShapes[1],
+        tableDimension1: '',
+        tableDimension2: '',
 
-    tableDataType: string = 'number';
+        tableDataType: 'number',
 
-    for1Variable: string = 'i';
-    for1Init: string = '0';
-    for1Condition: string = 'i < (TODO: Define)';
-    for1Update: string = 'i = i + 1';
+        for1Variable: 'i',
+        for1Init: '0',
+        for1Condition: 'i < (TODO: Define)',
+        for1Update: 'i = i + 1',
 
-    for2Variable: string = 'j';
-    for2Init: string = '0';
-    for2Condition: string = 'j < (TODO: Define)';
-    for2Update: string = 'j = j + 1';
+        for2Variable: 'j',
+        for2Init: '0',
+        for2Condition: 'j < (TODO: Define)',
+        for2Update: 'j = j + 1',
 
-    setNextEntryCode: string = `// TODO: Set entry = (whatever the next entry should be)
+        setNextEntryCode: `// TODO: Set entry = (whatever the next entry should be)
 
 // You can access existing table entries with the following syntax:
 
@@ -48,14 +49,15 @@ export class HomeComponent implements OnInit {
 // Everything else is Javascript
 
 // You can resize this text area using the handle at the bottom right (or whatever your browser supports)
-`;
-    defaultTableEntry: string = '';
-    useDefaultTableEntry: boolean = false;
+`,
+        defaultTableEntry: '',
+        useDefaultTableEntry: false,
 
-    returnValueCode: string = 'return 0; // TODO: return correct value';
+        returnValueCode: 'return 0; // TODO: return correct value',
 
-    nextEntryIndex1: string = 'i';
-    nextEntryIndex2: string = 'j';
+        nextEntryIndex1: 'i',
+        nextEntryIndex2: 'j'
+    };
 
     testResults: any = {};
 
@@ -77,7 +79,7 @@ export class HomeComponent implements OnInit {
         const component = this;
         component.http.get('../assets/problems/' + problemFileName).subscribe(data => {
             component.problem = data;
-            component.solution = component.problem['solution'];
+            component.providedSolution = component.problem['provided-solution'];
             component.testCases = component.problem['test-cases'];
             component.problemDefined = true;
         });
@@ -132,25 +134,25 @@ export class HomeComponent implements OnInit {
 
     // Returns result of running the test case, as well as the table
     runAllTests(): void {
-        const code = HomeComponent.getPlainRunnableCode(this);
+        const code = HomeComponent.getPlainRunnableCode(this.solution, this.problem);
         this.runTest(0, code);
     }
 
-    static getPlainRunnableCode(component: any): string {
+    static getPlainRunnableCode(solution: any, problem: any): string {
         const result = [];
-        const is2d = component.tableShape === component.tableShapes[1];
+        const is2d = solution.tableShape === '2d';
 
         let initializationCode = [];
         if (is2d) {
             initializationCode.push('const ', encodedTableName, ' = [];\n');
-            initializationCode.push('for (let i = 0; i < ', component.tableDimension1, '; i++) {\n');
-            initializationCode.push('\t', encodedTableName, '.push(Array(', component.tableDimension2, '));\n');
+            initializationCode.push('for (let i = 0; i < ', solution.tableDimension1, '; i++) {\n');
+            initializationCode.push('\t', encodedTableName, '.push(Array(', solution.tableDimension2, '));\n');
             initializationCode.push('}');
         } else {
             initializationCode.push('const ',
                 encodedTableName,
                 ' = Array(',
-                component.tableDimension1,
+                solution.tableDimension1,
                 ');')
         }
         result.push(
@@ -162,20 +164,20 @@ export class HomeComponent implements OnInit {
             '\n\n',
             HomeComponent.getPlainSetTableFunction(is2d),
             '\n\n',
-            HomeComponent.getAlgorithmCode(component)
+            HomeComponent.getAlgorithmCode(solution, problem)
         );
         return result.join('');
     }
 
     // Generate code that returns the table and result without altering the UI
     // Note: code takes in inputs in alphabetical order
-    static getAlgorithmCode(component: any): string {
+    static getAlgorithmCode(solution: any, problem: any): string {
         const outerCode = [];
-        const is2d = component.tableShape === component.tableShapes[1];
+        const is2d = solution.tableShape === '2d';
 
         outerCode.push('const algorithm = function(');
 
-        const inputMap = component.problem.input;
+        const inputMap = problem.input;
         const inputs = Object.keys(inputMap).sort();
         for (let i = 0; i < inputs.length; i++) {
             outerCode.push(inputs[i]);
@@ -195,39 +197,40 @@ export class HomeComponent implements OnInit {
         //     innerCode.push('[],[]');
         // }
         // innerCode.push('];\n\n');
-        innerCode.push('for(let ', component.for1Variable, ' = ', component.for1Init, '; ', component.for1Condition, '; ', component.for1Update, ') {\n\n');
+        innerCode.push('for(let ', solution.for1Variable, ' = ', solution.for1Init, '; ', solution.for1Condition, '; ', solution.for1Update, ') {\n\n');
         if (is2d) {
-            innerCode.push('\tfor(let ', component.for2Variable, ' = ', component.for2Init, '; ', component.for2Condition, '; ', component.for2Update, ') {\n\n');
+            innerCode.push('\tfor(let ', solution.for2Variable, ' = ', solution.for2Init, '; ', solution.for2Condition, '; ', solution.for2Update, ') {\n\n');
         }
 
-        const setNextEntryCode = component.setNextEntryCode;
+        const setNextEntryCode = solution.setNextEntryCode;
+        console.log(setNextEntryCode);
         innerCode.push('\t');
         if (is2d) {
             innerCode.push('\t');
-            if (component.useDefaultTableEntry) {
-                innerCode.push('let entry = ', component.defaultTableEntry, ';\n\n\t\t');
+            if (solution.useDefaultTableEntry) {
+                innerCode.push('let entry = ', solution.defaultTableEntry, ';\n\n\t\t');
             } else {
                 innerCode.push('let entry = null;\n\t\t');
             }
             innerCode.push(setNextEntryCode.replace(/(?:\r\n|\r|\n)/g, '\n\t\t'));
         } else {
-            if (component.useDefaultTableEntry) {
-                innerCode.push('let entry = ', component.defaultTableEntry, ';\n\n\t');
+            if (solution.useDefaultTableEntry) {
+                innerCode.push('let entry = ', solution.defaultTableEntry, ';\n\n\t');
             } else {
                 innerCode.push('let entry = null;\n\n\t');
             }
             innerCode.push(setNextEntryCode.replace(/(?:\r\n|\r|\n)/g, '\n\t'));
         }
-        innerCode.push('\n\n\t', is2d ? '\t' : '', 'set', encodedTableName, '(entry, ', component.nextEntryIndex1);
+        innerCode.push('\n\n\t', is2d ? '\t' : '', 'set', encodedTableName, '(entry, ', solution.nextEntryIndex1);
         if (is2d) {
-            innerCode.push(', ', component.nextEntryIndex2);
+            innerCode.push(', ', solution.nextEntryIndex2);
         }
         innerCode.push(', ', encodedTableName, ');\n');
         if (is2d) {
             innerCode.push('\t}\n\n');
         }
         innerCode.push('}\n\n');
-        innerCode.push(component.returnValueCode);
+        innerCode.push(solution.returnValueCode);
 
         outerCode.push(innerCode.join('').replace(/(?:\r\n|\r|\n)/g, '\n\t'));
         outerCode.push('\n\n};');
