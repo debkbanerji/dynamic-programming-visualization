@@ -2,7 +2,7 @@
     "name": "Knapsack without repetition",
     "problem-statement": "Description of the knapsack optimization problem with repetition",
     "input": {
-        "b": {
+        "W": {
             "description": "Maximum Capacity",
             "type": "int",
             "non-negative": true
@@ -31,9 +31,27 @@
     },
     "result-type": "float",
     "provided-solution": {
-        "table-shape": "2d",
-        "table-data-type": "float",
-        "table-entry-definition": "T[<em>i</em>][<em>j</em>] Is the maximum value obtainable with a knapsack of capacity <em>i</em> using the first <em>j</em> items."
+        "tableShape": "2d",
+        "tableDimension1": "b + 1",
+        "tableDimension2": "n + 1",
+        "tableDataType": "number",
+        "initializationCode": "// No other initialization needed",
+        "for1Variable": "i",
+        "for1Init": "0",
+        "for1Condition": "i < n +1",
+        "for1Update": "i = i + 1",
+        "for2Variable": "w",
+        "for2Init": "0",
+        "for2Condition": "w <= maxCapacity",
+        "for2Update": "w = w + 1",
+        "setNextEntryCode": "",
+        "defaultTableEntry": "",
+        "useDefaultTableEntry": false,
+        "returnValueCode": "return T(n, W)",
+        "nextEntryIndex1": "i",
+        "nextEntryIndex2": "W",
+        "tableEntryDefinition": "T[<em>i</em>][<em>j</em>] Is the maximum value obtainable with a knapsack of capacity <em>i</em> using the first <em>j</em> items.",
+        "solutionNotes": "(Additional solution notes here"
     },
     "test-cases": [
         {
