@@ -33,6 +33,12 @@
     width: 80%;
 }
 
+#initialization-textarea, #return-value-textarea {
+    width: calc(90% + 32px);
+    max-width: calc(90% + 32px);
+    min-width: calc(90% + 32px);
+}
+
 #set-next-value-textarea {
     width: 90%;
     max-width: 90%;

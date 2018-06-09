@@ -46,6 +46,9 @@
                 <!--<mat-card-content>-->
                 <p class="code">T = <span *ngIf="solution.tableShape === '2d'"></span>[{{solution.tableDimension1}}]<span
                     *ngIf="solution.tableShape === '2d'">[{{solution.tableDimension2}}]</span></p>
+                <textarea id="initialization-textarea" class="code"
+                          [(ngModel)]="solution.initializationCode"
+                          title="initializationCode" rows="3"></textarea>
                 <p class="code">for (
                     <input [(ngModel)]="solution.for1Variable"
                            title="for1Variable"

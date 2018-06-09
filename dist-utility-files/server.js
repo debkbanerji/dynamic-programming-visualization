@@ -1,11 +1,11 @@
-var express = require("express");
-var os = require('os');
+const express = require("express");
+const os = require('os');
 const path = require('path');
-var bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
 
-var app = express();
+const app = express();
 
-var port = process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
 /*
  To set a port other than 3000:
  in Unix:
@@ -18,10 +18,10 @@ var port = process.env.PORT || 3000;
  node server.js
  */
 
-var ifaces = os.networkInterfaces();
+const ifaces = os.networkInterfaces();
 
 Object.keys(ifaces).forEach(function (ifname) {
-    var alias = 0;
+    let alias = 0;
 
     ifaces[ifname].forEach(function (iface) {
         if ('IPv4' !== iface.family || iface.internal !== false) {
@@ -41,7 +41,7 @@ Object.keys(ifaces).forEach(function (ifname) {
 });
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: false}));
 
 // parse application/json
 app.use(bodyParser.json());
