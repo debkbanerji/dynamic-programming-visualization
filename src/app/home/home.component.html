@@ -79,47 +79,58 @@
                            class="input-field-small" value="j = j + 1">) {{'{'}}</p>
 
                 <div>
-                    <div id="default-entry-container">
-                        <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                        <span *ngIf="solution.tableShape === '2d'">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                        <!--<span *ngIf="!useDefaultTableEntry">// </span>-->
-                        <span class="code">let entry = <input [(ngModel)]="solution.defaultTableEntry"
-                                                              [hidden]="!solution.useDefaultTableEntry"
-                                                              title="defaultTableEntry"
-                                                              class="input-field-small" value="">
-                        </span>
-                        <span *ngIf="!solution.useDefaultTableEntry">null</span>;
-                        &nbsp;&nbsp;
-                        <mat-checkbox [(ngModel)]="solution.useDefaultTableEntry">Set a default value</mat-checkbox>
-                        <!--<input type="checkbox" [(ngModel)]="useDefaultTableEntry"-->
-                        <!--title="useDefaultTableEntry"> Use default value-->
+                    <!--<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>-->
+                    <!--<span *ngIf="solution.tableShape === '2d'">&nbsp;&nbsp;&nbsp;&nbsp;</span>-->
+                    <div class="full-width" style="overflow: hidden">
+                        <div id="set-next-value-container">
+                            <div id="default-entry-container">
+                                <!--<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>-->
+                                <!--<span *ngIf="solution.tableShape === '2d'">&nbsp;&nbsp;&nbsp;&nbsp;</span>-->
+                                <!--<span *ngIf="!useDefaultTableEntry">// </span>-->
+                                <span class="code">let entry = <input [(ngModel)]="solution.defaultTableEntry"
+                                                                      [hidden]="!solution.useDefaultTableEntry"
+                                                                      title="defaultTableEntry"
+                                                                      class="input-field-small" value="">
+                                </span>
+                                <span *ngIf="!solution.useDefaultTableEntry">null</span>;
+                                &nbsp;&nbsp;
+                                <mat-checkbox [(ngModel)]="solution.useDefaultTableEntry">Set a default value
+                                </mat-checkbox>
+                                <!--<input type="checkbox" [(ngModel)]="useDefaultTableEntry"-->
+                                <!--title="useDefaultTableEntry"> Use default value-->
+                            </div>
+                            <!--<textarea spellcheck="false" id="set-next-value-textarea" class="code"-->
+                            <!--[(ngModel)]="solution.setNextEntryCode"-->
+                            <!--title="setNextValueCode" rows="20"></textarea>-->
+                            <textarea class="code code-editor"
+                                      [(ngModel)]="solution.setNextEntryCode"
+                                      title="setNextEntryCode" rows="20"></textarea>
+                            <!--<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>-->
+                            <!--<span *ngIf="solution.tableShape === '2d'">&nbsp;&nbsp;&nbsp;&nbsp;</span>-->
+                            <br>
+                            <span class="code">T<span *ngIf="solution.tableShape === '2d'"></span>(<input
+                                [(ngModel)]="solution.nextEntryIndex1"
+                                title="nextEntryIndex1"
+                                class="input-field-small"
+                                value="i"><span
+                                [hidden]="solution.tableShape === '1d'">,<input
+                                [(ngModel)]="solution.nextEntryIndex2"
+                                title="nextEntryIndex2"
+                                class="input-field-small"
+                                value="j"></span>) = entry;</span>
+                        </div>
                     </div>
-                    <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    <span *ngIf="solution.tableShape === '2d'">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    <span class="set-next-value-container">
-                    <textarea spellcheck="false" id="set-next-value-textarea" class="code"
-                              [(ngModel)]="solution.setNextEntryCode"
-                              title="setNextValueCode" rows="20"></textarea>
-                    </span>
-                    <br>
-                    <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    <span *ngIf="solution.tableShape === '2d'">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    <span class="code">T<span *ngIf="solution.tableShape === '2d'"></span>(<input
-                        [(ngModel)]="solution.nextEntryIndex1"
-                        title="nextEntryIndex1"
-                        class="input-field-small"
-                        value="i"><span
-                        [hidden]="solution.tableShape === '1d'">,<input
-                        [(ngModel)]="solution.nextEntryIndex2"
-                        title="nextEntryIndex2"
-                        class="input-field-small"
-                        value="j"></span>) = entry;</span>
                 </div>
                 <p class="code" [hidden]="solution.tableShape === '1d'">&nbsp;{{'}'}}</p>
                 <p class="code">{{'}'}}</p>
-                <textarea spellcheck="false" id="return-value-textarea" class="code"
-                          [(ngModel)]="solution.returnValueCode"
-                          title="returnValueCode" rows="6"></textarea>
+                <!--<textarea spellcheck="false" id="return-value-textarea" class="code"-->
+                <!--[(ngModel)]="solution.returnValueCode"-->
+                <!--title="returnValueCode" rows="6"></textarea>-->
+                <div id="return-value-textarea">
+                    <textarea class="full-width code code-editor"
+                              title="solution.returnValueCode" rows="6"
+                              [(ngModel)]="solution.returnValueCode"></textarea>
+                </div>
                 <!--</mat-card-content>-->
                 <!--</mat-card>-->
                 <button mat-raised-button
@@ -133,15 +144,15 @@
                 <!--<br>-->
                 <!--<br>-->
                 <!--<mat-expansion-panel *ngIf="generatedCode">-->
-                    <!--<mat-expansion-panel-header>-->
-                        <!--<mat-panel-title>-->
-                            <!--<b>Generated Code</b>-->
-                        <!--</mat-panel-title>-->
-                    <!--</mat-expansion-panel-header>-->
-                    <!--<div>-->
-                        <!--<small [innerHTML]="generatedCode"-->
-                               <!--class="code"></small>-->
-                    <!--</div>-->
+                <!--<mat-expansion-panel-header>-->
+                <!--<mat-panel-title>-->
+                <!--<b>Generated Code</b>-->
+                <!--</mat-panel-title>-->
+                <!--</mat-expansion-panel-header>-->
+                <!--<div>-->
+                <!--<small [innerHTML]="generatedCode"-->
+                <!--class="code"></small>-->
+                <!--</div>-->
                 <!--</mat-expansion-panel>-->
             </mat-card-content>
         </mat-card>

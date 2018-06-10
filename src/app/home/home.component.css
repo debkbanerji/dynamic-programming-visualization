@@ -30,25 +30,22 @@
 /*}*/
 
 #set-next-value-container {
-    width: 80%;
+    width: calc(100% - 32px);
+    max-width: calc(100% - 32px);
+    min-width: calc(100% - 32px);
+    float: right;
 }
 
-#initialization-textarea, #return-value-textarea {
-    width: calc(90% + 32px);
-    max-width: calc(90% + 32px);
-    min-width: calc(90% + 32px);
+#initialization-textarea, #return-value-textarea, .code-editor {
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%
 }
 
 #set-next-value-textarea {
     width: 90%;
     max-width: 90%;
     min-width: 90%;
-}
-
-#return-value-textarea {
-    width: calc(90% + 32px);
-    max-width: calc(90% + 32px);
-    min-width: calc(90% + 32px);
 }
 
 .full-width {
