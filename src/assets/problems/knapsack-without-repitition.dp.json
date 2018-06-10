@@ -44,7 +44,7 @@
         "for2Init": "0",
         "for2Condition": "w < W + 1",
         "for2Update": "w = w + 1",
-        "setNextEntryCode": "",
+        "setNextEntryCode": "if (i == 0 || w == 0) {\n    entry = 0;\n} else {\n    itemWeight = weights[i - 1];\n    if (itemWeight > w) {\n        entry = T(i - 1, w);\n    } else {\n        valueWithLastItem = T(i - 1, w - itemWeight) + values[i - 1];\n        if (valueWithLastItem > T(i - 1, w)) {\n            entry = valueWithLastItem;\n        } else {\n            entry = T(i - 1, w);\n        }\n    }\n}",
         "defaultTableEntry": "",
         "useDefaultTableEntry": false,
         "returnValueCode": "return T(n, W);",
@@ -61,10 +61,10 @@
                 "W": 6,
                 "n": 4,
                 "weights": [
-                    20,
-                    30,
-                    30,
-                    40
+                    1,
+                    2,
+                    3,
+                    4
                 ],
                 "values": [
                     12,

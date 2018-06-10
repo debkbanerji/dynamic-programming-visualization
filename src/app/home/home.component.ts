@@ -48,7 +48,7 @@ export class HomeComponent implements OnInit {
 // T(index) for one dimensional tables
 // T(rowNumber, columnNumber) for two dimensional tables
 
-// Note the tables are 0-indexed
+// Note the tables are 0 indexed
 
 // Everything else is Javascript
 

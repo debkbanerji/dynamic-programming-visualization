@@ -46,9 +46,9 @@
                 <!--<mat-card-content>-->
                 <p class="code" *ngIf="solution.tableShape === '1d'">T = A table of size
                     {{solution.tableDimension1 || '?'}}</p>
-                <p class="code" *ngIf="solution.tableShape === '2d'">T = A table of with
+                <p class="code" *ngIf="solution.tableShape === '2d'">T = A table with
                     {{solution.tableDimension1 || '?'}} rows and {{solution.tableDimension2 || '?'}} columns</p>
-                <textarea id="initialization-textarea" class="code"
+                <textarea spellcheck="false" id="initialization-textarea" class="code"
                           [(ngModel)]="solution.initializationCode"
                           title="initializationCode" rows="3"></textarea>
                 <p class="code">for (
@@ -97,7 +97,7 @@
                     <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                     <span *ngIf="solution.tableShape === '2d'">&nbsp;&nbsp;&nbsp;&nbsp;</span>
                     <span class="set-next-value-container">
-                    <textarea id="set-next-value-textarea" class="code"
+                    <textarea spellcheck="false" id="set-next-value-textarea" class="code"
                               [(ngModel)]="solution.setNextEntryCode"
                               title="setNextValueCode" rows="15"></textarea>
                     </span>
@@ -117,7 +117,7 @@
                 </div>
                 <p class="code" [hidden]="solution.tableShape === '1d'">&nbsp;{{'}'}}</p>
                 <p class="code">{{'}'}}</p>
-                <textarea id="return-value-textarea" class="code"
+                <textarea spellcheck="false" id="return-value-textarea" class="code"
                           [(ngModel)]="solution.returnValueCode"
                           title="returnValueCode" rows="6"></textarea>
                 <!--</mat-card-content>-->
