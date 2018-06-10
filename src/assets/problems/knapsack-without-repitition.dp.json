@@ -4,19 +4,19 @@
     "input": {
         "W": {
             "description": "Maximum Capacity",
-            "type": "int",
+            "type": "number",
             "non-negative": true
         },
         "n": {
             "description": "Number of Items",
-            "type": "int",
+            "type": "number",
             "non-negative": true
         },
         "weights": {
             "description": "array of item weights, where entry <em>i</em> represents the weight of item <em>i</em>",
             "type": "array",
             "shape": "1d",
-            "entry-type": "int",
+            "entry-type": "number",
             "length": "n",
             "non-negative": true
         },
@@ -24,7 +24,7 @@
             "description": "array of item values, where entry <em>i</em> represents the value of item <em>i</em>",
             "type": "array",
             "shape": "1d",
-            "entry-type": "float",
+            "entry-type": "number",
             "length": "n",
             "non-negative": true
         }

@@ -165,7 +165,7 @@ export class HomeComponent implements OnInit {
         const code = HomeComponent.getPlainRunnableCode(this.solution, this.problem);
         this.generatedCode = code
             .replace(new RegExp('\t', 'g'), '&nbsp;&nbsp;&nbsp;&nbsp;')
-            .replace(new RegExp('    ', 'g'), '&nbsp;&nbsp;&nbsp;&nbsp;')
+            .replace(new RegExp(' {4}', 'g'), '&nbsp;&nbsp;&nbsp;&nbsp;')
             .replace(new RegExp('\n', 'g'), '<br>');
         for (let i = 0; i < this.testCases.length; i++) {
             this.runTest(i, code, false, this);
@@ -364,24 +364,20 @@ export class HomeComponent implements OnInit {
     }
 
 
-    getDisplayedValue(value: any, type: string): string {
+    getDisplayedValue(value: any): string {
         if (value === null || value === undefined) {
             return '?';
         }
-        if (type === 'int' || type === 'float' || type === 'number') {
+        if ((typeof value) === (typeof 1) || value === 'infinity' || value === '-infinity') {
             if (value === Number.MAX_SAFE_INTEGER || value === Number.MAX_VALUE || value === 'infinity') {
                 return '&#x221e;';
             } else if (value === Number.MIN_SAFE_INTEGER || value === Number.MIN_VALUE || value === '-infinity') {
                 return '-&#x221e;';
             } else {
-                if (type === 'float' || type === 'number') {
-                    return value !== parseInt(value) ? value.toFixed(2) : Math.floor(value);
-                } else {
-                    return value;
-                }
+                return value !== parseInt(value) ? value.toFixed(2) : Math.floor(value);
             }
-        } else if (type === 'boolean') {
-            return value ? '&#x2714;' : '&#x2718;';
+        } else if ((typeof value) === (typeof true)) {
+            return value ? '<b>&#x2714;</b>' : '<b>&#x2718;</b>';
         } else {
             return 'Unrecognized type';
         }
