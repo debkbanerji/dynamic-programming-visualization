@@ -52,6 +52,9 @@ export class HomeComponent implements OnInit {
 
 // Everything else is Javascript
 
+// This means that entries of input tables are still accessed using syntax such as arr[index] or arr[row][column]
+
+
 // You can resize this text area using the handle at the bottom right (or whatever your browser supports)
 `,
         defaultTableEntry: '',
