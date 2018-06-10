@@ -45,8 +45,8 @@ export class HomeComponent implements OnInit {
 
 // You can access existing table entries with the following syntax:
 
-// T(42) for one dimensional tables
-// T(4,2) for two dimensional tables
+// T(index) for one dimensional tables
+// T(rowNumber, columnNumber) for two dimensional tables
 
 // Note the tables are 0-indexed
 

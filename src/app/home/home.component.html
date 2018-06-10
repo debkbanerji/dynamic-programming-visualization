@@ -44,8 +44,10 @@
                 <!--</p>-->
                 <!--<mat-card id="code-card">-->
                 <!--<mat-card-content>-->
-                <p class="code">T = <span *ngIf="solution.tableShape === '2d'"></span>[{{solution.tableDimension1}}]<span
-                    *ngIf="solution.tableShape === '2d'">[{{solution.tableDimension2}}]</span></p>
+                <p class="code" *ngIf="solution.tableShape === '1d'">T = A table of size
+                    {{solution.tableDimension1 || '?'}}</p>
+                <p class="code" *ngIf="solution.tableShape === '2d'">T = A table of with
+                    {{solution.tableDimension1 || '?'}} rows and {{solution.tableDimension2 || '?'}} columns</p>
                 <textarea id="initialization-textarea" class="code"
                           [(ngModel)]="solution.initializationCode"
                           title="initializationCode" rows="3"></textarea>
@@ -102,10 +104,11 @@
                     <br>
                     <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                     <span *ngIf="solution.tableShape === '2d'">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                    <span class="code">T<span *ngIf="solution.tableShape === '2d'"></span>(<input [(ngModel)]="solution.nextEntryIndex1"
-                                                                                         title="nextEntryIndex1"
-                                                                                         class="input-field-small"
-                                                                                         value="i"><span
+                    <span class="code">T<span *ngIf="solution.tableShape === '2d'"></span>(<input
+                        [(ngModel)]="solution.nextEntryIndex1"
+                        title="nextEntryIndex1"
+                        class="input-field-small"
+                        value="i"><span
                         [hidden]="solution.tableShape === '1d'">,<input
                         [(ngModel)]="solution.nextEntryIndex2"
                         title="nextEntryIndex2"
@@ -187,11 +190,13 @@
                                 <mat-panel-title class="slightly-bold-label">Expected Results</mat-panel-title>
                             </mat-expansion-panel-header>
                             <span class="slightly-bold-label">Table</span>
-                            <button mat-raised-button class="transpose-button" *ngIf="providedSolution['tableShape'] === '2d'"
+                            <button mat-raised-button class="transpose-button"
+                                    *ngIf="providedSolution['tableShape'] === '2d'"
                                     (click)="transposeTable()">
                                 Transpose
                             </button>
-                            <table class="dp-table" *ngIf="providedSolution['tableShape'] === '2d' && !transpose2dTable">
+                            <table class="dp-table"
+                                   *ngIf="providedSolution['tableShape'] === '2d' && !transpose2dTable">
                                 <tr class="dp-tr" *ngFor="let i of range(testCase['expected-table'].length);">
                                     <td class="dp-td" *ngFor="let j of range(testCase['expected-table'][0].length);">
                                     <span class="dp-table-cell"
