@@ -87,17 +87,25 @@ export class HomeComponent implements OnInit {
             component.problem = data;
             component.providedSolution = component.problem['provided-solution'];
             component.testCases = component.problem['test-cases'];
+            const code = HomeComponent.getPlainRunnableCode(component.providedSolution, component.problem);
+            for (let testCaseIndex of component.range(component.testCases.length)) {
+                // TODO: Switch to async
+                const testCase = component.testCases[testCaseIndex];
+                if (!testCase['expected-result'] && !testCase['expected-table']) {
+                    this.runTest(testCaseIndex, code, true, component);
+                }
+            }
             component.problemDefined = true;
         });
     }
 
     // Returns result of running the test case, as well as the table
-    runTest(testCaseIndex: number, plainFunctionCode: string) {
+    runTest(testCaseIndex: number, plainFunctionCode: string, isProvidedSolution: boolean, component: HomeComponent) {
         const code = [];
 
-        const inputMap = this.problem.input;
+        const inputMap = component.problem.input;
         const inputs = Object.keys(inputMap).sort();
-        const inputVals = this.testCases[testCaseIndex]['input'];
+        const inputVals = component.testCases[testCaseIndex]['input'];
 
         for (let i = 0; i < inputs.length; i++) {
             code.push('const ', inputs[i], ' = ');
@@ -124,6 +132,7 @@ export class HomeComponent implements OnInit {
         code.push('result = [];\n\nresult.push(algResult, table);\n\n');
         code.push('return result;');
 
+        // TODO: Extract generating this out into a method
         console.log(code.join(''));
 
         try {
@@ -131,8 +140,15 @@ export class HomeComponent implements OnInit {
             const testResult = testFunction();
             const result = testResult[0];
             const table = testResult[1];
-            console.log(result);
-            console.log(table);
+            // console.log(result);
+            // console.log(table);
+            if (isProvidedSolution) {
+                const testCase = component.testCases[testCaseIndex];
+                if (!testCase['expected-result'] && !testCase['expected-table']) {
+                    testCase['expected-result'] = result;
+                    testCase['expected-table'] = table;
+                }
+            }
         } catch (e) {
             console.log(e);
         }
@@ -140,9 +156,12 @@ export class HomeComponent implements OnInit {
 
     // Returns result of running the test case, as well as the table
     runAllTests(): void {
+        // TODO: switch to async
         console.log(JSON.stringify(this.solution));
         const code = HomeComponent.getPlainRunnableCode(this.solution, this.problem);
-        this.runTest(0, code);
+        for (let i = 0; i < this.testCases.length; i++) {
+            this.runTest(i, code, false, this);
+        }
     }
 
     static getPlainRunnableCode(solution: any, problem: any): string {
@@ -257,14 +276,14 @@ export class HomeComponent implements OnInit {
         code.push(', ', encodedTableName);
         code.push(') {\n');
         if (is2d) {
-            code.push('\n\tif(',encodedTableName,'.length <= i || i < 0) {');
+            code.push('\n\tif(', encodedTableName, '.length <= i || i < 0) {');
             code.push('\n\t\tthrow \'Could not get entry: \' + i + \' is not a valid table row\';');
             code.push('\n\t}\n');
-            code.push('\n\tif(',encodedTableName,'[0].length <= j || j < 0) {');
+            code.push('\n\tif(', encodedTableName, '[0].length <= j || j < 0) {');
             code.push('\n\t\tthrow \'Could not get entry: \' + j + \' is not a valid table column\';');
             code.push('\n\t}\n')
         } else {
-            code.push('\n\tif(',encodedTableName,'.length <= i || i < 0) {');
+            code.push('\n\tif(', encodedTableName, '.length <= i || i < 0) {');
             code.push('\n\t\tthrow \'Could not get entry: \' + i + \' is not a valid table index\';');
             code.push('\n\t}\n');
         }
@@ -303,14 +322,14 @@ export class HomeComponent implements OnInit {
         code.push(', ', encodedTableName);
         code.push(') {\n');
         if (is2d) {
-            code.push('\n\tif(',encodedTableName,'.length <= i || i < 0) {');
+            code.push('\n\tif(', encodedTableName, '.length <= i || i < 0) {');
             code.push('\n\t\tthrow \'Could not set entry: \' + i + \' is not a valid table row\';');
             code.push('\n\t}\n');
-            code.push('\n\tif(',encodedTableName,'[0].length <= j || j < 0) {');
+            code.push('\n\tif(', encodedTableName, '[0].length <= j || j < 0) {');
             code.push('\n\t\tthrow \'Could not set entry: \' + j + \' is not a valid table column\';');
             code.push('\n\t}\n')
         } else {
-            code.push('\n\tif(',encodedTableName,'.length <= i || i < 0) {');
+            code.push('\n\tif(', encodedTableName, '.length <= i || i < 0) {');
             code.push('\n\t\tthrow \'Could not set entry: \' + i + \' is not a valid table index\';');
             code.push('\n\t}\n');
         }
