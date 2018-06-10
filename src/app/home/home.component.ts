@@ -63,6 +63,8 @@ export class HomeComponent implements OnInit {
         nextEntryIndex2: 'j'
     };
 
+    generatedCode: string = null;
+
     testResults: any = {};
 
     transpose2dTable: boolean = false;
@@ -158,6 +160,10 @@ export class HomeComponent implements OnInit {
         // TODO: switch to async
         console.log(JSON.stringify(this.solution));
         const code = HomeComponent.getPlainRunnableCode(this.solution, this.problem);
+        this.generatedCode = code
+            .replace(new RegExp('\t', 'g'), '&nbsp;&nbsp;&nbsp;&nbsp;')
+            .replace(new RegExp('    ', 'g'), '&nbsp;&nbsp;&nbsp;&nbsp;')
+            .replace(new RegExp('\n', 'g'), '<br>');
         for (let i = 0; i < this.testCases.length; i++) {
             this.runTest(i, code, false, this);
         }

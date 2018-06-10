@@ -49,8 +49,8 @@
                 <p class="code" *ngIf="solution.tableShape === '2d'">T = A table with
                     {{solution.tableDimension1 || '?'}} rows and {{solution.tableDimension2 || '?'}} columns</p>
                 <!--<textarea spellcheck="false" id="initialization-textarea" class="code"-->
-                          <!--[(ngModel)]="solution.initializationCode"-->
-                          <!--title="initializationCode" rows="3"></textarea>-->
+                <!--[(ngModel)]="solution.initializationCode"-->
+                <!--title="initializationCode" rows="3"></textarea>-->
                 <p class="code">for (
                     <input [(ngModel)]="solution.for1Variable"
                            title="for1Variable"
@@ -130,6 +130,19 @@
                         (click)="openPopulateGivenSolutionDialog()">
                     Show Solution
                 </button>
+                <br>
+                <br>
+                <mat-expansion-panel *ngIf="generatedCode">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <b>Generated Code</b>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div>
+                        <small [innerHTML]="generatedCode"
+                               class="code"></small>
+                    </div>
+                </mat-expansion-panel>
             </mat-card-content>
         </mat-card>
     </div>
