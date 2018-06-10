@@ -255,7 +255,20 @@ export class HomeComponent implements OnInit {
             code.push(', j');
         }
         code.push(', ', encodedTableName);
-        code.push(') {\n\treturn ', encodedTableName, '[i]');
+        code.push(') {\n');
+        if (is2d) {
+            code.push('\n\tif(',encodedTableName,'.length <= i || i < 0) {');
+            code.push('\n\t\tthrow \'\' + i + \' is not a valid table row\';');
+            code.push('\n\t}\n');
+            code.push('\n\tif(',encodedTableName,'[0].length <= j || j < 0) {');
+            code.push('\n\t\tthrow \'\' + j + \' is not a valid table column\';');
+            code.push('\n\t}\n')
+        } else {
+            code.push('\n\tif(',encodedTableName,'.length <= i || i < 0) {');
+            code.push('\n\t\tthrow \'\' + i + \' is not a valid table index\';');
+            code.push('\n\t}\n');
+        }
+        code.push('\n\treturn ', encodedTableName, '[i]');
         if (is2d) {
             code.push('[j]')
         }
@@ -288,7 +301,20 @@ export class HomeComponent implements OnInit {
             code.push(', j');
         }
         code.push(', ', encodedTableName);
-        code.push(') {\n\t', encodedTableName, '[i]');
+        code.push(') {\n');
+        if (is2d) {
+            code.push('\n\tif(',encodedTableName,'.length <= i || i < 0) {');
+            code.push('\n\t\tthrow \'\' + i + \' is not a valid table row\';');
+            code.push('\n\t}\n');
+            code.push('\n\tif(',encodedTableName,'[0].length <= j || j < 0) {');
+            code.push('\n\t\tthrow \'\' + j + \' is not a valid table column\';');
+            code.push('\n\t}\n')
+        } else {
+            code.push('\n\tif(',encodedTableName,'.length <= i || i < 0) {');
+            code.push('\n\t\tthrow \'\' + i + \' is not a valid table index\';');
+            code.push('\n\t}\n');
+        }
+        code.push('\n\t', encodedTableName, '[i]');
         if (is2d) {
             code.push('[j]')
         }
