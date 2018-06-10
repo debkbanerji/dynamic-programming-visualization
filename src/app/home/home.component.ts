@@ -132,7 +132,6 @@ export class HomeComponent implements OnInit {
         code.push('result = [];\n\nresult.push(algResult, table);\n\n');
         code.push('return result;');
 
-        // TODO: Extract generating this out into a method
         console.log(code.join(''));
 
         try {
