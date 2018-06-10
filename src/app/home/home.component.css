@@ -92,3 +92,7 @@
 .transpose-button {
     margin: 5px;
 }
+
+#reveal-solution-button {
+    margin-left: 10px;
+}

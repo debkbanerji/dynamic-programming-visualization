@@ -17,9 +17,11 @@ import {
     MatIconModule,
     MatInputModule,
     MatSelectModule,
+    MatDialogModule,
     MatTabsModule
 } from "@angular/material";
 import {HttpClientModule} from "@angular/common/http";
+import {PopulateGivenSolutionDialogComponent} from './dialogs/populate-given-solution-dialog/populate-given-solution-dialog.component';
 
 const routes: Routes = [ // Array of all routes - modify when adding routes
     {path: '**', component: HomeComponent} // Default route
@@ -29,7 +31,8 @@ const routes: Routes = [ // Array of all routes - modify when adding routes
 @NgModule({
     declarations: [
         AppComponent,
-        HomeComponent
+        HomeComponent,
+        PopulateGivenSolutionDialogComponent
     ],
     imports: [
         BrowserModule,
@@ -45,7 +48,11 @@ const routes: Routes = [ // Array of all routes - modify when adding routes
         MatTabsModule,
         MatButtonModule,
         MatCheckboxModule,
+        MatDialogModule,
         RouterModule.forRoot(routes)
+    ],
+    entryComponents: [
+        PopulateGivenSolutionDialogComponent
     ],
     providers: [],
     bootstrap: [AppComponent]

@@ -32,7 +32,7 @@
     "result-type": "float",
     "provided-solution": {
         "tableShape": "2d",
-        "tableDimension1": "b + 1",
+        "tableDimension1": "W + 1",
         "tableDimension2": "n + 1",
         "tableDataType": "number",
         "initializationCode": "// No other initialization needed",
@@ -42,7 +42,7 @@
         "for1Update": "i = i + 1",
         "for2Variable": "w",
         "for2Init": "0",
-        "for2Condition": "w <= maxCapacity",
+        "for2Condition": "w < W + 1",
         "for2Update": "w = w + 1",
         "setNextEntryCode": "",
         "defaultTableEntry": "",
@@ -58,7 +58,7 @@
             "name": "Test Case 1",
             "hide-table": false,
             "input": {
-                "b": 6,
+                "W": 6,
                 "n": 4,
                 "weights": [
                     20,

@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
+import {MatDialog} from "@angular/material";
+import {PopulateGivenSolutionDialogComponent} from "../dialogs/populate-given-solution-dialog/populate-given-solution-dialog.component";
 
 const encodedTableName = '___TABLE___';
 
@@ -64,7 +66,9 @@ export class HomeComponent implements OnInit {
 
     transpose2dTable: boolean = false;
 
-    constructor(private http: HttpClient) {
+    revealedProvidedSolution: boolean = false;
+
+    constructor(private http: HttpClient, public dialog: MatDialog) {
     }
 
     ngOnInit() {
@@ -135,6 +139,7 @@ export class HomeComponent implements OnInit {
 
     // Returns result of running the test case, as well as the table
     runAllTests(): void {
+        console.log(JSON.stringify(this.solution));
         const code = HomeComponent.getPlainRunnableCode(this.solution, this.problem);
         this.runTest(0, code);
     }
@@ -146,7 +151,7 @@ export class HomeComponent implements OnInit {
         let initializationCode = [];
         if (is2d) {
             initializationCode.push('const ', encodedTableName, ' = [];\n');
-            initializationCode.push('for (let i = 0; i < ', solution.tableDimension1, '; i++) {\n');
+            initializationCode.push('for (let TABLE__INDEX = 0; TABLE__INDEX < ', solution.tableDimension1, '; TABLE__INDEX++) {\n');
             initializationCode.push('\t', encodedTableName, '.push(Array(', solution.tableDimension2, '));\n');
             initializationCode.push('}');
         } else {
@@ -205,7 +210,6 @@ export class HomeComponent implements OnInit {
         }
 
         const setNextEntryCode = solution.setNextEntryCode;
-        console.log(setNextEntryCode);
         innerCode.push('\t');
         if (is2d) {
             innerCode.push('\t');
@@ -295,6 +299,21 @@ export class HomeComponent implements OnInit {
         this.transpose2dTable = !this.transpose2dTable;
         // TODO: Rerun test cases
     }
+
+    openPopulateGivenSolutionDialog(): void {
+        const component = this;
+        const dialogRef = this.dialog.open(PopulateGivenSolutionDialogComponent, {});
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                component.revealedProvidedSolution = true;
+                // component.solution = Object.assign({}, component.providedSolution);
+                // deep copy just in case solution format is changed in the future
+                component.solution = JSON.parse(JSON.stringify(component.providedSolution));
+            }
+        });
+    }
+
 
     getDisplayedValue(value: any, type: string): string {
         if (value === null || value === undefined) {
