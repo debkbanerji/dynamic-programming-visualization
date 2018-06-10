@@ -32,8 +32,8 @@
     "result-type": "float",
     "provided-solution": {
         "tableShape": "2d",
-        "tableDimension1": "W + 1",
-        "tableDimension2": "n + 1",
+        "tableDimension1": "n + 1",
+        "tableDimension2": "W + 1",
         "tableDataType": "number",
         "initializationCode": "// No other initialization needed",
         "for1Variable": "i",
@@ -49,7 +49,7 @@
         "useDefaultTableEntry": false,
         "returnValueCode": "return T(n, W)",
         "nextEntryIndex1": "i",
-        "nextEntryIndex2": "W",
+        "nextEntryIndex2": "w",
         "tableEntryDefinition": "T[<em>i</em>][<em>j</em>] Is the maximum value obtainable with a knapsack of capacity <em>i</em> using the first <em>j</em> items.",
         "solutionNotes": "(Additional solution notes here)"
     },
