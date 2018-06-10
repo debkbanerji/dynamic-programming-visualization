@@ -48,9 +48,9 @@
                     {{solution.tableDimension1 || '?'}}</p>
                 <p class="code" *ngIf="solution.tableShape === '2d'">T = A table with
                     {{solution.tableDimension1 || '?'}} rows and {{solution.tableDimension2 || '?'}} columns</p>
-                <textarea spellcheck="false" id="initialization-textarea" class="code"
-                          [(ngModel)]="solution.initializationCode"
-                          title="initializationCode" rows="3"></textarea>
+                <!--<textarea spellcheck="false" id="initialization-textarea" class="code"-->
+                          <!--[(ngModel)]="solution.initializationCode"-->
+                          <!--title="initializationCode" rows="3"></textarea>-->
                 <p class="code">for (
                     <input [(ngModel)]="solution.for1Variable"
                            title="for1Variable"

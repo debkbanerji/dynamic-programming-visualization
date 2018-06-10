@@ -29,7 +29,7 @@ export class HomeComponent implements OnInit {
 
         tableDataType: 'number',
 
-        initializationCode: '// Any other initialization here',
+        // initializationCode: '// Any other initialization here',
 
         for1Variable: 'i',
         for1Init: '0',
@@ -218,12 +218,7 @@ export class HomeComponent implements OnInit {
 
         const innerCode = [];
         innerCode.push('\t');
-        // innerCode.push(encodedTableName, ' = [');
-        // if (is2d) {
-        //     innerCode.push('[],[]');
-        // }
-        // innerCode.push('];\n\n');
-        innerCode.push(solution.initializationCode, '\n\n');
+        // innerCode.push(solution.initializationCode, '\n\n');
         innerCode.push('for(let ', solution.for1Variable, ' = ', solution.for1Init, '; ', solution.for1Condition, '; ', solution.for1Update, ') {\n\n');
         if (is2d) {
             innerCode.push('\tfor(let ', solution.for2Variable, ' = ', solution.for2Init, '; ', solution.for2Condition, '; ', solution.for2Update, ') {\n\n');
