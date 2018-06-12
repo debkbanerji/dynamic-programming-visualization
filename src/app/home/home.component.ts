@@ -14,6 +14,8 @@ export class HomeComponent implements OnInit {
 
     objectKeys = Object.keys;
 
+    problemFileName: string = 'knapsack-without-repetition.dp.json';
+
     tableShapes: Array<string> = ['1d', '2d'];
 
     problemDefined: boolean = false;
@@ -70,6 +72,8 @@ export class HomeComponent implements OnInit {
 
     testResults: any = {};
 
+    testTimeLimit = 3000; // Time limit in milliseconds per test
+
     transpose2dTable: boolean = false;
 
     revealedProvidedSolution: boolean = false;
@@ -78,7 +82,7 @@ export class HomeComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.loadProblem('knapsack-without-repitition.dp.json');
+        this.loadProblem(this.problemFileName);
         const smallInputFields = document.getElementsByClassName('input-field-small');
         for (let i = 0; i < smallInputFields.length; i++) {
             const el = smallInputFields[i];
@@ -93,25 +97,39 @@ export class HomeComponent implements OnInit {
             component.providedSolution = component.problem['provided-solution'];
             component.testCases = component.problem['test-cases'];
             const code = HomeComponent.getPlainRunnableCode(component.providedSolution, component.problem);
-            for (let testCaseIndex of component.range(component.testCases.length)) {
-                const testCase = component.testCases[testCaseIndex];
-                if (!testCase['expected-result'] && !testCase['expected-table']) {
-                    const testResult = component.runTest(testCaseIndex, code, component);
-                    const testCase = component.testCases[testCaseIndex];
-                    console.log(testResult);
-                    if (!testCase['expected-result'] && !testCase['expected-table']) {
-                        testCase['expected-result'] = testResult['result'];
-                        testCase['expected-table'] = testResult['table'];
-                    }
-                }
-            }
             component.problemDefined = true;
+            component.runTestsWithProvidedSolution(component, 0, code);
         });
     }
 
+    runTestsWithProvidedSolution(component: HomeComponent, testCaseIndex: number, code: string): void {
+        if (testCaseIndex < component.testCases.length) {
+            const testCase = component.testCases[testCaseIndex];
+            if (!testCase['expected-result'] && !testCase['expected-table']) {
+                component.runTest(testCaseIndex, code, component, function (testResult) {
+                    if (testResult['error']) {
+                        console.log('Test error', testResult['error']);
+                        component.raiseProvidedSolutionError(testResult['error'].message);
+                    } else if (testResult['timed-out']) {
+                        component.raiseProvidedSolutionError('Test ' + testCaseIndex + ' timed out');
+                    } else {
+                        const testCase = component.testCases[testCaseIndex];
+                        if (!testCase['expected-result'] && !testCase['expected-table']) {
+                            testCase['expected-result'] = testResult['result'];
+                            testCase['expected-table'] = testResult['table'];
+                        }
+                        component.runTestsWithProvidedSolution(component, testCaseIndex + 1, code);
+                    }
+                });
+            } else {
+                component.runTestsWithProvidedSolution(component, testCaseIndex + 1, code);
+            }
+        }
+    }
+
     // Returns result of running the test case, as well as the table
-    runTest(testCaseIndex: number, plainFunctionCode: string, component: HomeComponent) {
-        // TODO: Switch to async
+    runTest(testCaseIndex: number, plainFunctionCode: string, component: HomeComponent, callback: Function) {
+        // console.log('Running test ' + testCaseIndex);
         const code = [];
 
         const inputMap = component.problem.input;
@@ -141,39 +159,65 @@ export class HomeComponent implements OnInit {
 
         code.push(');\ntable = ', encodedTableName, ';\n');
         code.push('result = [];\n\nresult.push(algResult, table);\n\n');
-        code.push('return result;');
+        code.push('postMessage(result);');
+        code.push('self.close();');
 
         const joinedCode = code.join('');
-        console.log(joinedCode);
 
         const result = {};
-        try {
-            const testFunction = Function(joinedCode);
-            const testResult = testFunction();
+
+        const _blob = new Blob([joinedCode], {type: 'text/javascript'});
+        const _worker = new Worker(window.URL.createObjectURL(_blob));
+        let testCaseFinished = false;
+        _worker.onmessage = function (m) {
+            testCaseFinished = true;
+            // console.log(m, m.data);
+            const testResult = m.data;
             result['result'] = testResult[0];
             result['table'] = testResult[1];
             result['timed-out'] = false;
             result['error'] = null;
-        } catch (e) {
+            callback(result);
+        };
+        _worker.onerror = function (e) {
+            testCaseFinished = true;
             result['result'] = null;
             result['table'] = null;
             result['timed-out'] = false;
             result['error'] = e;
-        }
-        return result;
+            callback(result);
+        };
+
+        setTimeout(function () {
+            if (!testCaseFinished) {
+                _worker.terminate();
+                result['result'] = null;
+                result['table'] = null;
+                result['timed-out'] = true;
+                result['error'] = null;
+                callback(result);
+            }
+        }, component.testTimeLimit);
+        // start worker
+        _worker.postMessage('Heyy');
     }
 
     // Returns result of running the test case, as well as the table
-    runAllTests(): void {
-        // TODO: switch to async
-        console.log(JSON.stringify(this.solution));
+    runAllTestsWithUserSolution(): void {
         const code = HomeComponent.getPlainRunnableCode(this.solution, this.problem);
         this.generatedCode = code
             .replace(new RegExp('\t', 'g'), '&nbsp;&nbsp;&nbsp;&nbsp;')
             .replace(new RegExp(' {4}', 'g'), '&nbsp;&nbsp;&nbsp;&nbsp;')
             .replace(new RegExp('\n', 'g'), '<br>');
-        for (let i = 0; i < this.testCases.length; i++) {
-            this.runTest(i, code, this);
+        this.runTestsWithUserSolution(this, 0, code);
+    }
+
+    runTestsWithUserSolution(component: HomeComponent, testCaseIndex: number, code: string) {
+        if (testCaseIndex < component.testCases.length) {
+            component.runTest(testCaseIndex, code, component, function (testResult) {
+                component.testResults[testCaseIndex] = testResult;
+                component.runTestsWithUserSolution(component, testCaseIndex + 1, code);
+            });
         }
     }
 
@@ -369,6 +413,14 @@ export class HomeComponent implements OnInit {
     }
 
 
+    raiseProvidedSolutionError(message: string) {
+        alert('It looks like there was en error with the provided solution for ' +
+            this.problemFileName
+            + ':\n\n'
+            + message
+            + '\n\nPlease close this page. If this issue persists, please contact the problem author');
+    }
+
     getDisplayedValue(value: any): string {
         if (value === null || value === undefined) {
             return '?';
@@ -383,6 +435,8 @@ export class HomeComponent implements OnInit {
             }
         } else if ((typeof value) === (typeof true)) {
             return value ? '<b>&#x2714;</b>' : '<b>&#x2718;</b>';
+        } else if ((typeof value) === (typeof 'string')) {
+            return value;
         } else {
             return 'Unrecognized type';
         }
