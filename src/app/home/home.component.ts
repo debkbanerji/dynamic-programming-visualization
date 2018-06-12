@@ -143,11 +143,12 @@ export class HomeComponent implements OnInit {
         code.push('result = [];\n\nresult.push(algResult, table);\n\n');
         code.push('return result;');
 
-        console.log(code.join(''));
+        const joinedCode = code.join('');
+        console.log(joinedCode);
 
         const result = {};
         try {
-            const testFunction = Function(code.join(''));
+            const testFunction = Function(joinedCode);
             const testResult = testFunction();
             result['result'] = testResult[0];
             result['table'] = testResult[1];
