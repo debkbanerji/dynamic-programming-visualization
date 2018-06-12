@@ -209,7 +209,7 @@
                                 </div>
                             </div>
                         </mat-expansion-panel>
-                        <mat-expansion-panel>
+                        <mat-expansion-panel *ngIf="testCase['expected-table'] && testCase['expected-result']">
                             <mat-expansion-panel-header>
                                 <mat-panel-title class="slightly-bold-label">Expected Results</mat-panel-title>
                             </mat-expansion-panel-header>

@@ -70,6 +70,8 @@ export class HomeComponent implements OnInit {
 
     testResults: any = {};
 
+    testTimeLimit = 3000; // Time limit in milliseconds per test
+
     transpose2dTable: boolean = false;
 
     revealedProvidedSolution: boolean = false;
@@ -96,13 +98,21 @@ export class HomeComponent implements OnInit {
             for (let testCaseIndex of component.range(component.testCases.length)) {
                 const testCase = component.testCases[testCaseIndex];
                 if (!testCase['expected-result'] && !testCase['expected-table']) {
-                    const testResult = component.runTest(testCaseIndex, code, component);
-                    const testCase = component.testCases[testCaseIndex];
-                    console.log(testResult);
-                    if (!testCase['expected-result'] && !testCase['expected-table']) {
-                        testCase['expected-result'] = testResult['result'];
-                        testCase['expected-table'] = testResult['table'];
-                    }
+                    component.runTest(testCaseIndex, code, component, function (testResult) {
+                        if (testResult['error']) {
+                            console.log('Test error', testResult['error']); // TODO: handle
+                        } else if (testResult['timed-out']) {
+                            console.log(testResult['timed-out']);
+                            console.log('Test timed out'); // TODO: handle
+                        } else {
+                            const testCase = component.testCases[testCaseIndex];
+                            console.log('Test result', testResult);
+                            if (!testCase['expected-result'] && !testCase['expected-table']) {
+                                testCase['expected-result'] = testResult['result'];
+                                testCase['expected-table'] = testResult['table'];
+                            }
+                        }
+                    });
                 }
             }
             component.problemDefined = true;
@@ -110,8 +120,7 @@ export class HomeComponent implements OnInit {
     }
 
     // Returns result of running the test case, as well as the table
-    runTest(testCaseIndex: number, plainFunctionCode: string, component: HomeComponent) {
-        // TODO: Switch to async
+    runTest(testCaseIndex: number, plainFunctionCode: string, component: HomeComponent, callback: Function) {
         const code = [];
 
         const inputMap = component.problem.input;
@@ -141,26 +150,47 @@ export class HomeComponent implements OnInit {
 
         code.push(');\ntable = ', encodedTableName, ';\n');
         code.push('result = [];\n\nresult.push(algResult, table);\n\n');
-        code.push('return result;');
+        code.push('postMessage(result);');
+        code.push('self.close();');
 
         const joinedCode = code.join('');
-        console.log(joinedCode);
 
         const result = {};
-        try {
-            const testFunction = Function(joinedCode);
-            const testResult = testFunction();
+
+        const _blob = new Blob([joinedCode], {type: 'text/javascript'});
+        const _worker = new Worker(window.URL.createObjectURL(_blob));
+        let testCaseFinished = false;
+        _worker.onmessage = function (m) {
+            testCaseFinished = true;
+            // console.log(m, m.data);
+            const testResult = m.data;
             result['result'] = testResult[0];
             result['table'] = testResult[1];
             result['timed-out'] = false;
             result['error'] = null;
-        } catch (e) {
+            callback(result);
+        };
+        _worker.onerror = function (e) {
+            testCaseFinished = true;
             result['result'] = null;
             result['table'] = null;
             result['timed-out'] = false;
             result['error'] = e;
-        }
-        return result;
+            callback(result);
+        };
+
+        setTimeout(function () {
+            if (!testCaseFinished) {
+                _worker.terminate();
+                result['result'] = null;
+                result['table'] = null;
+                result['timed-out'] = true;
+                result['error'] = null;
+                callback(result);
+            }
+        }, component.testTimeLimit);
+        // start worker
+        _worker.postMessage('Heyy');
     }
 
     // Returns result of running the test case, as well as the table
