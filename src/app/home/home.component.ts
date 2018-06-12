@@ -414,7 +414,7 @@ export class HomeComponent implements OnInit {
         });
     }
 
-    getSectionSpecificErrorMessage(e, code: string): string {
+    getSectionSpecificErrorMessage(e: ErrorEvent, code: string): string {
         // TODO: Get error message for user
         return 'TODO: Get error message for user';
     }
