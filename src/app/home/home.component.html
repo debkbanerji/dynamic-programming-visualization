@@ -263,6 +263,7 @@
                             </mat-card-header>
                             <mat-card-content>
                                 <pre>{{testResults[testCaseIndex] | json}}</pre>
+                                <pre>{{testResults[testCaseIndex].error ? testResults[testCaseIndex].error.message: 'No error'}}</pre>
                             </mat-card-content>
                         </mat-card>
                     </mat-tab>

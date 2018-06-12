@@ -184,6 +184,7 @@ export class HomeComponent implements OnInit {
             result['result'] = null;
             result['table'] = null;
             result['timed-out'] = false;
+            // TODO: figure out line number and return proper error message
             result['error'] = e;
             callback(result);
         };
