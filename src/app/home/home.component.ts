@@ -94,10 +94,15 @@ export class HomeComponent implements OnInit {
             component.testCases = component.problem['test-cases'];
             const code = HomeComponent.getPlainRunnableCode(component.providedSolution, component.problem);
             for (let testCaseIndex of component.range(component.testCases.length)) {
-                // TODO: Switch to async
                 const testCase = component.testCases[testCaseIndex];
                 if (!testCase['expected-result'] && !testCase['expected-table']) {
-                    this.runTest(testCaseIndex, code, true, component);
+                    const testResult = component.runTest(testCaseIndex, code, component);
+                    const testCase = component.testCases[testCaseIndex];
+                    console.log(testResult);
+                    if (!testCase['expected-result'] && !testCase['expected-table']) {
+                        testCase['expected-result'] = testResult['result'];
+                        testCase['expected-table'] = testResult['table'];
+                    }
                 }
             }
             component.problemDefined = true;
@@ -105,7 +110,8 @@ export class HomeComponent implements OnInit {
     }
 
     // Returns result of running the test case, as well as the table
-    runTest(testCaseIndex: number, plainFunctionCode: string, isProvidedSolution: boolean, component: HomeComponent) {
+    runTest(testCaseIndex: number, plainFunctionCode: string, component: HomeComponent) {
+        // TODO: Switch to async
         const code = [];
 
         const inputMap = component.problem.input;
@@ -139,23 +145,21 @@ export class HomeComponent implements OnInit {
 
         console.log(code.join(''));
 
+        const result = {};
         try {
             const testFunction = Function(code.join(''));
             const testResult = testFunction();
-            const result = testResult[0];
-            const table = testResult[1];
-            // console.log(result);
-            // console.log(table);
-            if (isProvidedSolution) {
-                const testCase = component.testCases[testCaseIndex];
-                if (!testCase['expected-result'] && !testCase['expected-table']) {
-                    testCase['expected-result'] = result;
-                    testCase['expected-table'] = table;
-                }
-            }
+            result['result'] = testResult[0];
+            result['table'] = testResult[1];
+            result['timed-out'] = false;
+            result['error'] = null;
         } catch (e) {
-            console.log(e);
+            result['result'] = null;
+            result['table'] = null;
+            result['timed-out'] = false;
+            result['error'] = e;
         }
+        return result;
     }
 
     // Returns result of running the test case, as well as the table
@@ -168,7 +172,7 @@ export class HomeComponent implements OnInit {
             .replace(new RegExp(' {4}', 'g'), '&nbsp;&nbsp;&nbsp;&nbsp;')
             .replace(new RegExp('\n', 'g'), '<br>');
         for (let i = 0; i < this.testCases.length; i++) {
-            this.runTest(i, code, false, this);
+            this.runTest(i, code, this);
         }
     }
 
