@@ -184,8 +184,7 @@ export class HomeComponent implements OnInit {
             result['result'] = null;
             result['table'] = null;
             result['timed-out'] = false;
-            // TODO: figure out line number and return proper error message
-            result['error'] = e;
+            result['error'] = component.getSectionSpecificErrorMessage(e, joinedCode);
             callback(result);
         };
 
@@ -227,6 +226,7 @@ export class HomeComponent implements OnInit {
         const is2d = solution.tableShape === '2d';
 
         let initializationCode = [];
+        initializationCode.push('// TABLE SHAPE: ', solution.tableShape, '\n');
         if (is2d) {
             initializationCode.push('const ', encodedTableName, ' = [];\n');
             initializationCode.push('for (let TABLE__INDEX = 0; TABLE__INDEX < ', solution.tableDimension1, '; TABLE__INDEX++) {\n');
@@ -309,6 +309,7 @@ export class HomeComponent implements OnInit {
             innerCode.push('\t}\n\n');
         }
         innerCode.push('}\n\n');
+        innerCode.push('//RETURN VALUE CODE START\n\n');
         innerCode.push(solution.returnValueCode);
 
         outerCode.push(innerCode.join('').replace(/(?:\r\n|\r|\n)/g, '\n\t'));
@@ -396,7 +397,7 @@ export class HomeComponent implements OnInit {
 
     transposeTable(): void {
         this.transpose2dTable = !this.transpose2dTable;
-        // TODO: Rerun test cases
+        this.runAllTestsWithUserSolution()
     }
 
     openPopulateGivenSolutionDialog(): void {
@@ -411,6 +412,11 @@ export class HomeComponent implements OnInit {
                 component.solution = JSON.parse(JSON.stringify(component.providedSolution));
             }
         });
+    }
+
+    getSectionSpecificErrorMessage(e, code: string): string {
+        // TODO: Get error message for user
+        return 'TODO: Get error message for user';
     }
 
 
