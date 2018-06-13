@@ -12,13 +12,13 @@
                         <mat-option value="2d">2 Dimensional</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <mat-form-field>
-                    <label for="table-data-type-select">Data Type</label>
-                    <mat-select [(ngModel)]="solution.tableDataType" id="table-data-type-select">
-                        <mat-option value="number">Numbers</mat-option>
-                        <mat-option value="boolean">Booleans</mat-option>
-                    </mat-select>
-                </mat-form-field>
+                <!--<mat-form-field>-->
+                    <!--<label for="table-data-type-select">Data Type</label>-->
+                    <!--<mat-select [(ngModel)]="solution.tableDataType" id="table-data-type-select">-->
+                        <!--<mat-option value="number">Numbers</mat-option>-->
+                        <!--<mat-option value="boolean">Booleans</mat-option>-->
+                    <!--</mat-select>-->
+                <!--</mat-form-field>-->
                 <form>
                     <mat-form-field *ngIf="solution.tableShape === '1d'">
                         <input matInput placeholder="Table Size"
@@ -51,6 +51,11 @@
                 <!--<textarea spellcheck="false" id="initialization-textarea" class="code"-->
                 <!--[(ngModel)]="solution.initializationCode"-->
                 <!--title="initializationCode" rows="3"></textarea>-->
+                <div id="initialization-textarea">
+                    <textarea class="full-width code code-editor"
+                              title="solution.initializationCode" rows="6"
+                              [(ngModel)]="solution.initializationCode"></textarea>
+                </div>
                 <p class="code">for (
                     <input [(ngModel)]="solution.for1Variable"
                            title="for1Variable"

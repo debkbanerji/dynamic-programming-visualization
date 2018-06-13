@@ -30,9 +30,7 @@ export class HomeComponent implements OnInit {
         tableDimension1: '',
         tableDimension2: '',
 
-        tableDataType: 'number',
-
-        // initializationCode: '// Any other initialization here',
+        initializationCode: '// Any other initialization here',
 
         for1Variable: 'i',
         for1Init: '0',
@@ -275,17 +273,17 @@ export class HomeComponent implements OnInit {
         outerCode.push(') {\n\n');
 
         const innerCode = [];
+        innerCode.push('\t// INITIALIZATION CODE START\n\n');
         innerCode.push('\t');
-        // innerCode.push(solution.initializationCode, '\n\n');
+        innerCode.push(solution.initializationCode, '\n\n');
         innerCode.push('for(let ', solution.for1Variable, ' = ', solution.for1Init, '; ', solution.for1Condition, '; ', solution.for1Update, ') {\n\n');
         if (is2d) {
             innerCode.push('\tfor(let ', solution.for2Variable, ' = ', solution.for2Init, '; ', solution.for2Condition, '; ', solution.for2Update, ') {\n\n');
         }
 
         const setNextEntryCode = solution.setNextEntryCode;
-        innerCode.push('\t');
         if (is2d) {
-            innerCode.push('\t');
+            innerCode.push('\t\t// SET NEXT ENTRY CODE START\n\n\t\t');
             if (solution.useDefaultTableEntry) {
                 innerCode.push('let entry = ', solution.defaultTableEntry, ';\n\n\t\t');
             } else {
@@ -293,6 +291,7 @@ export class HomeComponent implements OnInit {
             }
             innerCode.push(setNextEntryCode.replace(/(?:\r\n|\r|\n)/g, '\n\t\t'));
         } else {
+            innerCode.push('\t// SET NEXT ENTRY CODE START\n\n\t');
             if (solution.useDefaultTableEntry) {
                 innerCode.push('let entry = ', solution.defaultTableEntry, ';\n\n\t');
             } else {
@@ -309,7 +308,7 @@ export class HomeComponent implements OnInit {
             innerCode.push('\t}\n\n');
         }
         innerCode.push('}\n\n');
-        innerCode.push('//RETURN VALUE CODE START\n\n');
+        innerCode.push('// RETURN VALUE CODE START\n\n');
         innerCode.push(solution.returnValueCode);
 
         outerCode.push(innerCode.join('').replace(/(?:\r\n|\r|\n)/g, '\n\t'));
