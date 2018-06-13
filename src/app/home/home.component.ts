@@ -4,6 +4,7 @@ import {MatDialog} from "@angular/material";
 import {PopulateGivenSolutionDialogComponent} from "../dialogs/populate-given-solution-dialog/populate-given-solution-dialog.component";
 
 const encodedTableName = '___TABLE___';
+const logName = '___LOG___';
 
 @Component({
     selector: 'app-home',
@@ -146,20 +147,15 @@ export class HomeComponent implements OnInit {
         code.push('\n');
         code.push(plainFunctionCode);
 
-        code.push('\n\nalgResult = algorithm(');
-
+        code.push('\n\nresult = [];\n\nresult.push(algorithm(');
         for (let i = 0; i < inputs.length; i++) {
             code.push(inputs[i]);
             // if (i < inputs.length - 1) {
             code.push(', ');
             // }
         }
-
-        code.push(encodedTableName);
-
-        code.push(');\ntable = ', encodedTableName, ';\n');
-        code.push('result = [];\n\nresult.push(algResult, table);\n\n');
-        code.push('postMessage(result);');
+        code.push(encodedTableName, '),', encodedTableName, ',', logName, ');\n\n');
+        code.push('postMessage(result);\n');
         code.push('self.close();');
 
         const joinedCode = code.join('');
@@ -175,6 +171,7 @@ export class HomeComponent implements OnInit {
             const testResult = m.data;
             result['result'] = testResult[0];
             result['table'] = testResult[1];
+            result['log'] = testResult[2];
             result['timed-out'] = false;
             result['error'] = null;
             callback(result);
@@ -183,6 +180,7 @@ export class HomeComponent implements OnInit {
             testCaseFinished = true;
             result['result'] = null;
             result['table'] = null;
+            result['log'] = null;
             result['timed-out'] = false;
             result['error'] = component.getSectionSpecificErrorMessage(e, joinedCode);
             callback(result);
@@ -193,6 +191,7 @@ export class HomeComponent implements OnInit {
                 _worker.terminate();
                 result['result'] = null;
                 result['table'] = null;
+                result['log'] = null;
                 result['timed-out'] = true;
                 result['error'] = null;
                 callback(result);
@@ -239,6 +238,7 @@ export class HomeComponent implements OnInit {
                 solution.tableDimension1,
                 ');')
         }
+        initializationCode.push('\nconst ', logName, ' = [];\n');
         result.push(
             initializationCode.join(''),
             '\n\n',
@@ -335,11 +335,13 @@ export class HomeComponent implements OnInit {
             code.push('\n\t}\n');
             code.push('\n\tif(', encodedTableName, '[0].length <= j || j < 0) {');
             code.push('\n\t\tthrow \'Could not get entry: \' + j + \' is not a valid table column\';');
-            code.push('\n\t}\n')
+            code.push('\n\t}\n');
+            code.push('\n\t', logName, '.push({"action":"get","row":i,"column":j,"value":', encodedTableName, '[i][j]});\n');
         } else {
             code.push('\n\tif(', encodedTableName, '.length <= i || i < 0) {');
             code.push('\n\t\tthrow \'Could not get entry: \' + i + \' is not a valid table index\';');
             code.push('\n\t}\n');
+            code.push('\n\t', logName, '.push({"action":"get","index":i,"value":', encodedTableName, '[i]});\n');
         }
         code.push('\n\treturn ', encodedTableName, '[i]');
         if (is2d) {
@@ -391,7 +393,13 @@ export class HomeComponent implements OnInit {
         if (is2d) {
             code.push('[j]')
         }
-        code.push(' = val;\n};');
+        code.push(' = val;\n');
+        if (is2d) {
+            code.push('\n\t', logName, '.push({"action":"set","row":i,"column":j,"value":', encodedTableName, '[i][j]});\n');
+        } else {
+            code.push('\n\t', logName, '.push({"action":"set","index":i,"value":', encodedTableName, '[i]});\n');
+        }
+        code.push('\n\n};');
         return code.join('');
     }
 
@@ -416,6 +424,7 @@ export class HomeComponent implements OnInit {
 
     getSectionSpecificErrorMessage(e: ErrorEvent, code: string): string {
         // TODO: Get error message for user
+        console.log(e);
         return 'TODO: Get error message for user';
     }
 
