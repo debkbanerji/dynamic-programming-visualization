@@ -204,6 +204,7 @@
                                           [innerHTML]="' ' + getDisplayedValue(testCase['input'][input])">
                                 </span>
                                     <div *ngIf="isArray(testCase['input'][input])">
+                                        <!--TODO: Deal with displaying empty arrays everywhere (write a function for this)-->
                                         <table class="dp-table" *ngIf="!is2dArray(testCase['input'][input])">
                                             <tr class="dp-tr">
                                                 <td class="dp-td"
