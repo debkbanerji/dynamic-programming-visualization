@@ -267,9 +267,16 @@
                         </mat-card>
                         <mat-card *ngIf="testResults[testCaseIndex]">
                             <mat-card-content>
-                                <mat-panel-title class="slightly-bold-label">Test Results</mat-panel-title>
+                                <b class="slightly-bold-label">Test Results</b>
                                 <br>
                                 <br>
+                                <div *ngIf="testResults[testCaseIndex]['timed-out']">
+                                    <span class="time-out-text">
+                                        <mat-icon class="test-result-label">access_time</mat-icon>
+                                        <span class="test-result-label"> Test timed out (longer than {{testTimeLimit}} milliseconds)
+                                        </span>
+                                    </span>
+                                </div>
                                 <pre>{{testResults[testCaseIndex] | json}}</pre>
                             </mat-card-content>
                         </mat-card>

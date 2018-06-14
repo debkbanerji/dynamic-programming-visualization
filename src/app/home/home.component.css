@@ -93,3 +93,16 @@
 #reveal-solution-button {
     margin-left: 10px;
 }
+
+.time-out-text {
+    color: #F4511E;
+}
+
+.correct-result-but-different-table-text {
+
+}
+
+.test-result-label {
+    display: inline;
+    vertical-align: middle;
+}

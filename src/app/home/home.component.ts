@@ -82,6 +82,10 @@ export class HomeComponent implements OnInit {
 
     ngOnInit() {
         this.loadProblem(this.problemFileName);
+        this.makeInputsResizable();
+    }
+
+    makeInputsResizable() {
         const smallInputFields = document.getElementsByClassName('input-field-small');
         for (let i = 0; i < smallInputFields.length; i++) {
             const el = smallInputFields[i];
@@ -157,6 +161,7 @@ export class HomeComponent implements OnInit {
         code.push('self.close();');
 
         const joinedCode = code.join('');
+        console.log(joinedCode);
 
         const result = {};
 
@@ -418,6 +423,7 @@ export class HomeComponent implements OnInit {
                 // component.solution = Object.assign({}, component.providedSolution);
                 // deep copy just in case solution format is changed in the future
                 component.solution = JSON.parse(JSON.stringify(component.providedSolution));
+                component.makeInputsResizable();
             }
         });
     }
