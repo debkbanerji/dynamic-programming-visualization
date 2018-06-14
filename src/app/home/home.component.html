@@ -146,6 +146,17 @@
                         (click)="openPopulateGivenSolutionDialog()">
                     Show Solution
                 </button>
+                <div>
+                    <!--TODO: show loading-->
+                    <!--TODO: display nicely-->
+                    {{numRunTestCases}}
+                    {{numPassedTestCases}}
+                    {{numFailedTestCases}}
+                    {{numCrashedTestCases}}
+                    {{numTimedOutTestCases}}
+                    {{numExpectedTables}}
+                    {{numMatchingTableDimensions}}
+                </div>
                 <!--<br>-->
                 <!--<br>-->
                 <!--<mat-expansion-panel *ngIf="generatedCode">-->
@@ -263,7 +274,7 @@
                                 <div *ngIf="testResults[testCaseIndex]['timed-out']">
                                     <b class="text-orange">
                                         <mat-icon class="test-result-label">access_time</mat-icon>
-                                        <span class="test-result-label"> Test timed out (longer than {{testTimeLimit}} milliseconds)
+                                        <span class="test-result-label"> Test timed out (took longer than {{testTimeLimit}} milliseconds)
                                         </span>
                                     </b>
                                 </div>
@@ -303,7 +314,7 @@
                                             <span class="text-yellow">Did not create expected table</span>
                                             <br *ngIf="!haveEqualDimensions(testResults[testCaseIndex]['table'], testCase['expected-table'])">
                                             <span class="text-yellow"
-                                                *ngIf="!haveEqualDimensions(testResults[testCaseIndex]['table'], testCase['expected-table'])">
+                                                  *ngIf="!haveEqualDimensions(testResults[testCaseIndex]['table'], testCase['expected-table'])">
                                                     Mismatched table dimensions: expected {{getTableDimensions(testCase['expected-table'])}} but got {{getTableDimensions(testResults[testCaseIndex]['table'])}}
                                                 </span>
                                             <span
@@ -322,8 +333,9 @@
                                             <tr class="dp-tr">
                                                 <td class="dp-td"
                                                     *ngFor="let i of range(testResults[testCaseIndex]['table'].length);">
-                                            <span class="dp-table-cell"
-                                                  [innerHTML]="getDisplayedValue(testResults[testCaseIndex]['table'][i])">
+                                                    <!--TODO: context sensitive colors with NgClass-->
+                                                    <span class="dp-table-cell"
+                                                          [innerHTML]="getDisplayedValue(testResults[testCaseIndex]['table'][i])">
                                             </span>
                                                 </td>
                                             </tr>
@@ -333,15 +345,15 @@
                                                 *ngFor="let i of range(testResults[testCaseIndex]['table'].length);">
                                                 <td class="dp-td"
                                                     *ngFor="let j of range(testResults[testCaseIndex]['table'][0].length);">
-                                            <span class="dp-table-cell"
-                                                  [innerHTML]="getDisplayedValue(testResults[testCaseIndex]['table'][i][j])">
-                                            </span>
+                                                    <!--TODO: context sensitive colors with NgClass-->
+                                                    <span class="dp-table-cell"
+                                                          [innerHTML]="getDisplayedValue(testResults[testCaseIndex]['table'][i][j])">
+                                                    </span>
                                                 </td>
                                             </tr>
                                         </table>
                                     </div>
                                 </div>
-                                <pre>{{testResults[testCaseIndex] | json}}</pre>
                             </mat-card-content>
                         </mat-card>
                     </mat-tab>

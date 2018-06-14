@@ -77,12 +77,13 @@ export class HomeComponent implements OnInit {
 
     revealedProvidedSolution: boolean = false;
 
-    numRunTestCases = 0;
-    numPassedTestCases = 0;
-    numFailedTestCases = 0;
-    numCrashedTestCases = 0;
-    numTimedOutTestCases = 0;
-    numExpectedTables = 0;
+    numRunTestCases: number = 0;
+    numPassedTestCases: number = 0;
+    numFailedTestCases: number = 0;
+    numCrashedTestCases: number = 0;
+    numTimedOutTestCases: number = 0;
+    numExpectedTables: number = 0;
+    numMatchingTableDimensions: number = 0;
 
     constructor(private http: HttpClient, public dialog: MatDialog) {
     }
@@ -211,6 +212,13 @@ export class HomeComponent implements OnInit {
 
     // Returns result of running the test case, as well as the table
     runAllTestsWithUserSolution(): void {
+        this.numRunTestCases = 0;
+        this.numPassedTestCases = 0;
+        this.numFailedTestCases = 0;
+        this.numCrashedTestCases = 0;
+        this.numTimedOutTestCases = 0;
+        this.numExpectedTables = 0;
+        this.numMatchingTableDimensions = 0;
         const code = HomeComponent.getPlainRunnableCode(this.solution, this.problem);
         this.generatedCode = code
             .replace(new RegExp('\t', 'g'), '&nbsp;&nbsp;&nbsp;&nbsp;')
@@ -222,10 +230,30 @@ export class HomeComponent implements OnInit {
     runTestsWithUserSolution(component: HomeComponent, testCaseIndex: number, code: string) {
         if (testCaseIndex < component.testCases.length) {
             component.runTest(testCaseIndex, code, component, function (testResult) {
+                let testCase = component.testCases[testCaseIndex];
+                const expectedTable = testCase['expected-table'];
+                testResult['has-expected-table'] =
+                    (JSON.stringify(testResult['table']) === JSON.stringify(expectedTable));
                 component.testResults[testCaseIndex] = testResult;
-                const expectedTable = component.testCases[testCaseIndex]['expected-table'];
-                component.testResults[testCaseIndex]['has-expected-table'] =
-                    (JSON.stringify(component.testResults[testCaseIndex]['table']) === JSON.stringify(expectedTable));
+
+                component.numRunTestCases++;
+                if (testResult['result'] === testCase['expected-result']) {
+                    component.numPassedTestCases++;
+                } else {
+                    component.numFailedTestCases++;
+                }
+                if (testResult['error']) {
+                    component.numCrashedTestCases++;
+                }
+                if (testResult['timed-out']) {
+                    component.numTimedOutTestCases++;
+                }
+                if (testResult['has-expected-table']) {
+                    component.numExpectedTables++;
+                }
+                if (component.haveEqualDimensions(testResult['table'], testCase['expected-table'])) {
+                    component.numMatchingTableDimensions++;
+                }
                 component.runTestsWithUserSolution(component, testCaseIndex + 1, code);
             });
         }
@@ -417,6 +445,8 @@ export class HomeComponent implements OnInit {
     }
 
     transposeTable(): void {
+        this.numExpectedTables = 0;
+        this.numMatchingTableDimensions = 0;
         this.transpose2dTable = !this.transpose2dTable;
         for (let testCaseIndex = 0; testCaseIndex < this.testCases.length; testCaseIndex++) {
             const testCase = this.testCases[testCaseIndex];
@@ -425,11 +455,17 @@ export class HomeComponent implements OnInit {
                 if (this.testResults[testCaseIndex]) {
                     this.testResults[testCaseIndex]['has-expected-table'] =
                         JSON.stringify(this.testResults[testCaseIndex]['table']) === JSON.stringify(testCase['expected-table']);
+                    if (this.testResults[testCaseIndex]['has-expected-table']) {
+                        this.numExpectedTables++;
+                    }
+
+                    if (this.haveEqualDimensions(this.testResults[testCaseIndex]['table'], testCase['expected-table'])) {
+                        this.numMatchingTableDimensions++;
+                    }
                 }
             }
         }
         // this.runAllTestsWithUserSolution()
-
     }
 
     openPopulateGivenSolutionDialog(): void {
@@ -449,16 +485,15 @@ export class HomeComponent implements OnInit {
 
     getSectionSpecificErrorMessage(e: ErrorEvent, code: string): string {
         // TODO: Get error message for user
-        console.log(e);
         return 'TODO: Get error message for user';
     }
 
     isArray(item: any): boolean {
-        return item.constructor === Array;
+        return item && item.constructor === Array;
     }
 
     is2dArray(item: any): boolean {
-        return item.constructor === Array && item.length > 0 && item[0].constructor === Array;
+        return this.isArray(item) && item.constructor === Array && item.length > 0 && item[0].constructor === Array;
     }
 
     haveEqualDimensions(table1: any, table2): boolean {
