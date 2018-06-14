@@ -13,11 +13,11 @@
                     </mat-select>
                 </mat-form-field>
                 <!--<mat-form-field>-->
-                    <!--<label for="table-data-type-select">Data Type</label>-->
-                    <!--<mat-select [(ngModel)]="solution.tableDataType" id="table-data-type-select">-->
-                        <!--<mat-option value="number">Numbers</mat-option>-->
-                        <!--<mat-option value="boolean">Booleans</mat-option>-->
-                    <!--</mat-select>-->
+                <!--<label for="table-data-type-select">Data Type</label>-->
+                <!--<mat-select [(ngModel)]="solution.tableDataType" id="table-data-type-select">-->
+                <!--<mat-option value="number">Numbers</mat-option>-->
+                <!--<mat-option value="boolean">Booleans</mat-option>-->
+                <!--</mat-select>-->
                 <!--</mat-form-field>-->
                 <form>
                     <mat-form-field *ngIf="solution.tableShape === '1d'">
@@ -182,42 +182,45 @@
                     <!--&lt;!&ndash;TODO: Implement custom input&ndash;&gt;-->
                     <!--</mat-tab>-->
                     <mat-tab *ngFor="let testCase of testCases; let testCaseIndex = index" label="{{testCase['name']}}">
-                        <mat-expansion-panel [expanded]="true">
-                            <mat-expansion-panel-header>
-                                <mat-panel-title class="slightly-bold-label">Input Values</mat-panel-title>
-                            </mat-expansion-panel-header>
-                            <div *ngFor="let input of objectKeys(problem['input'])">
-                                <span class="slightly-bold-label">{{input}}:</span>
-                                <span *ngIf="problem['input'][input]['type'] !== 'array'"
-                                      [innerHTML]="' ' + getDisplayedValue(testCase['input'][input])">
+                        <mat-card>
+                            <b class="slightly-bold-label">Input Values</b>
+                            <br>
+                            <br>
+                            <mat-card-content>
+                                <div *ngFor="let input of objectKeys(problem['input'])">
+                                    <span class="slightly-bold-label">{{input}}:</span>
+                                    <span *ngIf="!isArray(testCase['input'][input])"
+                                          [innerHTML]="' ' + getDisplayedValue(testCase['input'][input])">
                                 </span>
-                                <div *ngIf="problem['input'][input]['type'] === 'array'">
-                                    <table class="dp-table" *ngIf="problem['input'][input]['shape'] === '1d'">
-                                        <tr class="dp-tr">
-                                            <td class="dp-td" *ngFor="let i of range(testCase['input'][input].length);">
+                                    <div *ngIf="isArray(testCase['input'][input])">
+                                        <table class="dp-table" *ngIf="!is2dArray(testCase['input'][input])">
+                                            <tr class="dp-tr">
+                                                <td class="dp-td"
+                                                    *ngFor="let i of range(testCase['input'][input].length);">
                                             <span class="dp-table-cell"
                                                   [innerHTML]="getDisplayedValue(testCase['input'][input][i])">
                                             </span>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                    <table class="dp-table" *ngIf="problem['input'][input]['shape'] === '2d'">
-                                        <tr class="dp-tr" *ngFor="let i of range(testCase['input'][input].length);">
-                                            <td class="dp-td"
-                                                *ngFor="let j of range(testCase['input'][input][0].length);">
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <table class="dp-table" *ngIf="is2dArray(testCase['input'][input])">
+                                            <tr class="dp-tr" *ngFor="let i of range(testCase['input'][input].length);">
+                                                <td class="dp-td"
+                                                    *ngFor="let j of range(testCase['input'][input][0].length);">
                                             <span class="dp-table-cell"
                                                   [innerHTML]="getDisplayedValue(testCase['input'][input][i][j])">
                                             </span>
-                                            </td>
-                                        </tr>
-                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
                                 </div>
-                            </div>
-                        </mat-expansion-panel>
+                            </mat-card-content>
+                        </mat-card>
                         <mat-card *ngIf="testCase['expected-table'] && testCase['expected-result']">
-                            <mat-card-header>
-                                <mat-panel-title class="slightly-bold-label">Expected Results</mat-panel-title>
-                            </mat-card-header>
+                            <b class="slightly-bold-label">Expected Results</b>
+                            <br>
+                            <br>
                             <mat-card-content>
                                 <span class="slightly-bold-label">Table</span>
                                 <button mat-raised-button class="transpose-button"
@@ -263,10 +266,10 @@
                             </mat-card-content>
                         </mat-card>
                         <mat-card *ngIf="testResults[testCaseIndex]">
-                            <mat-card-header>
-                                <mat-panel-title class="slightly-bold-label">Test Results</mat-panel-title>
-                            </mat-card-header>
                             <mat-card-content>
+                                <mat-panel-title class="slightly-bold-label">Test Results</mat-panel-title>
+                                <br>
+                                <br>
                                 <pre>{{testResults[testCaseIndex] | json}}</pre>
                             </mat-card-content>
                         </mat-card>

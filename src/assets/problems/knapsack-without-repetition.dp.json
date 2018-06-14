@@ -2,32 +2,10 @@
     "name": "Knapsack without repetition",
     "problem-statement": "Description of the knapsack optimization problem with repetition",
     "input": {
-        "W": {
-            "description": "Maximum Capacity",
-            "type": "number",
-            "non-negative": true
-        },
-        "n": {
-            "description": "Number of Items",
-            "type": "number",
-            "non-negative": true
-        },
-        "weights": {
-            "description": "array of item weights, where entry <em>i</em> represents the weight of item <em>i</em>",
-            "type": "array",
-            "shape": "1d",
-            "entry-type": "number",
-            "length": "n",
-            "non-negative": true
-        },
-        "values": {
-            "description": "array of item values, where entry <em>i</em> represents the value of item <em>i</em>",
-            "type": "array",
-            "shape": "1d",
-            "entry-type": "number",
-            "length": "n",
-            "non-negative": true
-        }
+        "W": "Maximum Capacity",
+        "n": "Number of Items",
+        "weights": "array of item weights, where entry <em>i</em> represents the weight of item <em>i</em>",
+        "values": "array of item values, where entry <em>i</em> represents the value of item <em>i</em>"
     },
     "result-type": "float",
     "provided-solution": {

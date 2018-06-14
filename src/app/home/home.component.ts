@@ -427,6 +427,24 @@ export class HomeComponent implements OnInit {
         return 'TODO: Get error message for user';
     }
 
+    isArray(item: any): boolean {
+        return item.constructor === Array;
+    }
+
+    is2dArray(item: any): boolean {
+        return item.constructor === Array && item.length > 0 && item[0].constructor === Array;
+    }
+
+    haveEqualDimensions(table1: any, table2): boolean {
+        if (!this.isArray(table1) || !this.isArray(table1)) {
+            return false;
+        } else if (!this.is2dArray(table1) && !this.is2dArray(table1)) {
+            return table1.length === table2.length;
+        } else {
+            return table1.length === table2.length && table1[0].length === table2[0].length;
+        }
+    }
+
 
     raiseProvidedSolutionError(message: string) {
         alert('It looks like there was en error with the provided solution for ' +
@@ -453,7 +471,7 @@ export class HomeComponent implements OnInit {
         } else if ((typeof value) === (typeof 'string')) {
             return value;
         } else {
-            return 'Unrecognized type';
+            return JSON.stringify(value);
         }
     }
 
