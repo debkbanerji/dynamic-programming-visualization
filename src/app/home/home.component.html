@@ -271,9 +271,18 @@
                                 <br>
                                 <br>
                                 <div *ngIf="testResults[testCaseIndex]['timed-out']">
-                                    <span class="time-out-text">
+                                    <span class="text-orange">
                                         <mat-icon class="test-result-label">access_time</mat-icon>
                                         <span class="test-result-label"> Test timed out (longer than {{testTimeLimit}} milliseconds)
+                                        </span>
+                                    </span>
+                                </div>
+                                <div *ngIf="testResults[testCaseIndex]['error']">
+                                    <span class="text-red">
+                                        <mat-icon class="test-result-label">error_outline</mat-icon>
+                                        <span class="test-result-label"> Test crashed:
+                                        </span>
+                                        <span class="test-result-label"> {{testResults[testCaseIndex]['error']}}
                                         </span>
                                     </span>
                                 </div>

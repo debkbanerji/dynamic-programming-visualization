@@ -161,7 +161,6 @@ export class HomeComponent implements OnInit {
         code.push('self.close();');
 
         const joinedCode = code.join('');
-        console.log(joinedCode);
 
         const result = {};
 
