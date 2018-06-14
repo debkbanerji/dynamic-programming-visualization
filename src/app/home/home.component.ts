@@ -224,6 +224,7 @@ export class HomeComponent implements OnInit {
 
         let initializationCode = [];
         initializationCode.push('// TABLE SHAPE: ', solution.tableShape, '\n');
+        initializationCode.push('// TABLE INITIALIZATION CODE START\n');
         if (is2d) {
             initializationCode.push('const ', encodedTableName, ' = [];\n');
             initializationCode.push('for (let TABLE__INDEX = 0; TABLE__INDEX < ', solution.tableDimension1, '; TABLE__INDEX++) {\n');
@@ -274,8 +275,8 @@ export class HomeComponent implements OnInit {
 
         const innerCode = [];
         innerCode.push('\t// INITIALIZATION CODE START\n\n');
-        innerCode.push('\t');
         innerCode.push(solution.initializationCode, '\n\n');
+        innerCode.push('// LOOP CODE START\n\n');
         innerCode.push('for(let ', solution.for1Variable, ' = ', solution.for1Init, '; ', solution.for1Condition, '; ', solution.for1Update, ') {\n\n');
         if (is2d) {
             innerCode.push('\tfor(let ', solution.for2Variable, ' = ', solution.for2Init, '; ', solution.for2Condition, '; ', solution.for2Update, ') {\n\n');
