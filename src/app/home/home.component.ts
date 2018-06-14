@@ -169,7 +169,6 @@ export class HomeComponent implements OnInit {
         let testCaseFinished = false;
         _worker.onmessage = function (m) {
             testCaseFinished = true;
-            // console.log(m, m.data);
             const testResult = m.data;
             result['result'] = testResult[0];
             result['table'] = testResult[1];
@@ -217,6 +216,9 @@ export class HomeComponent implements OnInit {
         if (testCaseIndex < component.testCases.length) {
             component.runTest(testCaseIndex, code, component, function (testResult) {
                 component.testResults[testCaseIndex] = testResult;
+                const expectedTable = component.providedSolution['table'];
+                component.testResults[testCaseIndex]['has-expected-table'] =
+                    JSON.stringify(component.testResults[testCaseIndex]['table']) === JSON.stringify(expectedTable);
                 component.runTestsWithUserSolution(component, testCaseIndex + 1, code);
             });
         }
@@ -409,7 +411,18 @@ export class HomeComponent implements OnInit {
 
     transposeTable(): void {
         this.transpose2dTable = !this.transpose2dTable;
-        this.runAllTestsWithUserSolution()
+        for (let testCaseIndex = 0; testCaseIndex < this.testCases.length; testCaseIndex++) {
+            const testCase = this.testCases[testCaseIndex];
+            if (this.is2dArray(testCase['expected-table'])) {
+                testCase['expected-table'] = this.getTransposedArray(testCase['expected-table']);
+                if (this.testResults[testCaseIndex]) {
+                    this.testResults[testCaseIndex]['has-expected-table'] =
+                        JSON.stringify(this.testResults[testCaseIndex]['table']) === JSON.stringify(testCase['expected-table']);
+                }
+            }
+        }
+        // this.runAllTestsWithUserSolution()
+
     }
 
     openPopulateGivenSolutionDialog(): void {
@@ -460,9 +473,25 @@ export class HomeComponent implements OnInit {
             + '\n\nPlease close this page. If this issue persists, please contact the problem author');
     }
 
+    // Assumes input is 2d table
+    getTransposedArray(input): any {
+        return input[0].map((x, i) => input.map(x => x[i]));
+    }
+
+    getTableDimensions(input): string {
+        if (!this.isArray(input)) {
+            return 'Not an array';
+        }
+        if (this.is2dArray(input)) {
+            return '' + input.length + ' x ' + input[0].length;
+        } else {
+            return '' + input.length;
+        }
+    }
+
     getDisplayedValue(value: any): string {
         if (value === null || value === undefined) {
-            return '?';
+            return '???';
         }
         if ((typeof value) === (typeof 1) || value === 'infinity' || value === '-infinity') {
             if (value === Number.MAX_SAFE_INTEGER || value === Number.MAX_VALUE || value === 'infinity') {
