@@ -77,6 +77,13 @@ export class HomeComponent implements OnInit {
 
     revealedProvidedSolution: boolean = false;
 
+    numRunTestCases = 0;
+    numPassedTestCases = 0;
+    numFailedTestCases = 0;
+    numCrashedTestCases = 0;
+    numTimedOutTestCases = 0;
+    numExpectedTables = 0;
+
     constructor(private http: HttpClient, public dialog: MatDialog) {
     }
 
@@ -216,9 +223,9 @@ export class HomeComponent implements OnInit {
         if (testCaseIndex < component.testCases.length) {
             component.runTest(testCaseIndex, code, component, function (testResult) {
                 component.testResults[testCaseIndex] = testResult;
-                const expectedTable = component.providedSolution['table'];
+                const expectedTable = component.testCases[testCaseIndex]['expected-table'];
                 component.testResults[testCaseIndex]['has-expected-table'] =
-                    JSON.stringify(component.testResults[testCaseIndex]['table']) === JSON.stringify(expectedTable);
+                    (JSON.stringify(component.testResults[testCaseIndex]['table']) === JSON.stringify(expectedTable));
                 component.runTestsWithUserSolution(component, testCaseIndex + 1, code);
             });
         }
