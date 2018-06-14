@@ -229,7 +229,7 @@
                                 </div>
                             </mat-card-content>
                         </mat-card>
-                        <mat-card *ngIf="testCase['expected-table'] && testCase['expected-result']">
+                        <mat-card *ngIf="testCase['expected-table'] && testCase['expected-result'] !== null && testCase['expected-result'] !== undefined">
                             <b class="slightly-bold-label">Expected Results</b>
                             <br>
                             <br>
