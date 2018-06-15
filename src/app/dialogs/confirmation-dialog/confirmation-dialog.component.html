@@ -1,0 +1,8 @@
+<h1 mat-dialog-title [ngClass]="data.titleClass">{{data.title}}</h1>
+<div mat-dialog-content>
+    <p [ngClass]="data.infoClass">{{data.info}}</p>
+</div>
+<div mat-dialog-actions>
+    <button mat-raised-button [mat-dialog-close]="false">{{data.cancelText}}</button>
+    <button mat-raised-button [mat-dialog-close]="true" [color]="data.acceptColor">{{data.acceptText}}</button>
+</div>

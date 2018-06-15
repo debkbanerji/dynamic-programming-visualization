@@ -2,14 +2,15 @@ import {Component, Inject} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 
 @Component({
-    selector: 'app-populate-given-solution-dialog',
-    templateUrl: './populate-given-solution-dialog.component.html'
+    selector: 'app-confirmation-solution-dialog',
+    templateUrl: './confirmation-dialog.component.html'
 })
-export class PopulateGivenSolutionDialogComponent {
+export class ConfirmationDialogComponent {
 
     constructor(
-        public dialogRef: MatDialogRef<PopulateGivenSolutionDialogComponent>,
+        public dialogRef: MatDialogRef<ConfirmationDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any) {
+        console.log(data);
     }
 
     onNoClick(): void {

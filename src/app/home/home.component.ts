@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {MatDialog} from "@angular/material";
-import {PopulateGivenSolutionDialogComponent} from "../dialogs/populate-given-solution-dialog/populate-given-solution-dialog.component";
+import {ConfirmationDialogComponent} from "../dialogs/confirmation-dialog/confirmation-dialog.component";
 
 const encodedTableName = '___TABLE___';
 const logName = '___LOG___';
@@ -478,7 +478,17 @@ export class HomeComponent implements OnInit {
 
     openPopulateGivenSolutionDialog(): void {
         const component = this;
-        const dialogRef = this.dialog.open(PopulateGivenSolutionDialogComponent, {});
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+            data: {
+                'title': 'Are you sure?',
+                'info': 'Showing the solution will overwrite the code you wrote',
+                'cancelText': 'Go Back',
+                'acceptText': 'Show Solution',
+                'acceptColor': 'warn',
+                'titleClass': 'text-red',
+                'infoClass': ''
+            }
+        });
 
         dialogRef.afterClosed().subscribe(result => {
             if (result) {

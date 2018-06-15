@@ -21,7 +21,7 @@ import {
     MatTabsModule, MatProgressBarModule
 } from "@angular/material";
 import {HttpClientModule} from "@angular/common/http";
-import {PopulateGivenSolutionDialogComponent} from './dialogs/populate-given-solution-dialog/populate-given-solution-dialog.component';
+import {ConfirmationDialogComponent} from './dialogs/confirmation-dialog/confirmation-dialog.component';
 
 const routes: Routes = [ // Array of all routes - modify when adding routes
     {path: '**', component: HomeComponent} // Default route
@@ -32,7 +32,7 @@ const routes: Routes = [ // Array of all routes - modify when adding routes
     declarations: [
         AppComponent,
         HomeComponent,
-        PopulateGivenSolutionDialogComponent
+        ConfirmationDialogComponent
     ],
     imports: [
         BrowserModule,
@@ -53,7 +53,7 @@ const routes: Routes = [ // Array of all routes - modify when adding routes
         RouterModule.forRoot(routes)
     ],
     entryComponents: [
-        PopulateGivenSolutionDialogComponent
+        ConfirmationDialogComponent
     ],
     providers: [],
     bootstrap: [AppComponent]

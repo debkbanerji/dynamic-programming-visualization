@@ -151,7 +151,7 @@
                     <span>Running {{testCases.length}} tests...</span>
                     <mat-progress-bar
                         [value]="100 * numRunTestCases / testCases.length"
-                        color="accent">
+                        color="primary">
                     </mat-progress-bar>
                 </div>
                 <div *ngIf="!testsCurrentlyRunning && numRunTestCases > 0">
