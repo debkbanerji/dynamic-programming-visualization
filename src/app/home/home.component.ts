@@ -26,7 +26,7 @@ export class HomeComponent implements OnInit {
     testCases: any;
 
     solution: any = {
-        tableShape: this.tableShapes[1],
+        tableShape: this.tableShapes[0],
         tableDimension1: '',
         tableDimension2: '',
 
@@ -104,6 +104,7 @@ export class HomeComponent implements OnInit {
 
     loadProblem(problemFileName: string): void {
         const component = this;
+        // TODO: Get from service
         component.http.get('../assets/problems/' + problemFileName).subscribe(data => {
             component.problem = data;
             component.providedSolution = component.problem['provided-solution'];
@@ -458,7 +459,7 @@ export class HomeComponent implements OnInit {
         this.transpose2dTable = !this.transpose2dTable;
         for (let testCaseIndex = 0; testCaseIndex < this.testCases.length; testCaseIndex++) {
             const testCase = this.testCases[testCaseIndex];
-            if (this.is2dArray(testCase['expected-table'])) {
+            if (this.isRectangular2dArray(testCase['expected-table'])) {
                 testCase['expected-table'] = this.getTransposedArray(testCase['expected-table']);
                 if (this.testResults[testCaseIndex]) {
                     this.testResults[testCaseIndex]['has-expected-table'] =
@@ -510,14 +511,26 @@ export class HomeComponent implements OnInit {
         return item && item.constructor === Array;
     }
 
-    is2dArray(item: any): boolean {
-        return this.isArray(item) && item.constructor === Array && item.length > 0 && item[0].constructor === Array;
+    isRectangular2dArray(item: any): boolean {
+        if (this.isArray(item) && item.constructor === Array && item.length > 0) {
+            if (item[0].constructor !== Array) {
+                return false;
+            }
+            for (let i = 1; i < item.length; i++) {
+                if (item[i].constructor !== Array || item[i].length !== item[i - 1].length) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
     haveEqualDimensions(table1: any, table2): boolean {
         if (!this.isArray(table1) || !this.isArray(table1)) {
             return false;
-        } else if (!this.is2dArray(table1) && !this.is2dArray(table1)) {
+        } else if (!this.isRectangular2dArray(table1) && !this.isRectangular2dArray(table1)) {
             return table1.length === table2.length;
         } else {
             return table1.length === table2.length && table1[0].length === table2[0].length;
@@ -542,7 +555,7 @@ export class HomeComponent implements OnInit {
         if (!this.isArray(input)) {
             return 'Not an array';
         }
-        if (this.is2dArray(input)) {
+        if (this.isRectangular2dArray(input)) {
             return '' + input.length + ' x ' + input[0].length;
         } else {
             return '' + input.length;
