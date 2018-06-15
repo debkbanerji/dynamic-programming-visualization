@@ -84,6 +84,7 @@ export class HomeComponent implements OnInit {
     numTimedOutTestCases: number = 0;
     numExpectedTables: number = 0;
     numMatchingTableDimensions: number = 0;
+    testsCurrentlyRunning: boolean = false;
 
     constructor(private http: HttpClient, public dialog: MatDialog) {
     }
@@ -109,6 +110,7 @@ export class HomeComponent implements OnInit {
             component.testCases = component.problem['test-cases'];
             const code = HomeComponent.getPlainRunnableCode(component.providedSolution, component.problem);
             component.problemDefined = true;
+            component.testsCurrentlyRunning = true;
             component.runTestsWithProvidedSolution(component, 0, code);
         });
     }
@@ -135,6 +137,8 @@ export class HomeComponent implements OnInit {
             } else {
                 component.runTestsWithProvidedSolution(component, testCaseIndex + 1, code);
             }
+        } else {
+            component.testsCurrentlyRunning = false;
         }
     }
 
@@ -219,6 +223,7 @@ export class HomeComponent implements OnInit {
         this.numTimedOutTestCases = 0;
         this.numExpectedTables = 0;
         this.numMatchingTableDimensions = 0;
+        this.testsCurrentlyRunning = true;
         const code = HomeComponent.getPlainRunnableCode(this.solution, this.problem);
         this.generatedCode = code
             .replace(new RegExp('\t', 'g'), '&nbsp;&nbsp;&nbsp;&nbsp;')
@@ -256,6 +261,9 @@ export class HomeComponent implements OnInit {
                 }
                 component.runTestsWithUserSolution(component, testCaseIndex + 1, code);
             });
+        }
+        else {
+            this.testsCurrentlyRunning = false;
         }
     }
 

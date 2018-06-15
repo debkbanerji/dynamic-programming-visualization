@@ -18,7 +18,7 @@ import {
     MatInputModule,
     MatSelectModule,
     MatDialogModule,
-    MatTabsModule
+    MatTabsModule, MatProgressBarModule
 } from "@angular/material";
 import {HttpClientModule} from "@angular/common/http";
 import {PopulateGivenSolutionDialogComponent} from './dialogs/populate-given-solution-dialog/populate-given-solution-dialog.component';
@@ -49,6 +49,7 @@ const routes: Routes = [ // Array of all routes - modify when adding routes
         MatButtonModule,
         MatCheckboxModule,
         MatDialogModule,
+        MatProgressBarModule,
         RouterModule.forRoot(routes)
     ],
     entryComponents: [
