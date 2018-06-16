@@ -159,10 +159,12 @@ export class HomeComponent implements OnInit {
             code.push(';\n')
         }
 
+        code.push('\ntry {\n');
+
         code.push('\n');
         code.push(plainFunctionCode);
 
-        code.push('\n\nresult = {};\n\nresult.answer = algorithm(');
+        code.push('\n\n// FUNCTION CODE END\n\nresult = {};\n\nresult.answer = algorithm(');
         for (let i = 0; i < inputs.length; i++) {
             code.push(inputs[i]);
             // if (i < inputs.length - 1) {
@@ -171,7 +173,10 @@ export class HomeComponent implements OnInit {
         }
         code.push(encodedTableName, ');\nresult.table = ', encodedTableName, ';\nresult.log = ', logName, ';\n\n');
         code.push('postMessage(result);\n');
-        code.push('self.close();');
+        code.push('self.close();\n\n');
+        code.push('} catch(e) {\n');
+        code.push('\npostMessage({\'error\':e.stack});\n');
+        code.push('\nself.close();\n\n}');
 
         const joinedCode = code.join('');
 
@@ -183,12 +188,21 @@ export class HomeComponent implements OnInit {
         _worker.onmessage = function (m) {
             testCaseFinished = true;
             const testResult = m.data;
-            result['result'] = testResult['answer'];
-            result['table'] = testResult['table'];
-            result['log'] = testResult['log'];
-            result['timed-out'] = false;
-            result['error'] = null;
-            callback(result);
+            if (testResult['error']) {
+                result['result'] = null;
+                result['table'] = null;
+                result['log'] = null;
+                result['timed-out'] = false;
+                result['error'] = component.getSectionSpecificErrorMessage(testResult['error'], joinedCode, true);
+                callback(result);
+            } else {
+                result['result'] = testResult['answer'];
+                result['table'] = testResult['table'];
+                result['log'] = testResult['log'];
+                result['timed-out'] = false;
+                result['error'] = null;
+                callback(result);
+            }
         };
         _worker.onerror = function (e) {
             testCaseFinished = true;
@@ -196,7 +210,7 @@ export class HomeComponent implements OnInit {
             result['table'] = null;
             result['log'] = null;
             result['timed-out'] = false;
-            result['error'] = component.getSectionSpecificErrorMessage(e, joinedCode);
+            result['error'] = component.getSectionSpecificErrorMessage(e, joinedCode, false);
             callback(result);
         };
 
@@ -287,6 +301,7 @@ export class HomeComponent implements OnInit {
                 solution.tableDimension1,
                 ');')
         }
+        initializationCode.push('// TABLE INITIALIZATION CODE END\n');
         initializationCode.push('\nconst ', logName, ' = [];\n');
         result.push(
             initializationCode.join(''),
@@ -382,15 +397,15 @@ export class HomeComponent implements OnInit {
         code.push(') {\n');
         if (is2d) {
             code.push('\n\tif(', encodedTableName, '.length <= i || i < 0) {');
-            code.push('\n\t\tthrow \'Could not get entry: \' + i + \' is not a valid table row\';');
+            code.push('\n\t\tthrow new Error(\'Could not get entry: \' + i + \' is not a valid table row\');');
             code.push('\n\t}\n');
             code.push('\n\tif(', encodedTableName, '[0].length <= j || j < 0) {');
-            code.push('\n\t\tthrow \'Could not get entry: \' + j + \' is not a valid table column\';');
+            code.push('\n\t\tthrow new Error(\'Could not get entry: \' + j + \' is not a valid table column\');');
             code.push('\n\t}\n');
             code.push('\n\t', logName, '.push({"action":"get","row":i,"column":j,"value":', encodedTableName, '[i][j]});\n');
         } else {
             code.push('\n\tif(', encodedTableName, '.length <= i || i < 0) {');
-            code.push('\n\t\tthrow \'Could not get entry: \' + i + \' is not a valid table index\';');
+            code.push('\n\t\tthrow new Error(\'Could not get entry: \' + i + \' is not a valid table index\');');
             code.push('\n\t}\n');
             code.push('\n\t', logName, '.push({"action":"get","index":i,"value":', encodedTableName, '[i]});\n');
         }
@@ -430,14 +445,14 @@ export class HomeComponent implements OnInit {
         code.push(') {\n');
         if (is2d) {
             code.push('\n\tif(', encodedTableName, '.length <= i || i < 0) {');
-            code.push('\n\t\tthrow \'Could not set entry: \' + i + \' is not a valid table row\';');
+            code.push('\n\t\tthrow new Error(\'Could not set entry: \' + i + \' is not a valid table row\');');
             code.push('\n\t}\n');
             code.push('\n\tif(', encodedTableName, '[0].length <= j || j < 0) {');
-            code.push('\n\t\tthrow \'Could not set entry: \' + j + \' is not a valid table column\';');
+            code.push('\n\t\tthrow new Error(\'Could not set entry: \' + j + \' is not a valid table column\');');
             code.push('\n\t}\n')
         } else {
             code.push('\n\tif(', encodedTableName, '.length <= i || i < 0) {');
-            code.push('\n\t\tthrow \'Could not set entry: \' + i + \' is not a valid table index\';');
+            code.push('\n\t\tthrow new Error(\'Could not set entry: \' + i + \' is not a valid table index\');');
             code.push('\n\t}\n');
         }
         code.push('\n\t', encodedTableName, '[i]');
@@ -503,9 +518,31 @@ export class HomeComponent implements OnInit {
         });
     }
 
-    getSectionSpecificErrorMessage(e: ErrorEvent, code: string): string {
-        // TODO: Get error message for user
+    getSectionSpecificErrorMessage(e, code: string, isStack: boolean): string {
+        // Note: e is either an error event (which means it's a syntax error) or an error object which means it's a runtime error)
+
+        // Lines marking the code
+        const tableInitStart = this.lineNumberOf('// TABLE INITIALIZATION CODE START', code);
+        const tableInitEnd = this.lineNumberOf('// TABLE INITIALIZATION CODE END', code);
+
+        let errorLine; // Actual line in stack for which we want to specify error section
+        // console.log(isStack);
+        // console.log(e);
+
+        if (!isStack) {
+            errorLine = e.lineno;
+        } else {
+            // console.log(e);
+            // const stack = e.stack;
+            // // console.log(stack);
+            // for (let i = 0; i < stack.length; i++) {
+            //     const stackline = stack[i];
+            //     // console.log(stackline);
+            // }
+        }
+
         return 'TODO: Get error message for user';
+
     }
 
     isArray(item: any): boolean {
@@ -582,6 +619,11 @@ export class HomeComponent implements OnInit {
         } else {
             return JSON.stringify(value);
         }
+    }
+
+    lineNumberOf(needle: string, haystack: string) {
+        const haystackSplit = haystack.split('\n');
+        // console.log(haystackSplit);
     }
 
     range(_p: number, _t?: number, _s?: number): Array<number> {
