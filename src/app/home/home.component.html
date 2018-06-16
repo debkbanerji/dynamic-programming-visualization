@@ -199,7 +199,7 @@
                         'text-green': numExpectedTables === numRunTestCases,
                         'text-yellow': numExpectedTables < numRunTestCases
                     }"><span *ngIf="numExpectedTables === numRunTestCases">&#x2714; </span>{{numExpectedTables}}
-                        matching table{{numExpectedTables === 1? '' : 's'}}</b>
+                        table{{numExpectedTables === 1? '' : 's'}} with matching entries</b>
                     <br>
                     <span *ngIf="numExpectedTables < numRunTestCases && numPassedTestCases === numRunTestCases">
                         This may not be an issue, since all your final answers are correct.

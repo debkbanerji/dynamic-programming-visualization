@@ -245,7 +245,7 @@ export class HomeComponent implements OnInit {
                 component.numRunTestCases++;
                 if (testResult['result'] === testCase['expected-result']) {
                     component.numPassedTestCases++;
-                } else {
+                } else if (!testResult['error'] && !testResult['timed-out']) {
                     component.numFailedTestCases++;
                 }
                 if (testResult['error']) {
