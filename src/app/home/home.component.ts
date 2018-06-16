@@ -162,14 +162,14 @@ export class HomeComponent implements OnInit {
         code.push('\n');
         code.push(plainFunctionCode);
 
-        code.push('\n\nresult = [];\n\nresult.push(algorithm(');
+        code.push('\n\nresult = {};\n\nresult.answer = algorithm(');
         for (let i = 0; i < inputs.length; i++) {
             code.push(inputs[i]);
             // if (i < inputs.length - 1) {
             code.push(', ');
             // }
         }
-        code.push(encodedTableName, '),', encodedTableName, ',', logName, ');\n\n');
+        code.push(encodedTableName, ');\nresult.table = ', encodedTableName, ';\nresult.log = ', logName, ';\n\n');
         code.push('postMessage(result);\n');
         code.push('self.close();');
 
@@ -183,9 +183,9 @@ export class HomeComponent implements OnInit {
         _worker.onmessage = function (m) {
             testCaseFinished = true;
             const testResult = m.data;
-            result['result'] = testResult[0];
-            result['table'] = testResult[1];
-            result['log'] = testResult[2];
+            result['result'] = testResult['answer'];
+            result['table'] = testResult['table'];
+            result['log'] = testResult['log'];
             result['timed-out'] = false;
             result['error'] = null;
             callback(result);
