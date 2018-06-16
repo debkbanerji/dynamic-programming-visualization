@@ -143,13 +143,14 @@
                 <p class="code">}</p>
                 <!--</mat-card-content>-->
                 <!--</mat-card>-->
+                <br>
                 <div *ngIf="!testsCurrentlyRunning">
                     <!--<button mat-raised-button-->
                     <!--(click)="runAllTestsWithUserSolution()">-->
                     <!--Generate Code and Run Tests-->
                     <!--</button>-->
                     <button mat-fab (click)="runAllTestsWithUserSolution()">
-                        <mat-icon aria-label="Example icon-button with a heart icon">play_arrow</mat-icon>
+                        <mat-icon aria-label="Run code button">play_arrow</mat-icon>
                     </button>
                     <button mat-button id="reveal-solution-button"
                             (click)="openPopulateGivenSolutionDialog()">
