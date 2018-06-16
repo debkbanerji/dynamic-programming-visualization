@@ -361,6 +361,7 @@ export class HomeComponent implements OnInit {
         innerCode.push('}\n\n');
         innerCode.push('// RETURN VALUE CODE START\n\n');
         innerCode.push(solution.returnValueCode);
+        // innerCode.push('return answer;\n');
 
         outerCode.push(innerCode.join('').replace(/(?:\r\n|\r|\n)/g, '\n\t'));
         outerCode.push('\n\n};');
@@ -595,6 +596,13 @@ export class HomeComponent implements OnInit {
         }
 
         return t;
+    }
+
+    camelCase(str: string) {
+        return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function (match, index) {
+            if (+match === 0) return ""; // or if (/\s+/.test(match)) for white spaces
+            return index == 0 ? match.toLowerCase() : match.toUpperCase();
+        });
     }
 
     // static makeRandomVarName(): string {

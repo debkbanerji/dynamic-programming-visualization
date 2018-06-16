@@ -35,16 +35,23 @@
 /*}*/
 
 #set-next-value-container {
-    width: calc(100% - 32px);
-    max-width: calc(100% - 32px);
-    min-width: calc(100% - 32px);
+    width: calc(100% - 45px);
+    max-width: calc(100% - 45px);
+    min-width: calc(100% - 45px);
     float: right;
 }
 
-#initialization-textarea, #return-value-textarea, .code-editor {
+#return-value-textarea-container {
     width: 100%;
-    max-width: 100%;
-    min-width: 100%
+    display: inline-block;
+}
+
+#initialization-textarea, #return-value-textarea, .code-editor {
+    width: calc(100% - 8px);
+    max-width: calc(100% - 8px);
+    min-width: calc(100% - 8px);
+    float: right;
+    display: inline-block;
 }
 
 #set-next-value-textarea {
