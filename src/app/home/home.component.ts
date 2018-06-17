@@ -407,15 +407,15 @@ export class HomeComponent implements OnInit {
         code.push(', ', encodedTableName);
         code.push(') {\n');
         if (is2d) {
-            code.push('\n\tif(', encodedTableName, '.length <= i || i < 0) {');
+            code.push('\n\tif(i === null || i === undefined || ', encodedTableName, '.length <= i || i < 0) {');
             code.push('\n\t\tthrow new Error(\'Could not get entry: \' + i + \' is not a valid table row\');');
             code.push('\n\t}\n');
-            code.push('\n\tif(', encodedTableName, '[0].length <= j || j < 0) {');
+            code.push('\n\tif(i === null || i === undefined || ', encodedTableName, '[0].length <= j || j < 0) {');
             code.push('\n\t\tthrow new Error(\'Could not get entry: \' + j + \' is not a valid table column\');');
             code.push('\n\t}\n');
             code.push('\n\t', logName, '.push({"action":"get","row":i,"column":j,"value":', encodedTableName, '[i][j]});\n');
         } else {
-            code.push('\n\tif(', encodedTableName, '.length <= i || i < 0) {');
+            code.push('\n\tif(i === null || i === undefined || ', encodedTableName, '.length <= i || i < 0) {');
             code.push('\n\t\tthrow new Error(\'Could not get entry: \' + i + \' is not a valid table index\');');
             code.push('\n\t}\n');
             code.push('\n\t', logName, '.push({"action":"get","index":i,"value":', encodedTableName, '[i]});\n');
@@ -455,14 +455,14 @@ export class HomeComponent implements OnInit {
         code.push(', ', encodedTableName);
         code.push(') {\n');
         if (is2d) {
-            code.push('\n\tif(', encodedTableName, '.length <= i || i < 0) {');
+            code.push('\n\tif(i === null || i === undefined || ', encodedTableName, '.length <= i || i < 0) {');
             code.push('\n\t\tthrow new Error(\'Could not set entry: \' + i + \' is not a valid table row\');');
             code.push('\n\t}\n');
-            code.push('\n\tif(', encodedTableName, '[0].length <= j || j < 0) {');
+            code.push('\n\tif(i === null || i === undefined || ', encodedTableName, '[0].length <= j || j < 0) {');
             code.push('\n\t\tthrow new Error(\'Could not set entry: \' + j + \' is not a valid table column\');');
             code.push('\n\t}\n')
         } else {
-            code.push('\n\tif(', encodedTableName, '.length <= i || i < 0) {');
+            code.push('\n\tif(i === null || i === undefined || ', encodedTableName, '.length <= i || i < 0) {');
             code.push('\n\t\tthrow new Error(\'Could not set entry: \' + i + \' is not a valid table index\');');
             code.push('\n\t}\n');
         }
