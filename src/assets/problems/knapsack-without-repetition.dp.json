@@ -30,7 +30,7 @@
         "setNextEntryTopDownCode": "if (i == 0 || j == 0) {\n  entry = 0;\n} else {\n  var itemWeight = weights[i - 1];\n  var valueWithoutLastItem = getTableEntry(i - 1, j);\n  if (itemWeight > j) {\n    entry = valueWithoutLastItem;\n  } else {\n    valueWithLastItem = getTableEntry(i - 1, j - itemWeight) + values[i - 1];\n    if (valueWithLastItem > valueWithoutLastItem) {\n      entry = valueWithLastItem;\n    } else {\n      entry = valueWithoutLastItem;\n    }\n  }\n}",
         "returnValueTopDownCode": "return getTableEntry(n, W);",
         "tableEntryDefinition": "T[ i ][ j ] Is the maximum value obtainable with a knapsack of capacity i using the first j items.",
-        "1solutionNotes": "(Additional solution notes here)"
+        "solutionNotes": "(Additional solution notes here)"
     },
     "test-cases": [
         {
