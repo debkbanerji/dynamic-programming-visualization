@@ -337,7 +337,7 @@
                         </mat-card>
                         <mat-card
                             *ngIf="testCase['expected-table'] && testCase['expected-result'] !== null && testCase['expected-result'] !== undefined">
-                            <b class="slightly-bold-label">Expected Results</b>
+                            <b class="slightly-bold-label">Expected {{testCase['name']}} Results<span *ngIf="approach === approaches[1]"> (for bottom up algorithm)</span></b>
                             <br>
                             <br>
                             <mat-card-content>
@@ -410,7 +410,7 @@
                                             {{testResults[testCaseIndex]['result'] === null ? 'null': ''}}
                                             {{testResults[testCaseIndex]['result'] === undefined ? 'undefined': ''}}
                                             {{((testResults[testCaseIndex]['result'] === null || testResults[testCaseIndex]['result'] === undefined)
-                                            && approach === approaches[1]) ? '  -  Make sure you\'re using  getTableEntry when returning your answer': ''}}
+                                            && approach === approaches[1]) ? '  -  Make sure you\'re using  getTableEntry when accessing table entries': ''}}
                                         </b>
                                     </div>
                                     <div>

@@ -241,8 +241,7 @@ export class HomeComponent implements OnInit {
             component.runTest(testCaseIndex, code, component, component.approach === component.approaches[1], function (testResult) {
                 let testCase = component.testCases[testCaseIndex];
                 const expectedTable = testCase['expected-table'];
-                testResult['has-expected-table'] =
-                    (JSON.stringify(testResult['table']) === JSON.stringify(expectedTable));
+                testResult['has-expected-table'] = component.isExpectedTable(expectedTable, testResult['table'], component.approach === component.approaches[1], component);
                 component.testResults[testCaseIndex] = testResult;
 
                 component.numRunTestCases++;
@@ -490,8 +489,7 @@ export class HomeComponent implements OnInit {
             if (this.isRectangular2dArray(testCase['expected-table'])) {
                 testCase['expected-table'] = this.getTransposedArray(testCase['expected-table']);
                 if (this.testResults[testCaseIndex]) {
-                    this.testResults[testCaseIndex]['has-expected-table'] =
-                        JSON.stringify(this.testResults[testCaseIndex]['table']) === JSON.stringify(testCase['expected-table']);
+                    this.testResults[testCaseIndex]['has-expected-table'] = this.isExpectedTable(testCase['expected-table'], this.testResults[testCaseIndex]['table'], this.approach === this.approaches[1], this);
                     if (this.testResults[testCaseIndex]['has-expected-table']) {
                         this.numExpectedTables++;
                     }
@@ -581,11 +579,41 @@ export class HomeComponent implements OnInit {
         }
     }
 
-    haveEqualDimensions(table1: any, table2): boolean {
+    isExpectedTable(target, provided, isTopDown: boolean, component: HomeComponent): boolean {
+        // Note: isTopDown just means we're avoiding mismatches rather than matching everything
+        if (!isTopDown) {
+            return JSON.stringify(target) === JSON.stringify(provided);
+        } else {
+            if (component.haveEqualDimensions(target, provided)) {
+                if (component.isRectangular2dArray(target)) {
+                    for (let i = 0; i < target.length; i++) {
+                        for (let j = 0; j < target[i].length; j++) {
+                            if (provided[i][j] !== null && provided[i][j] !== undefined && provided[i][j] !== target[i][j]) {
+                                return false;
+                            }
+                        }
+                    }
+                } else {
+                    for (let i = 0; i < target.length; i++) {
+                        if (provided[i] !== null && provided[i] !== undefined && provided[i] !== target[i]) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    haveEqualDimensions(table1: any, table2: any): boolean {
         if (!this.isArray(table1) || !this.isArray(table1)) {
             return false;
         } else if (!this.isRectangular2dArray(table1) && !this.isRectangular2dArray(table1)) {
             return table1.length === table2.length;
+        } else if (!this.isRectangular2dArray(table1) || !this.isRectangular2dArray(table1)) {
+            return false;
         } else {
             return table1.length === table2.length && table1[0].length === table2[0].length;
         }
@@ -663,14 +691,6 @@ export class HomeComponent implements OnInit {
         });
     }
 
-    // static makeRandomVarName(): string {
-    //     const result = ['_'];
-    //     const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    //     for (let i = 0; i < 5; i++)
-    //         result.push(possible.charAt(Math.floor(Math.random() * possible.length)));
-    //
-    //     return result.join('');
-    // }
 
     makeResizable(el, factor) {
         let int = Number(factor) || 7.7;
