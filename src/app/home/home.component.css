@@ -22,7 +22,7 @@
     font-family: Consolas, Monaco, Lucida Console, Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, sans-serif;
 }
 
-#default-entry-container {
+.default-entry-container {
     padding-bottom: 10px;
 }
 
@@ -34,7 +34,7 @@
 /*width: 100px;*/
 /*}*/
 
-#set-next-value-container {
+.set-next-value-container {
     width: calc(100% - 45px);
     max-width: calc(100% - 45px);
     min-width: calc(100% - 45px);
@@ -62,6 +62,8 @@
 
 .full-width {
     width: 100%;
+    max-width: 100%;
+    min-width: 100%;
 }
 
 /*DP Table*/
