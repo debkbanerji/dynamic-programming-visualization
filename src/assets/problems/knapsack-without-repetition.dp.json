@@ -21,13 +21,15 @@
         "for2Init": "0",
         "for2Condition": "w < W + 1",
         "for2Update": "w = w + 1",
-        "setNextEntryCode": "if (i == 0 || w == 0) {\n  entry = 0;\n} else {\n  itemWeight = weights[i - 1];\n  if (itemWeight > w) {\n    entry = T(i - 1, w);\n  } else {\n    valueWithLastItem = T(i - 1, w - itemWeight) + values[i - 1];\n    if (valueWithLastItem > T(i - 1, w)) {\n      entry = valueWithLastItem;\n    } else {\n      entry = T(i - 1, w);\n    }\n  }\n}",
+        "setNextEntryCode": "if (i == 0 || w == 0) {\n  entry = 0;\n} else {\n  itemWeight = weights[i - 1];\n  valueWithoutLastItem = T(i - 1, w);\n  if (itemWeight > w) {\n    entry = valueWithoutLastItem;\n  } else {\n    valueWithLastItem = T(i - 1, w - itemWeight) + values[i - 1];\n    if (valueWithLastItem > valueWithoutLastItem) {\n      entry = valueWithLastItem;\n    } else {\n      entry = valueWithoutLastItem;\n    }\n  }\n}",
         "defaultTableEntry": "",
         "useDefaultTableEntry": false,
         "returnValueCode": "return T(n, W);",
         "nextEntryIndex1": "i",
         "nextEntryIndex2": "w",
-        "tableEntryDefinition": "T[i][<em>j</em>] Is the maximum value obtainable with a knapsack of capacity i using the first <em>j</em> items.",
+        "setNextEntryTopDownCode": "if (i == 0 || j == 0) {\n  entry = 0;\n} else {\n  var itemWeight = weights[i - 1];\n  var valueWithoutLastItem = getTableEntry(i - 1, j);\n  if (itemWeight > j) {\n    entry = valueWithoutLastItem;\n  } else {\n    valueWithLastItem = getTableEntry(i - 1, j - itemWeight) + values[i - 1];\n    if (valueWithLastItem > valueWithoutLastItem) {\n      entry = valueWithLastItem;\n    } else {\n      entry = valueWithoutLastItem;\n    }\n  }\n}",
+        "returnValueTopDownCode": "return getTableEntry(n, W);",
+        "tableEntryDefinition": "T[ i ][ j ] Is the maximum value obtainable with a knapsack of capacity i using the first j items.",
         "solutionNotes": "(Additional solution notes here)"
     },
     "test-cases": [

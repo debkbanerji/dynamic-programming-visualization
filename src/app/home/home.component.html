@@ -12,28 +12,30 @@
                         <mat-option value="2d">2 Dimensional</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <!--<mat-form-field>-->
-                <!--<label for="table-data-type-select">Data Type</label>-->
-                <!--<mat-select [(ngModel)]="solution.tableDataType" id="table-data-type-select">-->
-                <!--<mat-option value="number">Numbers</mat-option>-->
-                <!--<mat-option value="boolean">Booleans</mat-option>-->
-                <!--</mat-select>-->
-                <!--</mat-form-field>-->
                 <form>
                     <mat-form-field *ngIf="solution.tableShape === '1d'">
                         <input matInput placeholder="Table Size"
                                [(ngModel)]="solution.tableDimension1" name="tableDimension1">
                     </mat-form-field>
                     <mat-form-field *ngIf="solution.tableShape === '2d'">
-                        <input matInput placeholder="Number of Rows"
+                        <input matInput placeholder="Dimension 1"
                                [(ngModel)]="solution.tableDimension1" name="tableDimension1">
                     </mat-form-field>
                     <mat-form-field *ngIf="solution.tableShape === '2d'">
-                        <input matInput placeholder="Number of Columns"
+                        <input matInput placeholder="Dimension 2"
                                [(ngModel)]="solution.tableDimension2" name="tableDimension2">
                     </mat-form-field>
                 </form>
                 <p class="section-header">Solution Code</p>
+                <!--A bottom up solution should always be provided, but a top down solution may also be provided-->
+                <mat-form-field
+                    *ngIf="problemDefined && providedSolution.returnValueTopDownCode">
+                    <!--<label for="approach-select">Approach</label>-->
+                    <mat-select [(ngModel)]="approach" id="approach-select">
+                        <mat-option value="{{approaches[0]}}">Bottom Up</mat-option>
+                        <mat-option value="{{approaches[1]}}">Top Down</mat-option>
+                    </mat-select>
+                </mat-form-field>
                 <!--<p>-->
                 <!--<small>-->
                 <!--<em>// Note: All providedSolution code is in Javascript-->
@@ -47,52 +49,21 @@
                 </p>
                 <p class="code" *ngIf="solution.tableShape === '1d'">&nbsp;&nbsp;T = A table of size
                     {{solution.tableDimension1 || '?'}}</p>
-                <p class="code" *ngIf="solution.tableShape === '2d'">&nbsp;&nbsp;T = A table with
-                    {{solution.tableDimension1 || '?'}} rows and {{solution.tableDimension2 || '?'}} columns</p>
-                <!--<textarea spellcheck="false" id="initialization-textarea" class="code"-->
-                <!--[(ngModel)]="solution.initializationCode"-->
-                <!--title="initializationCode" rows="3"></textarea>-->
-                <div id="initialization-textarea">
-                    <textarea class="full-width code code-editor"
-                              title="solution.initializationCode" rows="6"
-                              [(ngModel)]="solution.initializationCode"></textarea>
-                </div>
-                <p class="code">&nbsp;&nbsp;for (
-                    <input [(ngModel)]="solution.for1Variable"
-                           title="for1Variable"
-                           class="input-field-small" value="i"> =
-                    <input [(ngModel)]="solution.for1Init"
-                           title="for1Init"
-                           class="input-field-small" value="0">;
-                    <input [(ngModel)]="solution.for1Condition"
-                           title="for1Condition"
-                           class="input-field-small" value="i < (TODO: Define)">;
-                    <input [(ngModel)]="solution.for1Update"
-                           title="for1Update"
-                           class="input-field-small" value="i = i + 1">) {{'{'}}</p>
-                <p class="code" [hidden]="solution.tableShape === '1d'">&nbsp;&nbsp;&nbsp;&nbsp;for (
-                    <input [(ngModel)]="solution.for2Variable"
-                           title="for2Variable"
-                           class="input-field-small" value="j"> =
-                    <input [(ngModel)]="solution.for2Init"
-                           title="for2Init"
-                           class="input-field-small" value="0">;
-                    <input [(ngModel)]="solution.for2Condition"
-                           title="for2Condition"
-                           class="input-field-small" value="j < (TODO: Define)">;
-                    <input [(ngModel)]="solution.for2Update"
-                           title="for2Update"
-                           class="input-field-small" value="j = j + 1">) {{'{'}}</p>
-
-                <div>
-                    <!--<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>-->
-                    <!--<span *ngIf="solution.tableShape === '2d'">&nbsp;&nbsp;&nbsp;&nbsp;</span>-->
+                <p class="code" *ngIf="solution.tableShape === '2d'">&nbsp;&nbsp;T = A table with dimensions
+                    ({{solution.tableDimension1 || '?'}}) x ({{solution.tableDimension2 || '?'}})</p>
+                <div [hidden]="approach === approaches[0]">
+                    <p class="code">
+                        &nbsp;&nbsp;function getTableEntry(i<span *ngIf="solution.tableShape === '2d'">, j</span>)
+                        {{'{'}}
+                    </p>
+                    <p class="code">&nbsp;&nbsp;&nbsp;&nbsp;if (T(i<span *ngIf="solution.tableShape === '2d'">, j</span>)
+                        !== null) {{'{'}}</p>
+                    <p class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return T(i<span
+                        *ngIf="solution.tableShape === '2d'">, j</span>);</p>
+                    <p class="code">&nbsp;&nbsp;&nbsp;&nbsp;{{'}'}} else {{'{'}}</p>
                     <div class="full-width" style="overflow: hidden">
-                        <div id="set-next-value-container">
-                            <div id="default-entry-container">
-                                <!--<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>-->
-                                <!--<span *ngIf="solution.tableShape === '2d'">&nbsp;&nbsp;&nbsp;&nbsp;</span>-->
-                                <!--<span *ngIf="!useDefaultTableEntry">// </span>-->
+                        <div class="set-next-value-container">
+                            <div class="default-entry-container">
                                 <span class="code">let entry = <input [(ngModel)]="solution.defaultTableEntry"
                                                                       [hidden]="!solution.useDefaultTableEntry"
                                                                       title="defaultTableEntry"
@@ -102,36 +73,100 @@
                                 &nbsp;&nbsp;
                                 <mat-checkbox [(ngModel)]="solution.useDefaultTableEntry">Set a default value
                                 </mat-checkbox>
-                                <!--<input type="checkbox" [(ngModel)]="useDefaultTableEntry"-->
-                                <!--title="useDefaultTableEntry"> Use default value-->
                             </div>
-                            <!--<textarea spellcheck="false" id="set-next-value-textarea" class="code"-->
-                            <!--[(ngModel)]="solution.setNextEntryCode"-->
-                            <!--title="setNextValueCode" rows="20"></textarea>-->
-                            <textarea class="code code-editor"
+                            <textarea class="code full-width"
                                       [(ngModel)]="solution.setNextEntryCode"
                                       title="setNextEntryCode" rows="20"></textarea>
-                            <!--<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>-->
-                            <!--<span *ngIf="solution.tableShape === '2d'">&nbsp;&nbsp;&nbsp;&nbsp;</span>-->
                             <br>
-                            <span class="code">T<span *ngIf="solution.tableShape === '2d'"></span>(<input
-                                [(ngModel)]="solution.nextEntryIndex1"
-                                title="nextEntryIndex1"
-                                class="input-field-small"
-                                value="i"><span
-                                [hidden]="solution.tableShape === '1d'">,<input
-                                [(ngModel)]="solution.nextEntryIndex2"
-                                title="nextEntryIndex2"
-                                class="input-field-small"
-                                value="j"></span>) = entry;</span>
                         </div>
                     </div>
+                    <p class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;T(i<span *ngIf="solution.tableShape === '2d'">, j</span>)
+                        = entry;</p>
+                    <p class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return entry;</p>
+                    <p class="code">&nbsp;&nbsp;&nbsp;&nbsp;{{'}'}}</p>
+                    <p class="code">&nbsp;&nbsp;{{'}'}}</p>
                 </div>
-                <p class="code" [hidden]="solution.tableShape === '1d'">&nbsp;&nbsp;&nbsp;&nbsp;{{'}'}}</p>
-                <p class="code">&nbsp;&nbsp;{{'}'}}</p>
-                <!--<textarea spellcheck="false" id="return-value-textarea" class="code"-->
-                <!--[(ngModel)]="solution.returnValueCode"-->
-                <!--title="returnValueCode" rows="6"></textarea>-->
+                <div [hidden]="approach === approaches[1]">
+                    <div id="initialization-textarea">
+                    <textarea class="full-width code code-editor"
+                              title="solution.initializationCode" rows="6"
+                              [(ngModel)]="solution.initializationCode"></textarea>
+                    </div>
+                    <p class="code">&nbsp;&nbsp;for (
+                        <input [(ngModel)]="solution.for1Variable"
+                               title="for1Variable"
+                               class="input-field-small" value="i"> =
+                        <input [(ngModel)]="solution.for1Init"
+                               title="for1Init"
+                               class="input-field-small" value="0">;
+                        <input [(ngModel)]="solution.for1Condition"
+                               title="for1Condition"
+                               class="input-field-small" value="i < (TODO: Define)">;
+                        <input [(ngModel)]="solution.for1Update"
+                               title="for1Update"
+                               class="input-field-small" value="i = i + 1">) {{'{'}}</p>
+                    <p class="code" [hidden]="solution.tableShape === '1d'">&nbsp;&nbsp;&nbsp;&nbsp;for (
+                        <input [(ngModel)]="solution.for2Variable"
+                               title="for2Variable"
+                               class="input-field-small" value="j"> =
+                        <input [(ngModel)]="solution.for2Init"
+                               title="for2Init"
+                               class="input-field-small" value="0">;
+                        <input [(ngModel)]="solution.for2Condition"
+                               title="for2Condition"
+                               class="input-field-small" value="j < (TODO: Define)">;
+                        <input [(ngModel)]="solution.for2Update"
+                               title="for2Update"
+                               class="input-field-small" value="j = j + 1">) {{'{'}}</p>
+                    <div>
+                        <!--<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>-->
+                        <!--<span *ngIf="solution.tableShape === '2d'">&nbsp;&nbsp;&nbsp;&nbsp;</span>-->
+                        <div class="full-width" style="overflow: hidden">
+                            <div class="set-next-value-container">
+                                <div class="default-entry-container">
+                                    <!--<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>-->
+                                    <!--<span *ngIf="solution.tableShape === '2d'">&nbsp;&nbsp;&nbsp;&nbsp;</span>-->
+                                    <!--<span *ngIf="!useDefaultTableEntry">// </span>-->
+                                    <span class="code">let entry = <input [(ngModel)]="solution.defaultTableEntry"
+                                                                          [hidden]="!solution.useDefaultTableEntry"
+                                                                          title="defaultTableEntry"
+                                                                          class="input-field-small" value="">
+                                </span>
+                                    <span *ngIf="!solution.useDefaultTableEntry">null</span>;
+                                    &nbsp;&nbsp;
+                                    <mat-checkbox [(ngModel)]="solution.useDefaultTableEntry">Set a default value
+                                    </mat-checkbox>
+                                    <!--<input type="checkbox" [(ngModel)]="useDefaultTableEntry"-->
+                                    <!--title="useDefaultTableEntry"> Use default value-->
+                                </div>
+                                <!--<textarea spellcheck="false" id="set-next-value-textarea" class="code"-->
+                                <!--[(ngModel)]="solution.setNextEntryCode"-->
+                                <!--title="setNextValueCode" rows="20"></textarea>-->
+                                <textarea class="code full-width"
+                                          [(ngModel)]="solution.setNextEntryCode"
+                                          title="setNextEntryCode" rows="20"></textarea>
+                                <!--<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>-->
+                                <!--<span *ngIf="solution.tableShape === '2d'">&nbsp;&nbsp;&nbsp;&nbsp;</span>-->
+                                <br>
+                                <span class="code">T<span *ngIf="solution.tableShape === '2d'"></span>(<input
+                                    [(ngModel)]="solution.nextEntryIndex1"
+                                    title="nextEntryIndex1"
+                                    class="input-field-small"
+                                    value="i"><span
+                                    [hidden]="solution.tableShape === '1d'">,<input
+                                    [(ngModel)]="solution.nextEntryIndex2"
+                                    title="nextEntryIndex2"
+                                    class="input-field-small"
+                                    value="j"></span>) = entry;</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="code" [hidden]="solution.tableShape === '1d'">&nbsp;&nbsp;&nbsp;&nbsp;{{'}'}}</p>
+                    <p class="code">&nbsp;&nbsp;{{'}'}}</p>
+                    <!--<textarea spellcheck="false" id="return-value-textarea" class="code"-->
+                    <!--[(ngModel)]="solution.returnValueCode"-->
+                    <!--title="returnValueCode" rows="6"></textarea>-->
+                </div>
                 <div id="return-value-textarea-container">
                     <div id="return-value-textarea">
                     <textarea class="full-width code code-editor"
@@ -201,6 +236,7 @@
                     }"><span *ngIf="numExpectedTables === numRunTestCases">&#x2714; </span>{{numExpectedTables}}
                         table{{numExpectedTables === 1? '' : 's'}} with matching entries</b>
                     <br>
+                    <span><small>Note: If a top down approach was used, only non null entries were checked</small></span>
                     <span *ngIf="numExpectedTables < numRunTestCases && numPassedTestCases === numRunTestCases">
                         This may not be an issue, since all your final answers are correct.
                         <br>
@@ -240,6 +276,20 @@
             </b>
             <div *ngFor="let variable of objectKeys(problem.input)">
                 <span><b class="code">{{variable}}</b> : <small [innerHTML]="problem.input[variable]"></small></span>
+            </div>
+            <div
+                *ngIf="revealedProvidedSolution">
+                <br *ngIf="providedSolution['solutionNotes']">
+                <div *ngIf="providedSolution['solutionNotes']">
+                    <b>Solution notes</b>
+                    <br>
+                    <p [innerHTML]="providedSolution['solutionNotes']"></p>
+                </div>
+                <br *ngIf="providedSolution['tableEntryDefinition']">
+                <div *ngIf="providedSolution['tableEntryDefinition']">
+                    <b>Table entry definition: </b>
+                    <span [innerHTML]="providedSolution['tableEntryDefinition']"></span>
+                </div>
             </div>
         </mat-expansion-panel>
         <mat-card>
@@ -288,7 +338,8 @@
                         </mat-card>
                         <mat-card
                             *ngIf="testCase['expected-table'] && testCase['expected-result'] !== null && testCase['expected-result'] !== undefined">
-                            <b class="slightly-bold-label">Expected Results</b>
+                            <b class="slightly-bold-label">Expected {{testCase['name']}} Results<span
+                                *ngIf="approach === approaches[1]"> (for bottom up algorithm)</span></b>
                             <br>
                             <br>
                             <mat-card-content>
@@ -358,6 +409,12 @@
                                             &#x2718; Incorrect Final Answer - Expected {{testCase['expected-result']}}
                                             but got
                                             {{testResults[testCaseIndex]['result']}}
+                                            {{testResults[testCaseIndex]['result'] === null ? 'null': ''}}
+                                            {{testResults[testCaseIndex]['result'] === undefined ? 'undefined': ''}}
+                                            {{((testResults[testCaseIndex]['result'] === null ||
+                                            testResults[testCaseIndex]['result'] === undefined)
+                                            && approach === approaches[1]) ? ' - Make sure you\'re using getTableEntry
+                                            when accessing table entries': ''}}
                                         </b>
                                     </div>
                                     <div>
@@ -393,7 +450,9 @@
                                                             testResults[testCaseIndex]['table'][i] === testCase['expected-table'][i]
                                                           ),
                                                            'text-yellow': !(haveEqualDimensions(testResults[testCaseIndex]['table'], testCase['expected-table']) &&
-                                                            testResults[testCaseIndex]['table'][i] === testCase['expected-table'][i]
+                                                            (approach === approaches[1] ?
+                                                            testResults[testCaseIndex]['table'][i] === testCase['expected-table'][i] || testResults[testCaseIndex]['table'][i] === null || testResults[testCaseIndex]['table'][i] === undefined
+                                                             : testResults[testCaseIndex]['table'][i] === testCase['expected-table'][i])
                                                           )}"
                                                           [innerHTML]="getDisplayedValue(testResults[testCaseIndex]['table'][i])">
                                             </span>
@@ -411,7 +470,9 @@
                                                             testResults[testCaseIndex]['table'][i][j] === testCase['expected-table'][i][j]
                                                           ),
                                                            'text-yellow': !(haveEqualDimensions(testResults[testCaseIndex]['table'], testCase['expected-table']) &&
-                                                            testResults[testCaseIndex]['table'][i][j] === testCase['expected-table'][i][j]
+                                                            (approach === approaches[1] ?
+                                                            testResults[testCaseIndex]['table'][i][j] === testCase['expected-table'][i][j] || testResults[testCaseIndex]['table'][i][j] === null || testResults[testCaseIndex]['table'][i][j] === undefined
+                                                             : testResults[testCaseIndex]['table'][i][j] === testCase['expected-table'][i][j])
                                                           )}"
                                                           [innerHTML]="getDisplayedValue(testResults[testCaseIndex]['table'][i][j])">
                                                     </span>
