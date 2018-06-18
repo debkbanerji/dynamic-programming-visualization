@@ -7,7 +7,7 @@
         "weights": "array of item weights, where entry i represents the weight of item i",
         "values": "array of item values, where entry i represents the value of item i"
     },
-    "result-type": "float",
+    "output-description": "The maximum value that can be attained with a knapsack of capacity W",
     "provided-solution": {
         "tableShape": "2d",
         "tableDimension1": "n + 1",
@@ -24,11 +24,11 @@
         "setNextEntryCode": "if (i == 0 || w == 0) {\n  entry = 0;\n} else {\n  itemWeight = weights[i - 1];\n  valueWithoutLastItem = T(i - 1, w);\n  if (itemWeight > w) {\n    entry = valueWithoutLastItem;\n  } else {\n    valueWithLastItem = T(i - 1, w - itemWeight) + values[i - 1];\n    if (valueWithLastItem > valueWithoutLastItem) {\n      entry = valueWithLastItem;\n    } else {\n      entry = valueWithoutLastItem;\n    }\n  }\n}",
         "defaultTableEntry": "",
         "useDefaultTableEntry": false,
-        "returnValueCode": "return T(n, W);",
+        "returnValueCode": "result = T(n, W);",
         "nextEntryIndex1": "i",
         "nextEntryIndex2": "w",
         "setNextEntryTopDownCode": "if (i == 0 || j == 0) {\n  entry = 0;\n} else {\n  var itemWeight = weights[i - 1];\n  var valueWithoutLastItem = getTableEntry(i - 1, j);\n  if (itemWeight > j) {\n    entry = valueWithoutLastItem;\n  } else {\n    valueWithLastItem = getTableEntry(i - 1, j - itemWeight) + values[i - 1];\n    if (valueWithLastItem > valueWithoutLastItem) {\n      entry = valueWithLastItem;\n    } else {\n      entry = valueWithoutLastItem;\n    }\n  }\n}",
-        "returnValueTopDownCode": "return getTableEntry(n, W);",
+        "returnValueTopDownCode": "result = getTableEntry(n, W);",
         "tableEntryDefinition": "T[ i ][ j ] Is the maximum value obtainable with a knapsack of capacity i using the first j items.",
         "solutionNotes": "(Additional solution notes here)"
     },

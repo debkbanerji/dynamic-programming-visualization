@@ -152,15 +152,15 @@ export class HomeComponent implements OnInit {
         code.push('\n');
         code.push(plainFunctionCode);
 
-        code.push('\n\n\t// FUNCTION CODE END\n\nresult = {};\n\nresult.answer = algorithm(');
+        code.push('\n\n\t// FUNCTION CODE END\n\ntestResult = {};\n\ntestResult.answer = algorithm(');
         for (let i = 0; i < inputs.length; i++) {
             code.push(inputs[i]);
             // if (i < inputs.length - 1) {
             code.push(', ');
             // }
         }
-        code.push(encodedTableName, ');\nresult.table = ', encodedTableName, ';\nresult.log = ', logName, ';\n\n');
-        code.push('postMessage(result);\n');
+        code.push(encodedTableName, ');\ntestResult.table = ', encodedTableName, ';\ntestResult.log = ', logName, ';\n\n');
+        code.push('postMessage(testResult);\n');
         code.push('self.close();\n\n');
         code.push('} catch(e) {\n');
         code.push('\npostMessage({\'error\':e.stack});\n');
@@ -339,22 +339,25 @@ export class HomeComponent implements OnInit {
 
             const setNextEntryCode = solution.setNextEntryCode;
             if (is2d) {
-                innerCode.push('\t\t// SET NEXT ENTRY CODE START\n\n\t\t');
+                innerCode.push('\t\t// DEFAULT VALUE CODE START\n\n\t\t');
                 if (solution.useDefaultTableEntry) {
                     innerCode.push('let entry = ', solution.defaultTableEntry, ';\n\n\t\t');
                 } else {
-                    innerCode.push('let entry = null;\n\t\t');
+                    innerCode.push('let entry = null;\n\n\t\t');
                 }
+                innerCode.push('\t\t// SET NEXT ENTRY CODE START\n\n\t\t');
                 innerCode.push(setNextEntryCode.replace(/(?:\r\n|\r|\n)/g, '\n\t\t'));
             } else {
-                innerCode.push('\t// SET NEXT ENTRY CODE START\n\n\t');
+                innerCode.push('\t// DEFAULT VALUE CODE START\n\n\t');
                 if (solution.useDefaultTableEntry) {
                     innerCode.push('let entry = ', solution.defaultTableEntry, ';\n\n\t');
                 } else {
                     innerCode.push('let entry = null;\n\n\t');
                 }
+                innerCode.push('\t// SET NEXT ENTRY CODE START\n\n\t');
                 innerCode.push(setNextEntryCode.replace(/(?:\r\n|\r|\n)/g, '\n\t'));
             }
+            innerCode.push('\t// SET NEXT ENTRY CODE END\n');
             innerCode.push('\n\n\t', is2d ? '\t' : '', 'set', encodedTableName, '(entry, ', solution.nextEntryIndex1);
             if (is2d) {
                 innerCode.push(', ', solution.nextEntryIndex2);
@@ -374,13 +377,15 @@ export class HomeComponent implements OnInit {
             innerCode.push('\n\t\treturn ___CURRENT_TABLE_ELEMENT___;');
             innerCode.push('\n\t} else {');
             const setNextEntryCode = solution.setNextEntryCode;
-            innerCode.push('\n\t\t// SET NEXT ENTRY CODE START\n\n\t\t');
+            innerCode.push('\t\t\t// DEFAULT VALUE CODE START\n\n\t\t');
             if (solution.useDefaultTableEntry) {
                 innerCode.push('let entry = ', solution.defaultTableEntry, ';\n\n\t\t');
             } else {
-                innerCode.push('let entry = null;\n\t\t');
+                innerCode.push('let entry = null;\n\n\t\t');
             }
+            innerCode.push('\n\t\t// SET NEXT ENTRY CODE START\n\n\t\t');
             innerCode.push(setNextEntryCode.replace(/(?:\r\n|\r|\n)/g, '\n\t\t'));
+            innerCode.push('\t// SET NEXT ENTRY CODE END\n');
             innerCode.push('\n\n\t\t', 'set', encodedTableName, '(entry, i', is2d ? ', j' : '', ', ', encodedTableName, ');');
             innerCode.push('\n\t\treturn entry;');
             innerCode.push('\n\t}');
@@ -388,7 +393,8 @@ export class HomeComponent implements OnInit {
             innerCode.push('// RETURN VALUE CODE START\n\n');
             innerCode.push(solution.returnValueCode, '\n');
         }
-
+        innerCode.push('// RETURN VALUE CODE END\n\n');
+        innerCode.push('return result;', '\n');
         outerCode.push(innerCode.join('').replace(/(?:\r\n|\r|\n)/g, '\n\t'));
         outerCode.push('\n\n};');
 
@@ -535,27 +541,61 @@ export class HomeComponent implements OnInit {
     getSectionSpecificErrorMessage(e, code: string, isStack: boolean, isTopDown: boolean): string {
         // Note: e is either an error event (which means it's a syntax error) or an error object which means it's a runtime error)
 
+        const lineMarker = '___LINE___';
+
         // Lines marking the code
         const tableInitStart = this.lineNumberOf('// TABLE INITIALIZATION CODE START', code);
         const tableInitEnd = this.lineNumberOf('// TABLE INITIALIZATION CODE END', code);
+        const initCodeStart = this.lineNumberOf('// INITIALIZATION CODE START', code);
+        const loopCodeStart = this.lineNumberOf('// LOOP CODE START', code);
+        const defaultValueCodeStart = this.lineNumberOf('// DEFAULT VALUE CODE START', code);
+        const nextEntryCodeStart = this.lineNumberOf('// SET NEXT ENTRY CODE START', code);
+        const nextEntryCodeEnd = this.lineNumberOf('// SET NEXT ENTRY CODE END', code);
+        const returnValueCodeStart = this.lineNumberOf('// RETURN VALUE CODE START', code);
+        const returnValueCodeEnd = this.lineNumberOf('// RETURN VALUE CODE END', code);
+        const functionCodeEnd = this.lineNumberOf('// FUNCTION CODE END', code);
 
         let errorLine; // Actual line in stack for which we want to specify error section
-        // console.log(isStack);
-        // console.log(e);
+        let errorMessage;
+        let errorZoneMessage;
 
         if (!isStack) {
             errorLine = e.lineno;
+            errorMessage = e.message;
         } else {
-            // console.log(e);
-            // const stack = e.stack;
-            // // console.log(stack);
-            // for (let i = 0; i < stack.length; i++) {
-            //     const stackline = stack[i];
-            //     // console.log(stackline);
-            // }
+            const stackSplit = e.toString().split('\n');
+            errorMessage = stackSplit[0].substr(7);
+            for (let i = stackSplit.length - 1; i >= 0; i--) {
+                const stackline = stackSplit[i];
+                if (stackline.indexOf('at algorithm ') >= 0) {
+                    const lineSplit = stackline.split(':');
+                    errorLine = Number(lineSplit[lineSplit.length - 2]);
+                }
+            }
         }
 
-        return 'TODO: Get error message for user';
+        if (!isTopDown) {
+            if (errorLine <= tableInitEnd) {
+                errorZoneMessage = 'Error in table initialization';
+            } else if (errorLine <= loopCodeStart) {
+                errorZoneMessage = 'Error in line ' + (errorLine - initCodeStart - 2) + ' of initialization code';
+            } else if (errorLine <= defaultValueCodeStart) {
+                errorZoneMessage = 'Error in for loop definition'
+            } else if (errorLine <= nextEntryCodeStart) {
+                errorZoneMessage = 'Error in setting default value for entry'
+            } else if (errorLine <= nextEntryCodeEnd) {
+                errorZoneMessage = 'Error in line ' + (errorLine - nextEntryCodeStart - 2) + ' of set next entry code';
+            } else if (errorLine < returnValueCodeStart) {
+                errorZoneMessage = 'Error in setting table value equal to entry';
+            } else if (errorLine <= returnValueCodeEnd) {
+                errorZoneMessage = 'Error in line ' + (errorLine - returnValueCodeStart - 2) + ' of return value code';
+            } else {
+                errorZoneMessage = 'Error while trying to return result'
+            }
+        }
+
+        // Formatting error message here so we only have to return 1 value
+        return ' ' + errorZoneMessage + '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + errorMessage;
 
     }
 
@@ -667,7 +707,13 @@ export class HomeComponent implements OnInit {
 
     lineNumberOf(needle: string, haystack: string) {
         const haystackSplit = haystack.split('\n');
-        // console.log(haystackSplit);
+        for (let i = 0; i < haystackSplit.length; i++) {
+            const line = haystackSplit[i];
+            if (line.indexOf(needle) >= 0) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     range(_p: number, _t?: number, _s?: number): Array<number> {
