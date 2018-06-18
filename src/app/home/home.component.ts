@@ -133,7 +133,6 @@ export class HomeComponent implements OnInit {
 
     // Returns result of running the test case, as well as the table
     runTest(testCaseIndex: number, plainFunctionCode: string, component: HomeComponent, isTopDown: boolean, callback: Function) {
-        // console.log('Running test ' + testCaseIndex);
         const code = [];
 
         const inputMap = component.problem.input;
@@ -241,9 +240,8 @@ export class HomeComponent implements OnInit {
             component.runTest(testCaseIndex, code, component, component.approach === component.approaches[1], function (testResult) {
                 let testCase = component.testCases[testCaseIndex];
                 const expectedTable = testCase['expected-table'];
-                testResult['has-expected-table'] = component.isExpectedTable(expectedTable, testResult['table'], component.approach === component.approaches[1], component);
+                testResult['has-expected-table'] = !testResult['error'] && !testResult['timed-out'] && component.isExpectedTable(expectedTable, testResult['table'], component.approach === component.approaches[1], component);
                 component.testResults[testCaseIndex] = testResult;
-
                 component.numRunTestCases++;
                 if (testResult['result'] === testCase['expected-result']) {
                     component.numPassedTestCases++;
@@ -592,10 +590,24 @@ export class HomeComponent implements OnInit {
             } else {
                 errorZoneMessage = 'Error while trying to return result'
             }
+        } else {
+            if (errorLine <= tableInitEnd) {
+                errorZoneMessage = 'Error in table initialization';
+            } else if (errorLine <= nextEntryCodeStart) {
+                errorZoneMessage = 'Error in setting default value for entry'
+            } else if (errorLine <= nextEntryCodeEnd) {
+                errorZoneMessage = 'Error in line ' + (errorLine - nextEntryCodeStart - 2) + ' of set next entry code';
+            } else if (errorLine < returnValueCodeStart) {
+                errorZoneMessage = 'Error in setting table value equal to entry';
+            } else if (errorLine <= returnValueCodeEnd) {
+                errorZoneMessage = 'Error in line ' + (errorLine - returnValueCodeStart - 2) + ' of return value code';
+            } else {
+                errorZoneMessage = 'Error while trying to return result'
+            }
         }
 
         // Formatting error message here so we only have to return 1 value
-        return ' ' + errorZoneMessage + '<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + errorMessage;
+        return ' ' + errorZoneMessage + '<br><br>' + errorMessage + (isTopDown ? '<br><br>Note that since the approach is top down the source of the error may be within another level of recursion' : '');
 
     }
 
