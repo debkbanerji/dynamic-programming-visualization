@@ -166,7 +166,7 @@ export class HomeComponent implements OnInit {
         code.push('\nself.close();\n\n}');
 
         const joinedCode = code.join('');
-        // console.log(joinedCode);
+        console.log(joinedCode);
 
         const result = {};
 
@@ -369,13 +369,15 @@ export class HomeComponent implements OnInit {
             innerCode.push(solution.returnValueCode, '\n');
         } else {
             const dimensions = '(i' + (is2d ? ', j' : '') + ')';
+            innerCode.push('\t// INITIALIZATION CODE START\n\n');
+            innerCode.push(solution.initializationCode, '\n\n');
             innerCode.push('\nfunction getTableEntry', dimensions, ' {');
             innerCode.push('\n\tlet ___CURRENT_TABLE_ELEMENT___ = T', dimensions, ';');
             innerCode.push('\n\tif (___CURRENT_TABLE_ELEMENT___ !== null && ___CURRENT_TABLE_ELEMENT___ !== undefined) {');
             innerCode.push('\n\t\treturn ___CURRENT_TABLE_ELEMENT___;');
             innerCode.push('\n\t} else {');
             const setNextEntryCode = solution.setNextEntryCode;
-            innerCode.push('\t\t\t// DEFAULT VALUE CODE START\n\n\t\t');
+            innerCode.push('\n\t\t\t// DEFAULT VALUE CODE START\n\n\t\t');
             if (solution.useDefaultTableEntry) {
                 innerCode.push('let entry = ', solution.defaultTableEntry, ';\n\n\t\t');
             } else {
@@ -594,6 +596,8 @@ export class HomeComponent implements OnInit {
         } else {
             if (errorLine <= tableInitEnd) {
                 errorZoneMessage = 'Error in table initialization';
+            } else if (errorLine <= defaultValueCodeStart) {
+                errorZoneMessage = 'Error in line ' + (errorLine - initCodeStart - 2) + ' of initialization code';
             } else if (errorLine <= nextEntryCodeStart) {
                 errorZoneMessage = 'Error in setting default value for entry'
             } else if (errorLine <= nextEntryCodeEnd) {

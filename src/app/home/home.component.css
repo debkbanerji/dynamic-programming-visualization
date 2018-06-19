@@ -46,7 +46,7 @@
     display: inline-block;
 }
 
-#initialization-textarea, #return-value-textarea, .code-editor {
+.initialization-textarea, #return-value-textarea, .code-editor {
     width: calc(100% - 8px);
     max-width: calc(100% - 8px);
     min-width: calc(100% - 8px);

@@ -52,6 +52,11 @@
                 <p class="code" *ngIf="solution.tableShape === '2d'">&nbsp;&nbsp;T = A table with dimensions
                     ({{solution.tableDimension1 || '?'}}) x ({{solution.tableDimension2 || '?'}})</p>
                 <div [hidden]="approach === approaches[0]">
+                    <div class="initialization-textarea">
+                    <textarea class="full-width code code-editor"
+                              title="solution.initializationCode" rows="6"
+                              [(ngModel)]="solution.initializationCode"></textarea>
+                    </div>
                     <p class="code">
                         &nbsp;&nbsp;function getTableEntry(i<span *ngIf="solution.tableShape === '2d'">, j</span>)
                         {{'{'}}
@@ -87,7 +92,7 @@
                     <p class="code">&nbsp;&nbsp;{{'}'}}</p>
                 </div>
                 <div [hidden]="approach === approaches[1]">
-                    <div id="initialization-textarea">
+                    <div class="initialization-textarea">
                     <textarea class="full-width code code-editor"
                               title="solution.initializationCode" rows="6"
                               [(ngModel)]="solution.initializationCode"></textarea>
