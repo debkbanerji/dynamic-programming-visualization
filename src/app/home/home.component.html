@@ -316,7 +316,8 @@
                                     <span *ngIf="!isArray(testCase['input'][input])"
                                           [innerHTML]="' ' + getDisplayedValue(testCase['input'][input])">
                                 </span>
-                                    <div *ngIf="isArray(testCase['input'][input])">
+                                    <div
+                                        *ngIf="isArray(testCase['input'][input]) && shouldDisplayArray(testCase['input'][input])">
                                         <!--TODO: Deal with displaying empty arrays everywhere (write a function for this)-->
                                         <table class="dp-table" *ngIf="!isRectangular2dArray(testCase['input'][input])">
                                             <tr class="dp-tr">
@@ -339,6 +340,10 @@
                                             </tr>
                                         </table>
                                     </div>
+                                    <div
+                                        *ngIf="isArray(testCase['input'][input]) && !shouldDisplayArray(testCase['input'][input])">
+                                        empty Array
+                                    </div>
                                 </div>
                             </mat-card-content>
                         </mat-card>
@@ -355,26 +360,32 @@
                                         (click)="transposeTable()">
                                     Transpose
                                 </button>
-                                <table class="dp-table"
-                                       *ngIf="providedSolution['tableShape'] === '2d'">
-                                    <tr class="dp-tr" *ngFor="let i of range(testCase['expected-table'].length);">
-                                        <td class="dp-td"
-                                            *ngFor="let j of range(testCase['expected-table'][0].length);">
+                                <div *ngIf="shouldDisplayArray(testCase['expected-table'])">
+                                    <table class="dp-table"
+                                           *ngIf="providedSolution['tableShape'] === '2d'">
+                                        <tr class="dp-tr" *ngFor="let i of range(testCase['expected-table'].length);">
+                                            <td class="dp-td"
+                                                *ngFor="let j of range(testCase['expected-table'][0].length);">
                                     <span class="dp-table-cell"
                                           [innerHTML]="getDisplayedValue(testCase['expected-table'][i][j])">
                                     </span>
-                                        </td>
-                                    </tr>
-                                </table>
-                                <table class="dp-table" *ngIf="providedSolution['tableShape'] === '1d'">
-                                    <tr class="dp-tr">
-                                        <td class="dp-td" *ngFor="let i of range(testCase['expected-table'].length);">
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table class="dp-table" *ngIf="providedSolution['tableShape'] === '1d'">
+                                        <tr class="dp-tr">
+                                            <td class="dp-td"
+                                                *ngFor="let i of range(testCase['expected-table'].length);">
                                     <span class="dp-table-cell"
                                           [innerHTML]="getDisplayedValue(testCase['expected-table'][i])">
                                     </span>
-                                        </td>
-                                    </tr>
-                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div *ngIf="!shouldDisplayArray(testCase['expected-table'])">
+                                    Empty Table
+                                </div>
                                 <br>
                                 <span class="slightly-bold-label">Final Answer</span>
                                 <span
@@ -419,8 +430,8 @@
                                             {{testResults[testCaseIndex]['result'] === undefined ? 'undefined': ''}}
                                             {{((testResults[testCaseIndex]['result'] === null ||
                                             testResults[testCaseIndex]['result'] === undefined)
-                                            && approach === approaches[1]) ? ' - Make sure you\'re using getTableEntry
-                                            when accessing table entries': ''}}
+                                            && approach === approaches[1]) ? ' - Make sure you\'re using getTableEntry'
+                                            + ' when accessing table entries': ''}}
                                         </b>
                                     </div>
                                     <div>
@@ -445,7 +456,7 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div *ngIf="shouldDisplayArray(testResults[testCaseIndex]['table'])">
                                         <table class="dp-table"
                                                *ngIf="!isRectangular2dArray(testResults[testCaseIndex]['table'])">
                                             <tr class="dp-tr">
@@ -485,6 +496,9 @@
                                                 </td>
                                             </tr>
                                         </table>
+                                    </div>
+                                    <div *ngIf="!shouldDisplayArray(testResults[testCaseIndex]['table'])">
+                                        Empty Table
                                     </div>
                                 </div>
                             </mat-card-content>

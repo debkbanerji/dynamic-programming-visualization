@@ -166,7 +166,7 @@ export class HomeComponent implements OnInit {
         code.push('\nself.close();\n\n}');
 
         const joinedCode = code.join('');
-        console.log(joinedCode);
+        // console.log(joinedCode);
 
         const result = {};
 
@@ -613,6 +613,14 @@ export class HomeComponent implements OnInit {
 
     isArray(item: any): boolean {
         return item && item.constructor === Array;
+    }
+
+    shouldDisplayArray(item: any): boolean {
+        if (this.isRectangular2dArray(item)) {
+            return item.length > 0 && item[0].length > 0;
+        } else {
+            return item.length > 0;
+        }
     }
 
     isRectangular2dArray(item: any): boolean {
