@@ -532,6 +532,7 @@ export class HomeComponent implements OnInit {
                     component.solution.returnValueCode = component.providedSolution.returnValueTopDownCode;
                 }
                 component.makeInputsResizable();
+                component.runAllTestsWithUserSolution();
             }
         });
     }
