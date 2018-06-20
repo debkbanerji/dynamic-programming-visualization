@@ -26,6 +26,20 @@
                                [(ngModel)]="solution.tableDimension2" name="tableDimension2">
                     </mat-form-field>
                 </form>
+                <form *ngIf="expectDetailedSolution && providedSolution.useAuxiliaryTableWithDetailedSolution">
+                    <mat-form-field *ngIf="solution.tableShape === '1d'">
+                        <input matInput placeholder="Table Size"
+                               [(ngModel)]="solution.auxiliaryTableDimension1" name="auxiliaryTableDimension1">
+                    </mat-form-field>
+                    <mat-form-field *ngIf="solution.tableShape === '2d'">
+                        <input matInput placeholder="Dimension 1"
+                               [(ngModel)]="solution.auxiliaryTableDimension1" name="auxiliaryTableDimension1">
+                    </mat-form-field>
+                    <mat-form-field *ngIf="solution.tableShape === '2d'">
+                        <input matInput placeholder="Dimension 2"
+                               [(ngModel)]="solution.auxiliaryTableDimension2" name="auxiliaryTableDimension2">
+                    </mat-form-field>
+                </form>
                 <p class="section-header">Solution Code</p>
                 <!--A bottom up solution should always be provided, but a top down solution may also be provided-->
                 <mat-form-field
@@ -179,7 +193,7 @@
                               [(ngModel)]="solution.returnValueCode"></textarea>
                     </div>
                 </div>
-                <p class="code">&nbsp;return result;</p>
+                <p class="code">&nbsp;return {{expectDetailedSolution ? 'return (result, solution)' : 'result'}};</p>
                 <!--<p class="code">return answer;</p>-->
                 <p class="code">}</p>
                 <!--</mat-card-content>-->
@@ -297,10 +311,18 @@
                     <span [innerHTML]="providedSolution['tableEntryDefinition']"></span>
                 </div>
             </div>
-            <div *ngIf="problem['output-description']">
+            <div *ngIf="problem['output']['result']">
                 <br>
                 <b>Output</b>
-                <div [innerHTML]="problem['output-description']"></div>
+                <div><b class="code">Result: </b>
+                    <small [innerHTML]="problem['output']['result']"></small>
+                </div>
+                <div *ngIf="expectDetailedSolution"><b class="code">Solution: </b>
+                    <small [innerHTML]="problem['output']['solution']"></small>
+                </div>
+                <div *ngIf="problem['output']['solution']">
+                    <mat-slide-toggle [(ngModel)]="expectDetailedSolution" (change)="recalculateExpectedResults()">Expect full solution</mat-slide-toggle>
+                </div>
             </div>
         </mat-expansion-panel>
         <mat-card>
@@ -508,6 +530,7 @@
                                 </div>
                             </mat-card-content>
                         </mat-card>
+                        <pre>{{testCase | json}}</pre>
                     </mat-tab>
                 </mat-tab-group>
             </mat-card-content>

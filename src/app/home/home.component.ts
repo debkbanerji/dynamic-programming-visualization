@@ -4,6 +4,7 @@ import {MatDialog} from "@angular/material";
 import {ConfirmationDialogComponent} from "../dialogs/confirmation-dialog/confirmation-dialog.component";
 
 const encodedTableName = '___TABLE___';
+const auxiliaryTableName = '___AUX_TABLE___';
 const logName = '___LOG___';
 
 @Component({
@@ -27,6 +28,10 @@ export class HomeComponent implements OnInit {
     problem: any;
     providedSolution: any;
     testCases: any;
+
+    // If true, we care about how the user got their result
+    // If false, only a single return value is expected
+    expectDetailedSolution: boolean = false;
 
     solution: any = {
         tableShape: this.tableShapes[0],
@@ -52,7 +57,11 @@ export class HomeComponent implements OnInit {
         returnValueCode: 'return 0; // TODO: return correct value',
 
         nextEntryIndex1: 'i',
-        nextEntryIndex2: 'j'
+        nextEntryIndex2: 'j',
+
+        useAuxillaryTable: false,
+        auxiliaryTableDimension1: '',
+        auxiliaryTableDimension2: '',
     };
 
     generatedCode: string = null;
@@ -97,18 +106,27 @@ export class HomeComponent implements OnInit {
             component.problem = data;
             component.providedSolution = component.problem['provided-solution'];
             component.testCases = component.problem['test-cases'];
-            const code = HomeComponent.getPlainRunnableCode(component.providedSolution, component.problem, false);
             component.problemDefined = true;
-            component.testsCurrentlyRunning = true;
-            component.runTestsWithProvidedSolution(component, 0, code);
+            component.recalculateExpectedResults();
         });
+    }
+
+    recalculateExpectedResults() {
+        const component = this;
+        // We're always calculating the detailed solution if we're using the provided solution
+        const code = HomeComponent.getPlainRunnableCode(component.providedSolution, component.problem, false, true, component.providedSolution.useAuxiliaryTableWithDetailedSolution);
+        component.testsCurrentlyRunning = true;
+        component.runTestsWithProvidedSolution(component, 0, code);
+
     }
 
     runTestsWithProvidedSolution(component: HomeComponent, testCaseIndex: number, code: string): void {
         if (testCaseIndex < component.testCases.length) {
             const testCase = component.testCases[testCaseIndex];
             if (!testCase['expected-result'] && !testCase['expected-table']) {
-                component.runTest(testCaseIndex, code, component, false, function (testResult) {
+                const detailedSolution = component.providedSolution.detailedSetNextEntryCode && component.providedSolution.detailedReturnValueCode;
+                const auxiliaryTable = detailedSolution && component.providedSolution.useAuxiliaryTableWithDetailedSolution;
+                component.runTest(testCaseIndex, code, component, false, detailedSolution, auxiliaryTable, function (testResult) {
                     if (testResult['error']) {
                         console.log('Test error', testResult['error']);
                         component.raiseProvidedSolutionError(testResult['error'].message);
@@ -119,6 +137,14 @@ export class HomeComponent implements OnInit {
                         if (!testCase['expected-result'] && !testCase['expected-table']) {
                             testCase['expected-result'] = testResult['result'];
                             testCase['expected-table'] = testResult['table'];
+                            // testCase['detailed-solution'] = detailedSolution;
+                            // testCase['auxiliaryTable'] = testResult;
+                            if (detailedSolution) {
+                                testCase['expected-solution'] = testResult['solution'];
+                                if (auxiliaryTable) {
+                                    testCase['expected-auxiliary-table'] = testResult['auxiliary-table'];
+                                }
+                            }
                         }
                         component.runTestsWithProvidedSolution(component, testCaseIndex + 1, code);
                     }
@@ -132,7 +158,7 @@ export class HomeComponent implements OnInit {
     }
 
     // Returns result of running the test case, as well as the table
-    runTest(testCaseIndex: number, plainFunctionCode: string, component: HomeComponent, isTopDown: boolean, callback: Function) {
+    runTest(testCaseIndex: number, plainFunctionCode: string, component: HomeComponent, isTopDown: boolean, detailedSolution: boolean, auxiliaryTable: boolean, callback: Function) {
         const code = [];
 
         const inputMap = component.problem.input;
@@ -151,15 +177,23 @@ export class HomeComponent implements OnInit {
         code.push('\n');
         code.push(plainFunctionCode);
 
-        code.push('\n\n\t// FUNCTION CODE END\n\ntestResult = {};\n\ntestResult.answer = algorithm(');
+        code.push('\n\n\t// FUNCTION CODE END\n\n');
+        code.push('const algResult = algorithm(');
         for (let i = 0; i < inputs.length; i++) {
             code.push(inputs[i]);
-            // if (i < inputs.length - 1) {
-            code.push(', ');
-            // }
+            if (i < inputs.length - 1) {
+                code.push(', ');
+            }
         }
-        code.push(encodedTableName, ');\ntestResult.table = ', encodedTableName, ';\ntestResult.log = ', logName, ';\n\n');
-        code.push('postMessage(testResult);\n');
+        code.push(');\n\ntestResult = {};\n\ntestResult.result = algResult.result;');
+        code.push('\ntestResult.table = ', encodedTableName, ';\ntestResult.log = ', logName, ';\n\n');
+        if (detailedSolution) {
+            code.push('\ntestResult.solution = algResult.solution;');
+        }
+        if (auxiliaryTable) {
+            code.push('\ntestResult.auxiliaryTable = ', auxiliaryTableName, ';');
+        }
+        code.push('\npostMessage(testResult);\n');
         code.push('self.close();\n\n');
         code.push('} catch(e) {\n');
         code.push('\npostMessage({\'error\':e.stack});\n');
@@ -184,11 +218,17 @@ export class HomeComponent implements OnInit {
                 result['error'] = component.getSectionSpecificErrorMessage(testResult['error'], joinedCode, true, isTopDown);
                 callback(result);
             } else {
-                result['result'] = testResult['answer'];
+                result['result'] = testResult['result'];
                 result['table'] = testResult['table'];
                 result['log'] = testResult['log'];
                 result['timed-out'] = false;
                 result['error'] = null;
+                if (detailedSolution) {
+                    result['solution'] = testResult['solution'];
+                }
+                if (auxiliaryTable) {
+                    result['auxiliary-table'] = testResult['auxiliaryTable'];
+                }
                 callback(result);
             }
         };
@@ -227,7 +267,7 @@ export class HomeComponent implements OnInit {
         this.numExpectedTables = 0;
         this.numMatchingTableDimensions = 0;
         this.testsCurrentlyRunning = true;
-        const code = HomeComponent.getPlainRunnableCode(this.solution, this.problem, this.approach === this.approaches[1]);
+        const code = HomeComponent.getPlainRunnableCode(this.solution, this.problem, this.approach === this.approaches[1], this.expectDetailedSolution, this.expectDetailedSolution && this.providedSolution.useAuxiliaryTableWithDetailedSolution);
         this.generatedCode = code
             .replace(new RegExp('\t', 'g'), '&nbsp;&nbsp;&nbsp;&nbsp;')
             .replace(new RegExp(' {4}', 'g'), '&nbsp;&nbsp;&nbsp;&nbsp;')
@@ -237,7 +277,7 @@ export class HomeComponent implements OnInit {
 
     runTestsWithUserSolution(component: HomeComponent, testCaseIndex: number, code: string) {
         if (testCaseIndex < component.testCases.length) {
-            component.runTest(testCaseIndex, code, component, component.approach === component.approaches[1], function (testResult) {
+            component.runTest(testCaseIndex, code, component, component.approach === component.approaches[1], component.expectDetailedSolution, component.expectDetailedSolution && component.providedSolution.useAuxiliaryTableWithDetailedSolution, function (testResult) {
                 let testCase = component.testCases[testCaseIndex];
                 const expectedTable = testCase['expected-table'];
                 testResult['has-expected-table'] = !testResult['error'] && !testResult['timed-out'] && component.isExpectedTable(expectedTable, testResult['table'], component.approach === component.approaches[1], component);
@@ -268,7 +308,7 @@ export class HomeComponent implements OnInit {
         }
     }
 
-    static getPlainRunnableCode(solution: any, problem: any, useTopDown: boolean): string {
+    static getPlainRunnableCode(solution: any, problem: any, useTopDown: boolean, detailedSolution: boolean, auxiliaryTable: boolean): string {
         const result = [];
         const is2d = solution.tableShape === '2d';
 
@@ -287,6 +327,20 @@ export class HomeComponent implements OnInit {
                 solution.tableDimension1,
                 ');')
         }
+        if (auxiliaryTable) {
+            if (is2d) {
+                initializationCode.push('\nconst ', auxiliaryTableName, ' = [];\n');
+                initializationCode.push('for (let TABLE__INDEX = 0; TABLE__INDEX < ', solution.auxiliaryTableDimension1, '; TABLE__INDEX++) {\n');
+                initializationCode.push('\t', auxiliaryTableName, '.push(Array(', solution.auxiliaryTableDimension2, '));\n');
+                initializationCode.push('}');
+            } else {
+                initializationCode.push('const ',
+                    encodedTableName,
+                    ' = Array(',
+                    solution.tableDimension1,
+                    ');')
+            }
+        }
         initializationCode.push('\n// TABLE INITIALIZATION CODE END\n');
         initializationCode.push('\nconst ', logName, ' = [];\n');
         result.push(
@@ -294,18 +348,19 @@ export class HomeComponent implements OnInit {
             '\n\n',
             HomeComponent.getWrappedGetTableFunction(is2d),
             '\n\n',
-            HomeComponent.getPlainGetTableFunction(is2d),
+            HomeComponent.getPlainGetTableFunction(is2d, false),
             '\n\n',
+            (auxiliaryTable ? HomeComponent.getPlainGetTableFunction(is2d, true) + '\n\n' : ''),
             HomeComponent.getPlainSetTableFunction(is2d),
             '\n\n',
-            HomeComponent.getAlgorithmCode(solution, problem, useTopDown)
+            HomeComponent.getAlgorithmCode(solution, problem, useTopDown, detailedSolution, auxiliaryTable)
         );
         return result.join('');
     }
 
     // Generate code that returns the table and result without altering the UI
     // Note: code takes in inputs in alphabetical order
-    static getAlgorithmCode(solution: any, problem: any, useTopDown: boolean): string {
+    static getAlgorithmCode(solution: any, problem: any, useTopDown: boolean, detailedSolution: boolean, auxiliaryTable: boolean): string {
         const outerCode = [];
         const is2d = solution.tableShape === '2d';
 
@@ -315,12 +370,12 @@ export class HomeComponent implements OnInit {
         const inputs = Object.keys(inputMap).sort();
         for (let i = 0; i < inputs.length; i++) {
             outerCode.push(inputs[i]);
-            // if (i < inputs.length - 1) {
-            outerCode.push(', ');
-            // }
+            if (i < inputs.length - 1) {
+                outerCode.push(', ');
+            }
         }
 
-        outerCode.push(encodedTableName);
+        // outerCode.push(encodedTableName);
 
         outerCode.push(') {\n\n');
 
@@ -360,7 +415,12 @@ export class HomeComponent implements OnInit {
             if (is2d) {
                 innerCode.push(', ', solution.nextEntryIndex2);
             }
-            innerCode.push(', ', encodedTableName, ', ', logName, ');\n');
+            innerCode.push(', ', encodedTableName, ', ', logName, ', false);\n');
+            innerCode.push('\n\n\t', is2d ? '\t' : '', 'set', encodedTableName, '(auxEntry, ', solution.nextEntryIndex1);
+            if (is2d) {
+                innerCode.push(', ', solution.nextEntryIndex2);
+            }
+            innerCode.push(', ', auxiliaryTableName, ', ', logName, ', true);\n');
             if (is2d) {
                 innerCode.push('\t}\n\n');
             }
@@ -386,7 +446,8 @@ export class HomeComponent implements OnInit {
             innerCode.push('\n\t\t// SET NEXT ENTRY CODE START\n\n\t\t');
             innerCode.push(setNextEntryCode.replace(/(?:\r\n|\r|\n)/g, '\n\t\t'));
             innerCode.push('\t// SET NEXT ENTRY CODE END\n');
-            innerCode.push('\n\n\t\t', 'set', encodedTableName, '(entry, i', is2d ? ', j' : '', ', ', encodedTableName, ', ', logName, ');');
+            innerCode.push('\n\n\t\t', 'set', encodedTableName, '(entry, i', is2d ? ', j' : '', ', ', encodedTableName, ', ', logName, ', false);');
+            innerCode.push('\n\n\t\t', 'set', encodedTableName, '(auxEntry, i', is2d ? ', j' : '', ', ', auxiliaryTableName, ', ', logName, ', true);');
             innerCode.push('\n\t\treturn entry;');
             innerCode.push('\n\t}');
             innerCode.push('\n}\n');
@@ -394,7 +455,12 @@ export class HomeComponent implements OnInit {
             innerCode.push(solution.returnValueCode, '\n');
         }
         innerCode.push('// RETURN VALUE CODE END\n\n');
-        innerCode.push('return result;', '\n');
+        innerCode.push('const resultSolution = {}\n\n');
+        innerCode.push('resultSolution.result = result;\n');
+        if (detailedSolution) {
+            innerCode.push('resultSolution.solution = solution;\n');
+        }
+        innerCode.push('return resultSolution;', '\n');
         outerCode.push(innerCode.join('').replace(/(?:\r\n|\r|\n)/g, '\n\t'));
         outerCode.push('\n\n};');
 
@@ -411,7 +477,7 @@ export class HomeComponent implements OnInit {
             code.push(', j');
         }
         code.push(', ', encodedTableName, ', ', logName);
-        code.push(') {\n');
+        code.push(', tableName) {\n');
         if (is2d) {
             code.push('\n\tif(i === null || i === undefined || ', encodedTableName, '.length <= i || i < 0) {');
             code.push('\n\t\tthrow new Error(\'Could not get entry: \' + i + \' is not a valid table row\');');
@@ -419,12 +485,12 @@ export class HomeComponent implements OnInit {
             code.push('\n\tif(i === null || i === undefined || ', encodedTableName, '[0].length <= j || j < 0) {');
             code.push('\n\t\tthrow new Error(\'Could not get entry: \' + j + \' is not a valid table column\');');
             code.push('\n\t}\n');
-            code.push('\n\t', logName, '.push({"action":"get","row":i,"column":j,"value":', encodedTableName, '[i][j]});\n');
+            code.push('\n\t', logName, '.push({"table": tableName, "action":"get","row":i,"column":j,"value":', encodedTableName, '[i][j]});\n');
         } else {
             code.push('\n\tif(i === null || i === undefined || ', encodedTableName, '.length <= i || i < 0) {');
             code.push('\n\t\tthrow new Error(\'Could not get entry: \' + i + \' is not a valid table index\');');
             code.push('\n\t}\n');
-            code.push('\n\t', logName, '.push({"action":"get","index":i,"value":', encodedTableName, '[i]});\n');
+            code.push('\n\t', logName, '.push({"table": tableName, "action":"get","index":i,"value":', encodedTableName, '[i]});\n');
         }
         code.push('\n\treturn ', encodedTableName, '[i]');
         if (is2d) {
@@ -435,10 +501,11 @@ export class HomeComponent implements OnInit {
     }
 
     // Returns a function that gets from the table without altering UI
-    static getPlainGetTableFunction(is2d: boolean): string {
+    static getPlainGetTableFunction(is2d: boolean, auxiliary: boolean): string {
         const code = [];
+        const userFriendlyName = auxiliary ? 'T2' : 'T';
 
-        code.push('const T = function(i');
+        code.push('const ', userFriendlyName, ' = function(i');
         if (is2d) {
             code.push(', j');
         }
@@ -446,7 +513,8 @@ export class HomeComponent implements OnInit {
         if (is2d) {
             code.push('j, ')
         }
-        code.push(encodedTableName, ', ', logName, ');\n};');
+        code.push(auxiliary ? auxiliaryTableName : encodedTableName, ', ', logName, ', \'', userFriendlyName, '\');\n};'
+        );
         return code.join('');
     }
 
@@ -459,7 +527,7 @@ export class HomeComponent implements OnInit {
             code.push(', j');
         }
         code.push(', ', encodedTableName, ', ', logName);
-        code.push(') {\n');
+        code.push(', auxiliary) {\n');
         if (is2d) {
             code.push('\n\tif(i === null || i === undefined || ', encodedTableName, '.length <= i || i < 0) {');
             code.push('\n\t\tthrow new Error(\'Could not set entry: \' + i + \' is not a valid table row\');');
@@ -478,9 +546,9 @@ export class HomeComponent implements OnInit {
         }
         code.push(' = val;\n');
         if (is2d) {
-            code.push('\n\t', logName, '.push({"action":"set","row":i,"column":j,"value":', encodedTableName, '[i][j]});\n');
+            code.push('\n\t', logName, '.push({"auxiliary": auxiliary, "action":"set","row":i,"column":j,"value":', encodedTableName, '[i][j]});\n');
         } else {
-            code.push('\n\t', logName, '.push({"action":"set","index":i,"value":', encodedTableName, '[i]});\n');
+            code.push('\n\t', logName, '.push({"auxiliary": auxiliary, "action":"set","index":i,"value":', encodedTableName, '[i]});\n');
         }
         code.push('\n\n};');
         return code.join('');
@@ -494,6 +562,7 @@ export class HomeComponent implements OnInit {
             const testCase = this.testCases[testCaseIndex];
             if (this.isRectangular2dArray(testCase['expected-table'])) {
                 testCase['expected-table'] = this.getTransposedArray(testCase['expected-table']);
+                // TODO: transpose expected-auxiliary-table, if it exists
                 if (this.testResults[testCaseIndex]) {
                     this.testResults[testCaseIndex]['has-expected-table'] = this.isExpectedTable(testCase['expected-table'], this.testResults[testCaseIndex]['table'], this.approach === this.approaches[1], this);
                     if (this.testResults[testCaseIndex]['has-expected-table']) {

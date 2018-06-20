@@ -18,7 +18,7 @@ import {
     MatInputModule,
     MatSelectModule,
     MatDialogModule,
-    MatTabsModule, MatProgressBarModule
+    MatTabsModule, MatProgressBarModule, MatSlideToggleModule
 } from "@angular/material";
 import {HttpClientModule} from "@angular/common/http";
 import {ConfirmationDialogComponent} from './dialogs/confirmation-dialog/confirmation-dialog.component';
@@ -48,6 +48,7 @@ const routes: Routes = [ // Array of all routes - modify when adding routes
         MatTabsModule,
         MatButtonModule,
         MatCheckboxModule,
+        MatSlideToggleModule,
         MatDialogModule,
         MatProgressBarModule,
         RouterModule.forRoot(routes)
