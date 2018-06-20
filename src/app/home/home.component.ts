@@ -360,7 +360,7 @@ export class HomeComponent implements OnInit {
             if (is2d) {
                 innerCode.push(', ', solution.nextEntryIndex2);
             }
-            innerCode.push(', ', encodedTableName, ');\n');
+            innerCode.push(', ', encodedTableName, ', ', logName, ');\n');
             if (is2d) {
                 innerCode.push('\t}\n\n');
             }
@@ -386,7 +386,7 @@ export class HomeComponent implements OnInit {
             innerCode.push('\n\t\t// SET NEXT ENTRY CODE START\n\n\t\t');
             innerCode.push(setNextEntryCode.replace(/(?:\r\n|\r|\n)/g, '\n\t\t'));
             innerCode.push('\t// SET NEXT ENTRY CODE END\n');
-            innerCode.push('\n\n\t\t', 'set', encodedTableName, '(entry, i', is2d ? ', j' : '', ', ', encodedTableName, ');');
+            innerCode.push('\n\n\t\t', 'set', encodedTableName, '(entry, i', is2d ? ', j' : '', ', ', encodedTableName, ', ', logName, ');');
             innerCode.push('\n\t\treturn entry;');
             innerCode.push('\n\t}');
             innerCode.push('\n}\n');
@@ -410,7 +410,7 @@ export class HomeComponent implements OnInit {
         if (is2d) {
             code.push(', j');
         }
-        code.push(', ', encodedTableName);
+        code.push(', ', encodedTableName, ', ', logName);
         code.push(') {\n');
         if (is2d) {
             code.push('\n\tif(i === null || i === undefined || ', encodedTableName, '.length <= i || i < 0) {');
@@ -446,7 +446,7 @@ export class HomeComponent implements OnInit {
         if (is2d) {
             code.push('j, ')
         }
-        code.push(encodedTableName, ');\n};');
+        code.push(encodedTableName, ', ', logName, ');\n};');
         return code.join('');
     }
 
@@ -458,7 +458,7 @@ export class HomeComponent implements OnInit {
         if (is2d) {
             code.push(', j');
         }
-        code.push(', ', encodedTableName);
+        code.push(', ', encodedTableName, ', ', logName);
         code.push(') {\n');
         if (is2d) {
             code.push('\n\tif(i === null || i === undefined || ', encodedTableName, '.length <= i || i < 0) {');
@@ -541,8 +541,6 @@ export class HomeComponent implements OnInit {
 
     getSectionSpecificErrorMessage(e, code: string, isStack: boolean, isTopDown: boolean): string {
         // Note: e is either an error event (which means it's a syntax error) or an error object which means it's a runtime error)
-
-        const lineMarker = '___LINE___';
 
         // Lines marking the code
         const tableInitStart = this.lineNumberOf('// TABLE INITIALIZATION CODE START', code);
