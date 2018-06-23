@@ -622,7 +622,8 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <div *ngIf="!testResults[testCaseIndex]['has-expected-table']">
+                                    <!--<div *ngIf="!testResults[testCaseIndex]['has-expected-table']">-->
+                                    <div>
                                         <div *ngIf="shouldDisplayArray(testResults[testCaseIndex]['table'])">
                                             <table class="dp-table"
                                                    *ngIf="!isRectangular2dArray(testResults[testCaseIndex]['table'])">
