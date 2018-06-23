@@ -73,12 +73,15 @@ export class HomeComponent implements OnInit {
     revealedProvidedSolution: boolean = false;
 
     numRunTestCases: number = 0;
-    numPassedTestCases: number = 0;
-    numFailedTestCases: number = 0;
+    numCorrectFinalAnswerTestCases: number = 0;
+    numIncorrectFinalAnswerTestCases: number = 0;
     numCrashedTestCases: number = 0;
     numTimedOutTestCases: number = 0;
     numExpectedTables: number = 0;
     numMatchingTableDimensions: number = 0;
+    numCorrectSolutions: number = 0;
+    numIncorrectSolutions: number = 0;
+    numExpectedAuxiliaryTables: number = 0;
     testsCurrentlyRunning: boolean = false;
 
     constructor(private http: HttpClient, public dialog: MatDialog) {
@@ -263,12 +266,15 @@ export class HomeComponent implements OnInit {
     // Returns result of running the test case, as well as the table
     runAllTestsWithUserSolution(): void {
         this.numRunTestCases = 0;
-        this.numPassedTestCases = 0;
-        this.numFailedTestCases = 0;
+        this.numCorrectFinalAnswerTestCases = 0;
+        this.numIncorrectFinalAnswerTestCases = 0;
         this.numCrashedTestCases = 0;
         this.numTimedOutTestCases = 0;
         this.numExpectedTables = 0;
         this.numMatchingTableDimensions = 0;
+        this.numCorrectSolutions = 0;
+        this.numIncorrectSolutions = 0;
+        this.numExpectedAuxiliaryTables = 0;
         this.testsCurrentlyRunning = true;
         const code = HomeComponent.getPlainRunnableCode(this.solution, this.problem, this.approach === this.approaches[1], this.expectDetailedSolution, this.expectDetailedSolution && this.providedSolution.useAuxiliaryTableWithDetailedSolution);
         this.generatedCode = code
@@ -280,16 +286,29 @@ export class HomeComponent implements OnInit {
 
     runTestsWithUserSolution(component: HomeComponent, testCaseIndex: number, code: string) {
         if (testCaseIndex < component.testCases.length) {
-            component.runTest(testCaseIndex, code, component, component.approach === component.approaches[1], component.expectDetailedSolution, component.expectDetailedSolution && component.providedSolution.useAuxiliaryTableWithDetailedSolution, function (testResult) {
+            let topDown = component.approach === component.approaches[1];
+            let useDetailedSolution = component.expectDetailedSolution;
+            let useAuxiliaryTable = useDetailedSolution && component.providedSolution.useAuxiliaryTableWithDetailedSolution;
+            component.runTest(testCaseIndex, code, component, topDown, useDetailedSolution, useAuxiliaryTable, function (testResult) {
                 let testCase = component.testCases[testCaseIndex];
                 const expectedTable = testCase['expected-table'];
                 testResult['has-expected-table'] = !testResult['error'] && !testResult['timed-out'] && component.isExpectedTable(expectedTable, testResult['table'], component.approach === component.approaches[1], component);
+                if (useDetailedSolution) {
+                    testResult['has-expected-solution'] = !testResult['error'] && !testResult['timed-out'] && component.deepEquals(testCase['expected-solution'], testResult['solution']);
+                }
                 component.testResults[testCaseIndex] = testResult;
                 component.numRunTestCases++;
                 if (testResult['result'] === testCase['expected-result']) {
-                    component.numPassedTestCases++;
+                    component.numCorrectFinalAnswerTestCases++;
                 } else if (!testResult['error'] && !testResult['timed-out']) {
-                    component.numFailedTestCases++;
+                    component.numIncorrectFinalAnswerTestCases++;
+                }
+                if (useDetailedSolution) {
+                    if (testResult['has-expected-solution']) {
+                        component.numCorrectSolutions++;
+                    } else if (!testResult['error'] && !testResult['timed-out']) {
+                        component.numIncorrectSolutions++;
+                    }
                 }
                 if (testResult['error']) {
                     component.numCrashedTestCases++;
@@ -487,10 +506,10 @@ export class HomeComponent implements OnInit {
         code.push(', tableName) {\n');
         if (is2d) {
             code.push('\n\tif(i === null || i === undefined || ', encodedTableName, '.length <= i || i < 0) {');
-            code.push('\n\t\tthrow new Error(\'Could not get entry: \' + i + \' is not a valid table row\');');
+            code.push('\n\t\tthrow new Error(\'Could not get entry: \' + i + \' is not a valid table dimension 1 index\');');
             code.push('\n\t}\n');
             code.push('\n\tif(i === null || i === undefined || ', encodedTableName, '[0].length <= j || j < 0) {');
-            code.push('\n\t\tthrow new Error(\'Could not get entry: \' + j + \' is not a valid table column\');');
+            code.push('\n\t\tthrow new Error(\'Could not get entry: \' + j + \' is not a valid table dimension 2 index\');');
             code.push('\n\t}\n');
             code.push('\n\t', logName, '.push({"table": tableName, "action":"get","row":i,"column":j,"value":', encodedTableName, '[i][j]});\n');
         } else {
@@ -537,10 +556,10 @@ export class HomeComponent implements OnInit {
         code.push(', auxiliary) {\n');
         if (is2d) {
             code.push('\n\tif(i === null || i === undefined || ', encodedTableName, '.length <= i || i < 0) {');
-            code.push('\n\t\tthrow new Error(\'Could not set entry: \' + i + \' is not a valid table row\');');
+            code.push('\n\t\tthrow new Error(\'Could not set entry: \' + i + \' is not a valid table dimension 1 index\');');
             code.push('\n\t}\n');
             code.push('\n\tif(i === null || i === undefined || ', encodedTableName, '[0].length <= j || j < 0) {');
-            code.push('\n\t\tthrow new Error(\'Could not set entry: \' + j + \' is not a valid table column\');');
+            code.push('\n\t\tthrow new Error(\'Could not set entry: \' + j + \' is not a valid table dimension 2 index\');');
             code.push('\n\t}\n')
         } else {
             code.push('\n\tif(i === null || i === undefined || ', encodedTableName, '.length <= i || i < 0) {');

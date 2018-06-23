@@ -243,15 +243,28 @@
                     <b>Ran {{numRunTestCases}} test case{{numRunTestCases === 1? '' : 's'}}</b>
                     <br>
                     <b [ngClass]="{
-                        'text-green': numPassedTestCases === numRunTestCases,
-                        'text-yellow': numPassedTestCases < numRunTestCases
-                    }"><span *ngIf="numPassedTestCases === numRunTestCases">&#x2714; </span>{{numPassedTestCases}}
-                        correct final answer{{numPassedTestCases === 1? '' : 's'}}</b>
+                        'text-green': numCorrectFinalAnswerTestCases === numRunTestCases,
+                        'text-yellow': numCorrectFinalAnswerTestCases < numRunTestCases
+                    }"><span *ngIf="numCorrectFinalAnswerTestCases === numRunTestCases">&#x2714; </span>{{numCorrectFinalAnswerTestCases}}
+                        correct final result{{numCorrectFinalAnswerTestCases === 1? '' : 's'}}</b>
                     <br>
-                    <b class="text-red" *ngIf="numFailedTestCases > 0">
-                        &#x2718; {{numFailedTestCases}} incorrect final answer{{numFailedTestCases === 1? '' : 's'}}
+                    <b class="text-red" *ngIf="numIncorrectFinalAnswerTestCases > 0">
+                        &#x2718; {{numIncorrectFinalAnswerTestCases}} incorrect final
+                        result{{numIncorrectFinalAnswerTestCases === 1? '' : 's'}}
                     </b>
-                    <br *ngIf="numFailedTestCases > 0">
+                    <br *ngIf="numIncorrectFinalAnswerTestCases > 0">
+                    <div *ngIf="expectDetailedSolution">
+                        <b [ngClass]="{
+                        'text-green': numCorrectSolutions === numRunTestCases,
+                        'text-yellow': numCorrectSolutions < numRunTestCases
+                    }"><span *ngIf="numCorrectSolutions === numRunTestCases">&#x2714; </span>{{numCorrectSolutions}}
+                            correct solution{{numCorrectSolutions === 1? '' : 's'}}</b>
+                        <br>
+                        <b class="text-red" *ngIf="numIncorrectSolutions > 0">
+                            &#x2718; {{numIncorrectSolutions}} incorrect solution{{numIncorrectSolutions === 1? '' :
+                            's'}}
+                        </b>
+                    </div>
                     <b class="text-red" *ngIf="numCrashedTestCases > 0">
                         &#x2718; {{numCrashedTestCases}} test{{numCrashedTestCases === 1? '' : 's'}} crashed
                     </b>
@@ -274,8 +287,9 @@
                         table{{numExpectedTables === 1? '' : 's'}} with matching entries</b>
                     <br>
                     <span><small>Note: If a top down approach was used, only non null entries were checked</small></span>
-                    <span *ngIf="numExpectedTables < numRunTestCases && numPassedTestCases === numRunTestCases">
-                        This may not be an issue, since all your final answers are correct.
+                    <span
+                        *ngIf="numExpectedTables < numRunTestCases && numCorrectFinalAnswerTestCases === numRunTestCases">
+                        This may not be an issue, since all your final results are correct.
                         <br>
                         <button *ngIf="solution['tableShape'] === '2d'" mat-raised-button (click)="transposeTable()">Transpose provided table</button>
                     </span>
@@ -434,7 +448,7 @@
                                     Empty Table
                                 </div>
                                 <br>
-                                <span class="slightly-bold-label">Final Answer</span>
+                                <span class="slightly-bold-label">Final Result</span>
                                 <span
                                     [innerHTML]="' ' + getDisplayedValue(testCase['expected-result'])">
                                 </span>
@@ -458,7 +472,8 @@
                                                     </td>
                                                 </tr>
                                             </table>
-                                            <table class="dp-table" *ngIf="!isRectangular2dArray(testCase['expected-solution'])">
+                                            <table class="dp-table"
+                                                   *ngIf="!isRectangular2dArray(testCase['expected-solution'])">
                                                 <tr class="dp-tr">
                                                     <td class="dp-td"
                                                         *ngFor="let i of range(testCase['expected-solution'].length);">
@@ -468,6 +483,9 @@
                                                     </td>
                                                 </tr>
                                             </table>
+                                        </div>
+                                        <div *ngIf="!shouldDisplayArray(testCase['expected-solution'])">
+                                            Empty Array
                                         </div>
                                     </div>
                                 </div>
@@ -499,11 +517,11 @@
                                     <div>
                                         <b class="text-green"
                                            *ngIf="testResults[testCaseIndex]['result'] === testCase['expected-result']">
-                                            &#x2714; Correct Final Answer
+                                            &#x2714; Correct Final Result
                                         </b>
                                         <b class="text-red"
                                            *ngIf="!(testResults[testCaseIndex]['result'] === testCase['expected-result'])">
-                                            &#x2718; Incorrect Final Answer - Expected
+                                            &#x2718; Incorrect Final Result - Expected
                                             {{getDisplayedValue(testCase['expected-result'])}}
                                             but got
                                             {{getDisplayedValue(testResults[testCaseIndex]['result'])}}
@@ -514,18 +532,69 @@
                                         </b>
                                     </div>
                                     <div *ngIf="expectDetailedSolution">
-                                        <!--Note: we only need to chec deep equals for detailed solutions-->
+                                        <!--Note: we only need to check deep equals for detailed solutions-->
                                         <b class="text-green"
                                            *ngIf="deepEquals(testResults[testCaseIndex]['solution'],testCase['expected-solution'])">
                                             &#x2714; Correct Solution
                                         </b>
-                                        <b class="text-red"
-                                           *ngIf="!(deepEquals(testResults[testCaseIndex]['solution'], testCase['expected-solution']))">
-                                            &#x2718; Incorrect Solution - Expected
-                                            {{getDisplayedValue(testCase['expected-solution'])}}
-                                            but got
-                                            {{getDisplayedValue(testResults[testCaseIndex]['solution'])}}
-                                        </b>
+                                        <div
+                                            *ngIf="!(deepEquals(testResults[testCaseIndex]['solution'], testCase['expected-solution']))">
+                                            <b *ngIf="!isArray(testResults[testCaseIndex]['solution'])"
+                                               class="text-red">
+                                                &#x2718; Incorrect Solution - Expected
+                                                {{getDisplayedValue(testCase['expected-solution'])}}
+                                                but got
+                                                {{getDisplayedValue(testResults[testCaseIndex]['solution'])}}
+                                            </b>
+                                            <div *ngIf="isArray(testResults[testCaseIndex]['solution'])">
+                                                <b class="text-red">&#x2718; Incorrect Solution</b>
+                                                <div *ngIf="shouldDisplayArray(testResults[testCaseIndex]['solution'])">
+                                                    <table class="dp-table"
+                                                           *ngIf="!isRectangular2dArray(testResults[testCaseIndex]['solution'])">
+                                                        <tr class="dp-tr">
+                                                            <td class="dp-td"
+                                                                *ngFor="let i of range(testResults[testCaseIndex]['solution'].length);">
+                                                                <span class="dp-table-cell"
+                                                                      [ngClass]="{'text-green': (haveEqualDimensions(testResults[testCaseIndex]['solution'], testCase['expected-solution']) &&
+                                                                        testResults[testCaseIndex]['solution'][i] === testCase['expected-solution'][i]
+                                                                      ),
+                                                                       'text-yellow': !(haveEqualDimensions(testResults[testCaseIndex]['solution'], testCase['expected-solution']) &&
+                                                                        (approach === approaches[1] ?
+                                                                        testResults[testCaseIndex]['solution'][i] === testCase['expected-solution'][i] || testResults[testCaseIndex]['solution'][i] === null || testResults[testCaseIndex]['solution'][i] === undefined
+                                                                         : testResults[testCaseIndex]['solution'][i] === testCase['expected-solution'][i])
+                                                                      )}"
+                                                                      [innerHTML]="getDisplayedValue(testResults[testCaseIndex]['solution'][i])">
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <table class="dp-table"
+                                                           *ngIf="isRectangular2dArray(testResults[testCaseIndex]['solution'])">
+                                                        <tr class="dp-tr"
+                                                            *ngFor="let i of range(testResults[testCaseIndex]['solution'].length);">
+                                                            <td class="dp-td"
+                                                                *ngFor="let j of range(testResults[testCaseIndex]['solution'][0].length);">
+                                                                <span class="dp-table-cell"
+                                                                      [ngClass]="{'text-green': (haveEqualDimensions(testResults[testCaseIndex]['solution'], testCase['expected-solution']) &&
+                                                                        testResults[testCaseIndex]['solution'][i][j] === testCase['expected-solution'][i][j]
+                                                                      ),
+                                                                       'text-yellow': !(haveEqualDimensions(testResults[testCaseIndex]['solution'], testCase['expected-solution']) &&
+                                                                        (approach === approaches[1] ?
+                                                                        testResults[testCaseIndex]['solution'][i][j] === testCase['expected-solution'][i][j] || testResults[testCaseIndex]['solution'][i][j] === null || testResults[testCaseIndex]['solution'][i][j] === undefined
+                                                                         : testResults[testCaseIndex]['solution'][i][j] === testCase['expected-solution'][i][j])
+                                                                      )}"
+                                                                      [innerHTML]="getDisplayedValue(testResults[testCaseIndex]['solution'][i][j])">
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                                <div
+                                                    *ngIf="!shouldDisplayArray(testResults[testCaseIndex]['solution'])">
+                                                    Empty Array
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div>
                                         <b class="text-green"
@@ -543,18 +612,19 @@
                                             <span
                                                 *ngIf="testResults[testCaseIndex]['result'] === testCase['expected-result']">
                                                 <br>
-                                                Your final answer is correct, but your table did not match the table generated by the provided solution.
-                                                <span *ngIf="numPassedTestCases === numRunTestCases">This is likely not an issue since your solution returns the correct final answer for every test case.<br></span>
+                                                Your final result is correct, but your table did not match the table generated by the provided solution.
+                                                <span *ngIf="numCorrectFinalAnswerTestCases === numRunTestCases">This is likely not an issue since your solution returns the correct final result for every test case.<br></span>
                                                 <span>If the expected table is just a transposed version of yours, you can use the transpose button to compare them.</span>
                                             </span>
                                         </div>
                                     </div>
-                                    <div *ngIf="shouldDisplayArray(testResults[testCaseIndex]['table'])">
-                                        <table class="dp-table"
-                                               *ngIf="!isRectangular2dArray(testResults[testCaseIndex]['table'])">
-                                            <tr class="dp-tr">
-                                                <td class="dp-td"
-                                                    *ngFor="let i of range(testResults[testCaseIndex]['table'].length);">
+                                    <div *ngIf="!testResults[testCaseIndex]['has-expected-table']">
+                                        <div *ngIf="shouldDisplayArray(testResults[testCaseIndex]['table'])">
+                                            <table class="dp-table"
+                                                   *ngIf="!isRectangular2dArray(testResults[testCaseIndex]['table'])">
+                                                <tr class="dp-tr">
+                                                    <td class="dp-td"
+                                                        *ngFor="let i of range(testResults[testCaseIndex]['table'].length);">
                                                     <span class="dp-table-cell"
                                                           [ngClass]="{'text-green': (haveEqualDimensions(testResults[testCaseIndex]['table'], testCase['expected-table']) &&
                                                             testResults[testCaseIndex]['table'][i] === testCase['expected-table'][i]
@@ -566,15 +636,15 @@
                                                           )}"
                                                           [innerHTML]="getDisplayedValue(testResults[testCaseIndex]['table'][i])">
                                             </span>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                        <table class="dp-table"
-                                               *ngIf="isRectangular2dArray(testResults[testCaseIndex]['table'])">
-                                            <tr class="dp-tr"
-                                                *ngFor="let i of range(testResults[testCaseIndex]['table'].length);">
-                                                <td class="dp-td"
-                                                    *ngFor="let j of range(testResults[testCaseIndex]['table'][0].length);">
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <table class="dp-table"
+                                                   *ngIf="isRectangular2dArray(testResults[testCaseIndex]['table'])">
+                                                <tr class="dp-tr"
+                                                    *ngFor="let i of range(testResults[testCaseIndex]['table'].length);">
+                                                    <td class="dp-td"
+                                                        *ngFor="let j of range(testResults[testCaseIndex]['table'][0].length);">
                                                     <span class="dp-table-cell"
                                                           [ngClass]="{'text-green': (haveEqualDimensions(testResults[testCaseIndex]['table'], testCase['expected-table']) &&
                                                             testResults[testCaseIndex]['table'][i][j] === testCase['expected-table'][i][j]
@@ -586,12 +656,13 @@
                                                           )}"
                                                           [innerHTML]="getDisplayedValue(testResults[testCaseIndex]['table'][i][j])">
                                                     </span>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                    <div *ngIf="!shouldDisplayArray(testResults[testCaseIndex]['table'])">
-                                        Empty Table
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div *ngIf="!shouldDisplayArray(testResults[testCaseIndex]['table'])">
+                                            Empty Table
+                                        </div>
                                     </div>
                                 </div>
                             </mat-card-content>

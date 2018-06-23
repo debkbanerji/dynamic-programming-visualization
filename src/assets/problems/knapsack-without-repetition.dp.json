@@ -33,7 +33,7 @@
         "setNextEntryTopDownCode": "if (i == 0 || j == 0) {\n  entry = 0;\n} else {\n  var itemWeight = weights[i - 1];\n  var valueWithoutLastItem = getTableEntry(i - 1, j);\n  if (itemWeight > j) {\n    entry = valueWithoutLastItem;\n  } else {\n    valueWithLastItem = getTableEntry(i - 1, j - itemWeight) + values[i - 1];\n    if (valueWithLastItem > valueWithoutLastItem) {\n      entry = valueWithLastItem;\n    } else {\n      entry = valueWithoutLastItem;\n    }\n  }\n}",
         "returnValueTopDownCode": "result = getTableEntry(n, W);",
         "useAuxiliaryTableWithDetailedSolution": false,
-        "detailedSetNextEntryCode": "if (i == 0 || j == 0) {\n  entry = 0;\n} else {\n  itemWeight = weights[i - 1];\n  valueWithoutLastItem = T(i - 1, j);\n  if (itemWeight > j) {\n    entry = valueWithoutLastItem;\n  } else {\n    valueWithLastItem = T(i - 1, j - itemWeight) + values[i - 1];\n    if (valueWithLastItem > valueWithoutLastItem) {\n      entry = valueWithLastItem;\n    } else {\n      entry = valueWithoutLastItem;\n    }\n  }\n}",
+        "detailedSetNextEntryCode": "if (i == 0 || j == 0) {\n  entry = 0;\n} else {\n  itemWeight = weights[i - 1];\n  valueWithoutLastItem = T(i - 1, j);\n  if (itemWeight > j) {\n    entry = valueWithoutLastItem;\n  } else {\n    valueWithLastItem = T(i - 1, j - itemWeight) + values[i - 1];\n    if (valueWithLastItem > valueWithoutLastItem) {\n      entry = valueWithLastItem;\n    } else {\n      entry = valueWithoutLastItem;\n    }\n  }\n}\nauxEntry = null;",
         "detailedReturnValueCode": "const result = T(n, W);\n\nconst solution = [];\nlet i = n;\nlet j = W;\n\nwhile (i > 0 && j > 0) {\n  if (T(i - 1, j) !== T(i, j)) {\n    solution.push(i);\n    j = j - weights[i - 1];   \n  }\n  i = i - 1;\n}\n\nsolution.reverse();",
         "detailedSetNextEntryTopDownCode": "if (i == 0 || j == 0) {\n  entry = 0;\n} else {\n  var itemWeight = weights[i - 1];\n  var valueWithoutLastItem = getTableEntry(i - 1, j);\n  if (itemWeight > j) {\n    entry = valueWithoutLastItem;\n  } else {\n    valueWithLastItem = getTableEntry(i - 1, j - itemWeight) + values[i - 1];\n    if (valueWithLastItem > valueWithoutLastItem) {\n      entry = valueWithLastItem;\n    } else {\n      entry = valueWithoutLastItem;\n    }\n  }\n}",
         "detailedReturnValueTopDownCode": "const result = getTableEntry(n, W);\n\nconst solution = [];\nlet i = n;\nlet j = W;\n\nwhile (i > 0 && j > 0) {\n  if (T(i - 1, j) !== T(i, j)) {\n    solution.push(i);\n    j = j - weights[i - 1];   \n  }\n  i = i - 1;\n}\n\nsolution.reverse();",
@@ -43,7 +43,6 @@
     "test-cases": [
         {
             "name": "Test Case 1",
-            "hide-table": false,
             "input": {
                 "W": 6,
                 "n": 4,
@@ -63,7 +62,6 @@
         },
         {
             "name": "Test Case 2",
-            "hide-table": false,
             "input": {
                 "W": 7,
                 "n": 5,
@@ -85,7 +83,6 @@
         },
         {
             "name": "Test Case 3",
-            "hide-table": false,
             "input": {
                 "W": 16,
                 "n": 8,
@@ -113,7 +110,6 @@
         },
         {
             "name": "Edge Case 1",
-            "hide-table": false,
             "input": {
                 "W": 0,
                 "n": 5,
@@ -135,7 +131,6 @@
         },
         {
             "name": "Edge Case 2",
-            "hide-table": false,
             "input": {
                 "W": 4,
                 "n": 0,
