@@ -33,8 +33,6 @@
         "setNextEntryTopDownCode": "if (i == 0 || j == 0) {\n  entry = 0;\n} else {\n  var itemWeight = weights[i - 1];\n  var valueWithoutLastItem = getTableEntry(i - 1, j);\n  if (itemWeight > j) {\n    entry = valueWithoutLastItem;\n  } else {\n    valueWithLastItem = getTableEntry(i - 1, j - itemWeight) + values[i - 1];\n    if (valueWithLastItem > valueWithoutLastItem) {\n      entry = valueWithLastItem;\n    } else {\n      entry = valueWithoutLastItem;\n    }\n  }\n}",
         "returnValueTopDownCode": "result = getTableEntry(n, W);",
         "useAuxiliaryTableWithDetailedSolution": true,
-        "auxiliaryTableDimension1": "n + 1",
-        "auxiliaryTableDimension2": "W + 1",
         "detailedSetNextEntryCode": "DETAILED BOTTOM UP",
         "detailedReturnValueCode": "DETAILED BOTTOM UP RETURN",
         "detailedSetNextEntryTopDownCode": "DETAILED TOP DOWN",
