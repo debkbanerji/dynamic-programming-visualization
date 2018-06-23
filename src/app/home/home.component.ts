@@ -680,9 +680,10 @@ export class HomeComponent implements OnInit {
         } else {
             const stackSplit = e.toString().split('\n');
             errorMessage = stackSplit[0].substr(7);
-            for (let i = stackSplit.length - 1; i >= 0; i--) {
+            stackSplit.reverse();
+            for (let i = 0; i < stackSplit.length; i++) {
                 const stackline = stackSplit[i];
-                if (stackline.indexOf('at algorithm ') >= 0) {
+                if (stackline.indexOf('at algorithm ') >= 0 || stackline.indexOf('at getTableEntry ') >= 0) {
                     const lineSplit = stackline.split(':');
                     errorLine = Number(lineSplit[lineSplit.length - 2]);
                 }
@@ -726,7 +727,7 @@ export class HomeComponent implements OnInit {
         }
 
         // Formatting error message here so we only have to return 1 value
-        return ' ' + errorZoneMessage + '<br><br>' + errorMessage + (isTopDown ? '<br><br>Note that since the approach is top down the source of the error may be within another level of recursion' : '');
+        return ' ' + errorZoneMessage + '<br><br>' + errorMessage;
 
     }
 
