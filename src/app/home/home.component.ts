@@ -207,7 +207,7 @@ export class HomeComponent implements OnInit {
         code.push('\nself.close();\n\n}');
 
         const joinedCode = code.join('');
-        // console.log(joinedCode);
+        console.log(joinedCode);
 
         const result = {};
 
@@ -296,6 +296,9 @@ export class HomeComponent implements OnInit {
                 testResult['has-expected-table'] = !testResult['error'] && !testResult['timed-out'] && component.isExpectedTable(expectedTable, testResult['table'], component.approach === component.approaches[1], component);
                 if (useDetailedSolution) {
                     testResult['has-expected-solution'] = !testResult['error'] && !testResult['timed-out'] && component.deepEquals(testCase['expected-solution'], testResult['solution']);
+                    if (component.providedSolution.useAuxiliaryTableWithDetailedSolution) {
+                        testResult['has-expected-auxiliary-table'] = !testResult['error'] && !testResult['timed-out'] && component.isExpectedTable(testCase['expected-auxiliary-table'], testResult['auxiliary-table'], component.approach === component.approaches[1], component);
+                    }
                 }
                 component.testResults[testCaseIndex] = testResult;
                 component.numRunTestCases++;
@@ -319,6 +322,9 @@ export class HomeComponent implements OnInit {
                 }
                 if (testResult['has-expected-table']) {
                     component.numExpectedTables++;
+                }
+                if (testResult['has-expected-auxiliary-table']) {
+                    component.numExpectedAuxiliaryTables++;
                 }
                 if (component.haveEqualDimensions(testResult['table'], testCase['expected-table'])) {
                     component.numMatchingTableDimensions++;
@@ -438,13 +444,13 @@ export class HomeComponent implements OnInit {
             if (is2d) {
                 innerCode.push(', ', solution.nextEntryIndex2);
             }
-            innerCode.push(', ', encodedTableName, ', ', logName, ', false);\n');
+            innerCode.push(', ', encodedTableName, ', ', logName, ', \'T\');\n');
             if (auxiliaryTable) {
                 innerCode.push('\n\n\t', is2d ? '\t' : '', 'set', encodedTableName, '(auxEntry, ', solution.nextEntryIndex1);
                 if (is2d) {
                     innerCode.push(', ', solution.nextEntryIndex2);
                 }
-                innerCode.push(', ', auxiliaryTableName, ', ', logName, ', true);\n');
+                innerCode.push(', ', auxiliaryTableName, ', ', logName, ', \'T2\');\n');
             }
             if (is2d) {
                 innerCode.push('\t}\n\n');
@@ -471,9 +477,9 @@ export class HomeComponent implements OnInit {
             innerCode.push('\n\t\t// SET NEXT ENTRY CODE START\n\n\t\t');
             innerCode.push(setNextEntryCode.replace(/(?:\r\n|\r|\n)/g, '\n\t\t'));
             innerCode.push('\n\t// SET NEXT ENTRY CODE END\n');
-            innerCode.push('\n\n\t\t', 'set', encodedTableName, '(entry, i', is2d ? ', j' : '', ', ', encodedTableName, ', ', logName, ', false);');
+            innerCode.push('\n\n\t\t', 'set', encodedTableName, '(entry, i', is2d ? ', j' : '', ', ', encodedTableName, ', ', logName, ', \'T\');');
             if (auxiliaryTable) {
-                innerCode.push('\n\n\t\t', 'set', encodedTableName, '(auxEntry, i', is2d ? ', j' : '', ', ', auxiliaryTableName, ', ', logName, ', true);');
+                innerCode.push('\n\n\t\t', 'set', encodedTableName, '(auxEntry, i', is2d ? ', j' : '', ', ', auxiliaryTableName, ', ', logName, ', \'T2\');');
             }
             innerCode.push('\n\t\treturn entry;');
             innerCode.push('\n\t}');
@@ -554,7 +560,7 @@ export class HomeComponent implements OnInit {
             code.push(', j');
         }
         code.push(', ', encodedTableName, ', ', logName);
-        code.push(', auxiliary) {\n');
+        code.push(', tableName) {\n');
         if (is2d) {
             code.push('\n\tif(i === null || i === undefined || ', encodedTableName, '.length <= i || i < 0) {');
             code.push('\n\t\tthrow new Error(\'Could not set entry: \' + i + \' is not a valid table dimension 1 index\');');
@@ -573,9 +579,9 @@ export class HomeComponent implements OnInit {
         }
         code.push(' = val;\n');
         if (is2d) {
-            code.push('\n\t', logName, '.push({"auxiliary": auxiliary, "action":"set","row":i,"column":j,"value":', encodedTableName, '[i][j]});\n');
+            code.push('\n\t', logName, '.push({"table": tableName, "action":"set","row":i,"column":j,"value":', encodedTableName, '[i][j]});\n');
         } else {
-            code.push('\n\t', logName, '.push({"auxiliary": auxiliary, "action":"set","index":i,"value":', encodedTableName, '[i]});\n');
+            code.push('\n\t', logName, '.push({"table": tableName, "action":"set","index":i,"value":', encodedTableName, '[i]});\n');
         }
         code.push('\n\n};');
         return code.join('');
@@ -584,6 +590,7 @@ export class HomeComponent implements OnInit {
     transposeTable(): void {
         this.numExpectedTables = 0;
         this.numMatchingTableDimensions = 0;
+        this.numExpectedAuxiliaryTables = 0;
         this.transpose2dTable = !this.transpose2dTable;
         for (let testCaseIndex = 0; testCaseIndex < this.testCases.length; testCaseIndex++) {
             const testCase = this.testCases[testCaseIndex];
@@ -598,6 +605,13 @@ export class HomeComponent implements OnInit {
 
                     if (this.haveEqualDimensions(this.testResults[testCaseIndex]['table'], testCase['expected-table'])) {
                         this.numMatchingTableDimensions++;
+                    }
+
+                    if (this.expectDetailedSolution && this.providedSolution.useAuxiliaryTableWithDetailedSolution) {
+                        this.testResults[testCaseIndex]['has-expected-auxiliary-table'] = this.isExpectedTable(testCase['expected-auxiliary-table'], this.testResults[testCaseIndex]['auxiliary-table'], this.approach === this.approaches[1], this);
+                        if (this.testResults[testCaseIndex]['has-expected-auxiliary-table']) {
+                            this.numExpectedAuxiliaryTables++;
+                        }
                     }
                 }
             }
