@@ -356,7 +356,7 @@
                         Note: Obtaining the full solution may require use of a second table
                     </small>
                     <br *ngIf="expectDetailedSolution && providedSolution.useAuxiliaryTableWithDetailedSolution">
-                    <mat-slide-toggle [(ngModel)]="expectDetailedSolution"
+                    <mat-slide-toggle [(ngModel)]="expectDetailedSolution" *ngIf="!testsCurrentlyRunning"
                                       (change)="recalculateExpectedResults(); runAllTestsWithUserSolution();">
                         Expect full solution
                     </mat-slide-toggle>
