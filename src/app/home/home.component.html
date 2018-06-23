@@ -65,6 +65,14 @@
                     {{solution.tableDimension1 || '?'}}</p>
                 <p class="code" *ngIf="solution.tableShape === '2d'">&nbsp;&nbsp;T = A table with dimensions
                     ({{solution.tableDimension1 || '?'}}) x ({{solution.tableDimension2 || '?'}})</p>
+                <p class="code"
+                   *ngIf="solution.tableShape === '1d' && expectDetailedSolution && providedSolution.useAuxiliaryTableWithDetailedSolution">
+                    &nbsp;&nbsp;T2 = A table of size
+                    {{solution.tableDimension1 || '?'}}</p>
+                <p class="code"
+                   *ngIf="solution.tableShape === '2d' && expectDetailedSolution && providedSolution.useAuxiliaryTableWithDetailedSolution">
+                    &nbsp;&nbsp;T2 = A table with dimensions
+                    ({{solution.tableDimension1 || '?'}}) x ({{solution.tableDimension2 || '?'}})</p>
                 <div [hidden]="approach === approaches[0]">
                     <div class="initialization-textarea">
                     <textarea class="full-width code code-editor"
@@ -330,7 +338,8 @@
                     <small [innerHTML]="problem['output']['solution']"></small>
                 </div>
                 <div *ngIf="problem['output']['solution']">
-                    <mat-slide-toggle [(ngModel)]="expectDetailedSolution" (change)="recalculateExpectedResults()">
+                    <mat-slide-toggle [(ngModel)]="expectDetailedSolution"
+                                      (change)="recalculateExpectedResults(); runAllTestsWithUserSolution();">
                         Expect full solution
                     </mat-slide-toggle>
                 </div>
@@ -429,6 +438,39 @@
                                 <span
                                     [innerHTML]="' ' + getDisplayedValue(testCase['expected-result'])">
                                 </span>
+                                <div *ngIf="expectDetailedSolution">
+                                    <br>
+                                    <span class="slightly-bold-label">Detailed Solution</span>
+                                    <div *ngIf="!isArray(testCase['expected-solution'])">
+                                        <span [innerHTML]="getDisplayedValue(testCase['expected-solution'])">
+                                        </span></div>
+                                    <div *ngIf="isArray(testCase['expected-solution'])">
+                                        <div *ngIf="shouldDisplayArray(testCase['expected-solution'])">
+                                            <table class="dp-table"
+                                                   *ngIf="isRectangular2dArray(testCase['expected-solution'])">
+                                                <tr class="dp-tr"
+                                                    *ngFor="let i of range(testCase['expected-solution'].length);">
+                                                    <td class="dp-td"
+                                                        *ngFor="let j of range(testCase['expected-solution'][0].length);">
+                                                        <span class="dp-table-cell"
+                                                              [innerHTML]="getDisplayedValue(testCase['expected-solution'][i][j])">
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <table class="dp-table" *ngIf="!isRectangular2dArray(testCase['expected-solution'])">
+                                                <tr class="dp-tr">
+                                                    <td class="dp-td"
+                                                        *ngFor="let i of range(testCase['expected-solution'].length);">
+                                                        <span class="dp-table-cell"
+                                                              [innerHTML]="getDisplayedValue(testCase['expected-solution'][i])">
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
                             </mat-card-content>
                         </mat-card>
                         <mat-card *ngIf="testResults[testCaseIndex] && !testsCurrentlyRunning">
@@ -461,15 +503,28 @@
                                         </b>
                                         <b class="text-red"
                                            *ngIf="!(testResults[testCaseIndex]['result'] === testCase['expected-result'])">
-                                            &#x2718; Incorrect Final Answer - Expected {{testCase['expected-result']}}
+                                            &#x2718; Incorrect Final Answer - Expected
+                                            {{getDisplayedValue(testCase['expected-result'])}}
                                             but got
-                                            {{testResults[testCaseIndex]['result']}}
-                                            {{testResults[testCaseIndex]['result'] === null ? 'null': ''}}
-                                            {{testResults[testCaseIndex]['result'] === undefined ? 'undefined': ''}}
+                                            {{getDisplayedValue(testResults[testCaseIndex]['result'])}}
                                             {{((testResults[testCaseIndex]['result'] === null ||
                                             testResults[testCaseIndex]['result'] === undefined)
                                             && approach === approaches[1]) ? ' - Make sure you\'re using getTableEntry'
                                             + ' when accessing table entries': ''}}
+                                        </b>
+                                    </div>
+                                    <div *ngIf="expectDetailedSolution">
+                                        <!--Note: we only need to chec deep equals for detailed solutions-->
+                                        <b class="text-green"
+                                           *ngIf="deepEquals(testResults[testCaseIndex]['solution'],testCase['expected-solution'])">
+                                            &#x2714; Correct Solution
+                                        </b>
+                                        <b class="text-red"
+                                           *ngIf="!(deepEquals(testResults[testCaseIndex]['solution'], testCase['expected-solution']))">
+                                            &#x2718; Incorrect Solution - Expected
+                                            {{getDisplayedValue(testCase['expected-solution'])}}
+                                            but got
+                                            {{getDisplayedValue(testResults[testCaseIndex]['solution'])}}
                                         </b>
                                     </div>
                                     <div>

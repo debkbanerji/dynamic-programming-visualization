@@ -112,7 +112,12 @@ export class HomeComponent implements OnInit {
     recalculateExpectedResults() {
         const component = this;
         // We're always calculating the detailed solution if we're using the provided solution
-        const code = HomeComponent.getPlainRunnableCode(component.providedSolution, component.problem, false, true, component.providedSolution.useAuxiliaryTableWithDetailedSolution);
+        const code = HomeComponent.getPlainRunnableCode(
+            component.providedSolution,
+            component.problem,
+            false,
+            component.providedSolution.detailedSetNextEntryCode,
+            component.providedSolution.detailedSetNextEntryCode && component.providedSolution.useAuxiliaryTableWithDetailedSolution);
         component.testsCurrentlyRunning = true;
         component.runTestsWithProvidedSolution(component, 0, code);
 
@@ -198,7 +203,7 @@ export class HomeComponent implements OnInit {
         code.push('\nself.close();\n\n}');
 
         const joinedCode = code.join('');
-        console.log(joinedCode);
+        // console.log(joinedCode);
 
         const result = {};
 
@@ -388,7 +393,7 @@ export class HomeComponent implements OnInit {
                 innerCode.push('\tfor(let ', solution.for2Variable, ' = ', solution.for2Init, '; ', solution.for2Condition, '; ', solution.for2Update, ') {\n\n');
             }
 
-            const setNextEntryCode = solution.setNextEntryCode;
+            const setNextEntryCode = solution.detailedSetNextEntryCode || solution.setNextEntryCode;
             if (is2d) {
                 innerCode.push('\t\t// DEFAULT VALUE CODE START\n\n\t\t');
                 if (solution.useDefaultTableEntry) {
@@ -426,7 +431,7 @@ export class HomeComponent implements OnInit {
             }
             innerCode.push('}\n\n');
             innerCode.push('// RETURN VALUE CODE START\n\n');
-            innerCode.push(solution.returnValueCode, '\n');
+            innerCode.push(solution.detailedReturnValueCode || solution.returnValueCode, '\n');
         } else {
             const dimensions = '(i' + (is2d ? ', j' : '') + ')';
             innerCode.push('\t// INITIALIZATION CODE START\n\n');
@@ -600,9 +605,29 @@ export class HomeComponent implements OnInit {
                 // component.solution = Object.assign({}, component.providedSolution);
                 // deep copy just in case solution format is changed in the future
                 component.solution = JSON.parse(JSON.stringify(component.providedSolution));
+                component.solution.detailedSetNextEntryTopDownCode = null;
+                component.solution.detailedReturnValueTopDownCode = null;
+                component.solution.setNextEntryTopDownCode = null;
+                component.solution.returnValueTopDownCode = null;
+                component.solution.detailedSetNextEntryCode = null;
+                component.solution.detailedReturnValueCode = null;
+
                 if (component.approach === component.approaches[1]) {
-                    component.solution.setNextEntryCode = component.providedSolution.setNextEntryTopDownCode;
-                    component.solution.returnValueCode = component.providedSolution.returnValueTopDownCode;
+                    if (component.expectDetailedSolution) {
+                        component.solution.setNextEntryCode = component.providedSolution.detailedSetNextEntryTopDownCode;
+                        component.solution.returnValueCode = component.providedSolution.detailedReturnValueTopDownCode;
+                    } else {
+                        component.solution.setNextEntryCode = component.providedSolution.setNextEntryTopDownCode;
+                        component.solution.returnValueCode = component.providedSolution.returnValueTopDownCode;
+                    }
+                } else {
+                    if (component.expectDetailedSolution) {
+                        component.solution.setNextEntryCode = component.providedSolution.detailedSetNextEntryCode;
+                        component.solution.returnValueCode = component.providedSolution.detailedReturnValueCode;
+                    } else {
+                        component.solution.setNextEntryCode = component.providedSolution.setNextEntryCode;
+                        component.solution.returnValueCode = component.providedSolution.returnValueCode;
+                    }
                 }
                 component.makeInputsResizable();
                 component.runAllTestsWithUserSolution();
@@ -716,7 +741,7 @@ export class HomeComponent implements OnInit {
     isExpectedTable(target, provided, isTopDown: boolean, component: HomeComponent): boolean {
         // Note: isTopDown just means we're avoiding mismatches rather than matching everything
         if (!isTopDown) {
-            return JSON.stringify(target) === JSON.stringify(provided);
+            return this.deepEquals(target, provided);
         } else {
             if (component.haveEqualDimensions(target, provided)) {
                 if (component.isRectangular2dArray(target)) {
@@ -808,6 +833,10 @@ export class HomeComponent implements OnInit {
             }
         }
         return -1;
+    }
+
+    deepEquals(a, b) {
+        return JSON.stringify(a) === JSON.stringify(b);
     }
 
     range(_p: number, _t?: number, _s?: number): Array<number> {
