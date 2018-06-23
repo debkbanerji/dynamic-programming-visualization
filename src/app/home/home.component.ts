@@ -446,7 +446,7 @@ export class HomeComponent implements OnInit {
             }
             innerCode.push(', ', encodedTableName, ', ', logName, ', \'T\');\n');
             if (auxiliaryTable) {
-                innerCode.push('\n\n\t', is2d ? '\t' : '', 'set', encodedTableName, '(auxEntry, ', solution.nextEntryIndex1);
+                innerCode.push('\n\n\t', is2d ? '\t' : '', 'set', encodedTableName, '(secondaryEntry, ', solution.nextEntryIndex1);
                 if (is2d) {
                     innerCode.push(', ', solution.nextEntryIndex2);
                 }
@@ -479,7 +479,7 @@ export class HomeComponent implements OnInit {
             innerCode.push('\n\t// SET NEXT ENTRY CODE END\n');
             innerCode.push('\n\n\t\t', 'set', encodedTableName, '(entry, i', is2d ? ', j' : '', ', ', encodedTableName, ', ', logName, ', \'T\');');
             if (auxiliaryTable) {
-                innerCode.push('\n\n\t\t', 'set', encodedTableName, '(auxEntry, i', is2d ? ', j' : '', ', ', auxiliaryTableName, ', ', logName, ', \'T2\');');
+                innerCode.push('\n\n\t\t', 'set', encodedTableName, '(secondaryEntry, i', is2d ? ', j' : '', ', ', auxiliaryTableName, ', ', logName, ', \'T2\');');
             }
             innerCode.push('\n\t\treturn entry;');
             innerCode.push('\n\t}');

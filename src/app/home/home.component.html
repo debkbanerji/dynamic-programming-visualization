@@ -112,7 +112,7 @@
                     <p class="code"
                        *ngIf="expectDetailedSolution && providedSolution.useAuxiliaryTableWithDetailedSolution">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;T2(i<span
                         *ngIf="solution.tableShape === '2d'">, j</span>)
-                        = auxEntry;</p>
+                        = secondaryEntry;</p>
                     <p class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return entry;</p>
                     <p class="code">&nbsp;&nbsp;&nbsp;&nbsp;{{'}'}}</p>
                     <p class="code">&nbsp;&nbsp;{{'}'}}</p>
@@ -193,7 +193,7 @@
                                    *ngIf="expectDetailedSolution && providedSolution.useAuxiliaryTableWithDetailedSolution">
                                     T2({{solution.nextEntryIndex1}}<span
                                     *ngIf="solution.tableShape === '2d'">, {{solution.nextEntryIndex2}}</span>)
-                                    = auxEntry;</p>
+                                    = secondaryEntry;</p>
                             </div>
                         </div>
                     </div>
