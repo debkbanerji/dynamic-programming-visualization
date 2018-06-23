@@ -140,6 +140,7 @@ export class HomeComponent implements OnInit {
                         component.raiseProvidedSolutionError('Test ' + testCaseIndex + ' timed out');
                     } else {
                         const testCase = component.testCases[testCaseIndex];
+                        testCase['log'] = testResult['log'];
                         if (!testCase['expected-result'] && !testCase['expected-table']) {
                             testCase['expected-result'] = testResult['result'];
                             testCase['expected-table'] = testResult['table'];

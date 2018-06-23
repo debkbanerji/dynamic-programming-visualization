@@ -352,6 +352,10 @@
                     <small [innerHTML]="problem['output']['solution']"></small>
                 </div>
                 <div *ngIf="problem['output']['solution']">
+                    <small *ngIf="expectDetailedSolution && providedSolution.useAuxiliaryTableWithDetailedSolution">
+                        Note: Obtaining the full solution may require use of a second table
+                    </small>
+                    <br *ngIf="expectDetailedSolution && providedSolution.useAuxiliaryTableWithDetailedSolution">
                     <mat-slide-toggle [(ngModel)]="expectDetailedSolution"
                                       (change)="recalculateExpectedResults(); runAllTestsWithUserSolution();">
                         Expect full solution
@@ -667,7 +671,7 @@
                                 </div>
                             </mat-card-content>
                         </mat-card>
-                        <pre>{{testCase | json}}</pre>
+                        <!--<pre>{{testCase | json}}</pre>-->
                     </mat-tab>
                 </mat-tab-group>
             </mat-card-content>
