@@ -608,6 +608,7 @@ export class HomeComponent implements OnInit {
                     }
 
                     if (this.expectDetailedSolution && this.providedSolution.useAuxiliaryTableWithDetailedSolution) {
+                        testCase['expected-auxiliary-table'] = this.getTransposedArray(testCase['expected-auxiliary-table']);
                         this.testResults[testCaseIndex]['has-expected-auxiliary-table'] = this.isExpectedTable(testCase['expected-auxiliary-table'], this.testResults[testCaseIndex]['auxiliary-table'], this.approach === this.approaches[1], this);
                         if (this.testResults[testCaseIndex]['has-expected-auxiliary-table']) {
                             this.numExpectedAuxiliaryTables++;
