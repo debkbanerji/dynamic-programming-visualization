@@ -344,10 +344,14 @@
                     <br>
                     <p [innerHTML]="providedSolution['solutionNotes']"></p>
                 </div>
-                <br *ngIf="providedSolution['tableEntryDefinition']">
+                <!--<br *ngIf="providedSolution['tableEntryDefinition']">-->
                 <div *ngIf="providedSolution['tableEntryDefinition']">
                     <b>Table entry definition: </b>
-                    <span [innerHTML]="providedSolution['tableEntryDefinition']"></span>
+                    <p [innerHTML]="providedSolution['tableEntryDefinition']"></p>
+                </div>
+                <div *ngIf="providedSolution['AuxiliaryTableEntryDefinition'] && expectDetailedSolution">
+                    <b>Second table entry definition: </b>
+                    <p [innerHTML]="providedSolution['AuxiliaryTableEntryDefinition']"></p>
                 </div>
             </div>
             <div *ngIf="problem['output']['result']">
