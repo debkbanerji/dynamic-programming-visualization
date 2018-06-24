@@ -8,11 +8,11 @@ const auxiliaryTableName = '___AUX_TABLE___';
 const logName = '___LOG___';
 
 @Component({
-    selector: 'app-home',
-    templateUrl: './home.component.html',
-    styleUrls: ['./home.component.css']
+    selector: 'app-solve-problem',
+    templateUrl: './solve-problem.component.html',
+    styleUrls: ['./solve-problem.component.css']
 })
-export class HomeComponent implements OnInit {
+export class SolveProblemComponent implements OnInit {
 
     objectKeys = Object.keys;
 
@@ -115,7 +115,7 @@ export class HomeComponent implements OnInit {
     recalculateExpectedResults() {
         const component = this;
         // We're always calculating the detailed solution if we're using the provided solution
-        const code = HomeComponent.getPlainRunnableCode(
+        const code = SolveProblemComponent.getPlainRunnableCode(
             component.providedSolution,
             component.problem,
             false,
@@ -126,7 +126,7 @@ export class HomeComponent implements OnInit {
 
     }
 
-    runTestsWithProvidedSolution(component: HomeComponent, testCaseIndex: number, code: string): void {
+    runTestsWithProvidedSolution(component: SolveProblemComponent, testCaseIndex: number, code: string): void {
         if (testCaseIndex < component.testCases.length) {
             const testCase = component.testCases[testCaseIndex];
             if (!testCase['expected-result'] && !testCase['expected-table']) {
@@ -165,7 +165,7 @@ export class HomeComponent implements OnInit {
     }
 
     // Returns result of running the test case, as well as the table
-    runTest(testCaseIndex: number, plainFunctionCode: string, component: HomeComponent, isTopDown: boolean, detailedSolution: boolean, auxiliaryTable: boolean, callback: Function) {
+    runTest(testCaseIndex: number, plainFunctionCode: string, component: SolveProblemComponent, isTopDown: boolean, detailedSolution: boolean, auxiliaryTable: boolean, callback: Function) {
         const code = [];
 
         const inputMap = component.problem.input;
@@ -277,7 +277,7 @@ export class HomeComponent implements OnInit {
         this.numIncorrectSolutions = 0;
         this.numExpectedAuxiliaryTables = 0;
         this.testsCurrentlyRunning = true;
-        const code = HomeComponent.getPlainRunnableCode(this.solution, this.problem, this.approach === this.approaches[1], this.expectDetailedSolution, this.expectDetailedSolution && this.providedSolution.useAuxiliaryTableWithDetailedSolution);
+        const code = SolveProblemComponent.getPlainRunnableCode(this.solution, this.problem, this.approach === this.approaches[1], this.expectDetailedSolution, this.expectDetailedSolution && this.providedSolution.useAuxiliaryTableWithDetailedSolution);
         this.generatedCode = code
             .replace(new RegExp('\t', 'g'), '&nbsp;&nbsp;&nbsp;&nbsp;')
             .replace(new RegExp(' {4}', 'g'), '&nbsp;&nbsp;&nbsp;&nbsp;')
@@ -285,7 +285,7 @@ export class HomeComponent implements OnInit {
         this.runTestsWithUserSolution(this, 0, code);
     }
 
-    runTestsWithUserSolution(component: HomeComponent, testCaseIndex: number, code: string) {
+    runTestsWithUserSolution(component: SolveProblemComponent, testCaseIndex: number, code: string) {
         if (testCaseIndex < component.testCases.length) {
             let topDown = component.approach === component.approaches[1];
             let useDetailedSolution = component.expectDetailedSolution;
@@ -375,14 +375,14 @@ export class HomeComponent implements OnInit {
         result.push(
             initializationCode.join(''),
             '\n\n',
-            HomeComponent.getWrappedGetTableFunction(is2d),
+            SolveProblemComponent.getWrappedGetTableFunction(is2d),
             '\n\n',
-            HomeComponent.getPlainGetTableFunction(is2d, false),
+            SolveProblemComponent.getPlainGetTableFunction(is2d, false),
             '\n\n',
-            (auxiliaryTable ? HomeComponent.getPlainGetTableFunction(is2d, true) + '\n\n' : ''),
-            HomeComponent.getPlainSetTableFunction(is2d),
+            (auxiliaryTable ? SolveProblemComponent.getPlainGetTableFunction(is2d, true) + '\n\n' : ''),
+            SolveProblemComponent.getPlainSetTableFunction(is2d),
             '\n\n',
-            HomeComponent.getAlgorithmCode(solution, problem, useTopDown, detailedSolution, auxiliaryTable)
+            SolveProblemComponent.getAlgorithmCode(solution, problem, useTopDown, detailedSolution, auxiliaryTable)
         );
         return result.join('');
     }
@@ -774,7 +774,7 @@ export class HomeComponent implements OnInit {
         }
     }
 
-    isExpectedTable(target, provided, isTopDown: boolean, component: HomeComponent): boolean {
+    isExpectedTable(target, provided, isTopDown: boolean, component: SolveProblemComponent): boolean {
         // Note: isTopDown just means we're avoiding mismatches rather than matching everything
         if (!isTopDown) {
             return this.deepEquals(target, provided);
