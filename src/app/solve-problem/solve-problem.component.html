@@ -45,7 +45,8 @@
                 <mat-form-field
                     *ngIf="problemDefined && providedSolution.returnValueTopDownCode">
                     <!--<label for="approach-select">Approach</label>-->
-                    <mat-select [(ngModel)]="approach" id="approach-select">
+                    <mat-select [(ngModel)]="approach" id="approach-select"
+                                (selectionChange)="makeEditorCodeEqual(approach)">
                         <mat-option value="{{approaches[0]}}">Bottom Up</mat-option>
                         <mat-option value="{{approaches[1]}}">Top Down</mat-option>
                     </mat-select>
@@ -74,10 +75,9 @@
                     &nbsp;&nbsp;T2 = A table with dimensions
                     ({{solution.tableDimension1 || '?'}}) x ({{solution.tableDimension2 || '?'}})</p>
                 <div [hidden]="approach === approaches[0]">
-                    <div class="initialization-textarea">
-                    <textarea class="full-width code code-editor"
-                              title="solution.initializationCode" rows="6"
-                              [(ngModel)]="solution.initializationCode"></textarea>
+                    <div class="initialization-textarea-container">
+                    <textarea class="full-width code code-editor" id="top-down-initialization-textarea"
+                              title="solution.initializationCode" rows="6"></textarea>
                     </div>
                     <p class="code">
                         &nbsp;&nbsp;function getTableEntry(i<span *ngIf="solution.tableShape === '2d'">, j</span>)
@@ -101,8 +101,7 @@
                                 <mat-checkbox [(ngModel)]="solution.useDefaultTableEntry">Set a default value
                                 </mat-checkbox>
                             </div>
-                            <textarea class="code full-width"
-                                      [(ngModel)]="solution.setNextEntryCode"
+                            <textarea class="code full-width" id="top-down-set-next-entry-textarea"
                                       title="setNextEntryCode" rows="20"></textarea>
                             <br>
                         </div>
@@ -118,10 +117,10 @@
                     <p class="code">&nbsp;&nbsp;{{'}'}}</p>
                 </div>
                 <div [hidden]="approach === approaches[1]">
-                    <div class="initialization-textarea">
+                    <div class="initialization-textarea-container">
                     <textarea class="full-width code code-editor"
-                              title="solution.initializationCode" rows="6"
-                              [(ngModel)]="solution.initializationCode"></textarea>
+                              id="initialization-textarea"
+                              title="solution.initializationCode" rows="6"></textarea>
                     </div>
                     <p class="code">&nbsp;&nbsp;for (
                         <input [(ngModel)]="solution.for1Variable"
@@ -173,8 +172,7 @@
                                 <!--<textarea spellcheck="false" id="set-next-value-textarea" class="code"-->
                                 <!--[(ngModel)]="solution.setNextEntryCode"-->
                                 <!--title="setNextValueCode" rows="20"></textarea>-->
-                                <textarea class="code full-width"
-                                          [(ngModel)]="solution.setNextEntryCode"
+                                <textarea class="code full-width" id="set-next-entry-textarea"
                                           title="setNextEntryCode" rows="20"></textarea>
                                 <!--<span>&nbsp;&nbsp;&nbsp;&nbsp;</span>-->
                                 <!--<span *ngIf="solution.tableShape === '2d'">&nbsp;&nbsp;&nbsp;&nbsp;</span>-->
@@ -203,11 +201,10 @@
                     <!--[(ngModel)]="solution.returnValueCode"-->
                     <!--title="returnValueCode" rows="6"></textarea>-->
                 </div>
-                <div id="return-value-textarea-container">
-                    <div id="return-value-textarea">
-                    <textarea class="full-width code code-editor"
-                              title="solution.returnValueCode" rows="6"
-                              [(ngModel)]="solution.returnValueCode"></textarea>
+                <div id="return-value-textarea-outer-container">
+                    <div id="return-value-textarea-container">
+                        <textarea class="full-width code code-editor" id="return-value-textarea"
+                                  title="solution.returnValueCode" rows="6"></textarea>
                     </div>
                 </div>
                 <p class="code">&nbsp;return {{expectDetailedSolution ? '(result, solution)' : 'result'}};</p>
@@ -291,7 +288,7 @@
                             'text-green': numExpectedAuxiliaryTables === numRunTestCases,
                             'text-yellow': numExpectedAuxiliaryTables < numRunTestCases
                         }"><span *ngIf="numExpectedAuxiliaryTables === numRunTestCases">&#x2714; </span>{{numExpectedAuxiliaryTables}}
-                                secondary table{{numExpectedAuxiliaryTables === 1? '' : 's'}} with matching entries</b>
+                            secondary table{{numExpectedAuxiliaryTables === 1? '' : 's'}} with matching entries</b>
                         <br>
                     </div>
                     <span><small>Note: If a top down approach was used, only non null entries of tables were checked</small></span>
@@ -547,7 +544,8 @@
                                                 <br>
                                                 Your final result is correct, but your table did not match the table generated by the provided answer.
                                                 <span *ngIf="numCorrectFinalAnswerTestCases === numRunTestCases">This is likely not an issue since your solution returns the correct final result for every test case.<br></span>
-                                                <span>If the expected table is just a transposed version of yours, you can <a class="transpose-text" (click)="transposeTable()">transpose the expected table</a> to compare them.</span>
+                                                <span>If the expected table is just a transposed version of yours, you can <a
+                                                    class="transpose-text" (click)="transposeTable()">transpose the expected table</a> to compare them.</span>
                                             </span>
                                         </div>
                                     </div>

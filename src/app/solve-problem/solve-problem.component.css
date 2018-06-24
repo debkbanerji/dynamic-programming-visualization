@@ -41,12 +41,12 @@
     float: right;
 }
 
-#return-value-textarea-container {
+#return-value-textarea-outer-container {
     width: 100%;
     display: inline-block;
 }
 
-.initialization-textarea, #return-value-textarea, .code-editor {
+.initialization-textarea-container, #return-value-textarea-container, .code-editor {
     width: calc(100% - 8px);
     max-width: calc(100% - 8px);
     min-width: calc(100% - 8px);
@@ -54,7 +54,7 @@
     display: inline-block;
 }
 
-#set-next-value-textarea {
+#set-next-entry-textarea-container {
     width: 90%;
     max-width: 90%;
     min-width: 90%;
