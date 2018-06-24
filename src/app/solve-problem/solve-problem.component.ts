@@ -121,7 +121,9 @@ export class SolveProblemComponent implements OnInit {
             lineNumbers: true,
             mode: 'javascript',
             theme: 'default',
-            viewportMargin: Infinity
+            viewportMargin: Infinity,
+            indentWithTabs: true,
+            tabSize: 4
         };
         const textEditorIDs = this.objectKeys(this.textAreaVariableMap);
         for (let i = 0; i < textEditorIDs.length; i++) {
