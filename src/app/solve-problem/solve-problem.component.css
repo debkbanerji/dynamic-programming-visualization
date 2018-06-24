@@ -104,6 +104,11 @@
     margin: 5px;
 }
 
+.transpose-text {
+    cursor: pointer;
+    text-underline: none;
+}
+
 #reveal-solution-button {
     margin-left: 10px;
 }
