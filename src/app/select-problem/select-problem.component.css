@@ -1,0 +1,22 @@
+#main-title-div {
+    text-align: center;
+    font-weight: normal;
+}
+
+#main-title {
+    font-weight: bold;
+}
+
+.section-title {
+    font-weight: bolder;
+}
+
+.problem-link {
+    cursor: pointer;
+    /*font-size: large;*/
+    font-weight: 600;
+}
+
+.problem-link:hover {
+    color: #ff4081;
+}

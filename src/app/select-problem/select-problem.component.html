@@ -1,3 +1,24 @@
-<p>
-  select-problem works!
-</p>
+<mat-card>
+    <div id="main-title-div">
+        <h3 id="main-title">
+            Dynamic Programming Problems
+        </h3>
+    </div>
+    <mat-expansion-panel *ngFor="let section of sections" [expanded]="true">
+        <mat-expansion-panel-header>
+            <h4 class="section-title" [innerHTML]="section.name"></h4>
+        </mat-expansion-panel-header>
+        <div class="row">
+            <div *ngFor="let problem of section.problems" class="col-xs-6 col-md-4">
+                <mat-card>
+                    <span class="problem-link"
+                          (click)="openProblem(problem.id)">
+                        <span class="glyphicon glyphicon-play"></span>
+                        <span [innerHTML]="' ' + problem.name">
+                        </span>
+                    </span>
+                </mat-card>
+            </div>
+        </div>
+    </mat-expansion-panel>
+</mat-card>

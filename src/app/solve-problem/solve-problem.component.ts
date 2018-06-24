@@ -176,7 +176,13 @@ export class SolveProblemComponent implements OnInit {
     }
 
     // Returns result of running the test case, as well as the table
-    runTest(testCaseIndex: number, plainFunctionCode: string, component: SolveProblemComponent, isTopDown: boolean, detailedSolution: boolean, auxiliaryTable: boolean, callback: Function) {
+    runTest(testCaseIndex: number,
+            plainFunctionCode: string,
+            component: SolveProblemComponent,
+            isTopDown: boolean,
+            detailedSolution: boolean,
+            auxiliaryTable: boolean,
+            callback: Function) {
         const code = [];
 
         const inputMap = component.problem.input;
