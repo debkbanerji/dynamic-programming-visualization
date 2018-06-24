@@ -22,9 +22,12 @@ import {
 } from "@angular/material";
 import {HttpClientModule} from "@angular/common/http";
 import {ConfirmationDialogComponent} from './dialogs/confirmation-dialog/confirmation-dialog.component';
+import {SelectProblemComponent} from './select-problem/select-problem.component';
 
-const routes: Routes = [ // Array of all routes - modify when adding routes
-    {path: '**', component: SolveProblemComponent} // Default route
+const routes: Routes = [
+    {path: 'problem/:problem-name', component: SolveProblemComponent},
+    {path: 'select-problem', component: SelectProblemComponent},
+    {path: '**', redirectTo: 'select-problem', pathMatch: 'full'} // Default route
 ];
 
 
@@ -32,7 +35,8 @@ const routes: Routes = [ // Array of all routes - modify when adding routes
     declarations: [
         AppComponent,
         SolveProblemComponent,
-        ConfirmationDialogComponent
+        ConfirmationDialogComponent,
+        SelectProblemComponent
     ],
     imports: [
         BrowserModule,

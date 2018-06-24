@@ -1,5 +1,5 @@
 {
-    "name": "Knapsack without repetition",
+    "name": "Knapsack Without Repetition",
     "problem-statement": "Description of the knapsack optimization problem with repetition",
     "input": {
         "W": "Maximum Capacity",

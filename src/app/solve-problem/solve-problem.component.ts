@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {MatDialog} from "@angular/material";
 import {ConfirmationDialogComponent} from "../dialogs/confirmation-dialog/confirmation-dialog.component";
+import {ActivatedRoute, Router} from "@angular/router";
+import {Title} from "@angular/platform-browser";
 
 const encodedTableName = '___TABLE___';
 const auxiliaryTableName = '___AUX_TABLE___';
@@ -16,7 +18,7 @@ export class SolveProblemComponent implements OnInit {
 
     objectKeys = Object.keys;
 
-    problemFileName: string = 'knapsack-without-repetition.dp.json';
+    problemFileName: string;
 
     tableShapes: Array<string> = ['1d', '2d'];
 
@@ -84,31 +86,40 @@ export class SolveProblemComponent implements OnInit {
     numExpectedAuxiliaryTables: number = 0;
     testsCurrentlyRunning: boolean = false;
 
-    constructor(private http: HttpClient, public dialog: MatDialog) {
+    constructor(private route: ActivatedRoute,
+                private router: Router,
+                private http: HttpClient,
+                private titleService: Title,
+                public dialog: MatDialog) {
     }
 
     ngOnInit() {
-        this.loadProblem(this.problemFileName);
-        this.makeInputsResizable();
+        const component: SolveProblemComponent = this;
+        component.route.params.subscribe(params => {
+            component.problemFileName = params['problem-name'];
+            component.loadProblem(component.problemFileName, component);
+        });
+        component.makeInputsResizable(component);
     }
 
-    makeInputsResizable() {
+    makeInputsResizable(component: SolveProblemComponent) {
         const smallInputFields = document.getElementsByClassName('input-field-small');
         for (let i = 0; i < smallInputFields.length; i++) {
             const el = smallInputFields[i];
-            this.makeResizable(el, 7.5);
+            component.makeResizable(el, 7.5);
         }
     }
 
-    loadProblem(problemFileName: string): void {
-        const component = this;
-        // TODO: Get from service
-        component.http.get('../assets/problems/' + problemFileName).subscribe(data => {
+    loadProblem(problemFileName: string, component: SolveProblemComponent): void {
+        component.http.get('../assets/problems/' + problemFileName + '.dp.json').subscribe(data => {
             component.problem = data;
             component.providedSolution = component.problem['provided-solution'];
             component.testCases = component.problem['test-cases'];
             component.problemDefined = true;
+            component.titleService.setTitle(component.problem.name);
             component.recalculateExpectedResults();
+        }, _ => {
+            component.router.navigate(['select-problem']);
         });
     }
 
@@ -596,7 +607,6 @@ export class SolveProblemComponent implements OnInit {
             const testCase = this.testCases[testCaseIndex];
             if (this.isRectangular2dArray(testCase['expected-table'])) {
                 testCase['expected-table'] = this.getTransposedArray(testCase['expected-table']);
-                // TODO: transpose expected-auxiliary-table, if it exists
                 if (this.testResults[testCaseIndex]) {
                     this.testResults[testCaseIndex]['has-expected-table'] = this.isExpectedTable(testCase['expected-table'], this.testResults[testCaseIndex]['table'], this.approach === this.approaches[1], this);
                     if (this.testResults[testCaseIndex]['has-expected-table']) {
@@ -664,7 +674,7 @@ export class SolveProblemComponent implements OnInit {
                         component.solution.returnValueCode = component.providedSolution.returnValueCode;
                     }
                 }
-                component.makeInputsResizable();
+                component.makeInputsResizable(component);
                 component.runAllTestsWithUserSolution();
             }
         });
