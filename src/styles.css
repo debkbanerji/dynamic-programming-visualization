@@ -9,3 +9,7 @@ mat-card {
 mat-expansion-panel {
     margin: 5px !important;
 }
+
+.CodeMirror {
+    height: auto;
+}

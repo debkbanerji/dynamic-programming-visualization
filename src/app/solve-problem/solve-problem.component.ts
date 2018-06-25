@@ -9,6 +9,8 @@ const encodedTableName = '___TABLE___';
 const auxiliaryTableName = '___AUX_TABLE___';
 const logName = '___LOG___';
 
+declare let CodeMirror: any;
+
 @Component({
     selector: 'app-solve-problem',
     templateUrl: './solve-problem.component.html',
@@ -17,6 +19,16 @@ const logName = '___LOG___';
 export class SolveProblemComponent implements OnInit {
 
     objectKeys = Object.keys;
+
+    // Maps textareas to the variables they correspond to
+    textAreaVariableMap: any = {
+        'initialization-textarea': 'initializationCode',
+        'top-down-initialization-textarea': 'initializationCode',
+        'set-next-entry-textarea': 'setNextEntryCode',
+        'top-down-set-next-entry-textarea': 'setNextEntryCode',
+        'return-value-textarea': 'returnValueCode'
+    };
+    codeMirrorMap = {};
 
     problemFileName: string;
 
@@ -98,9 +110,69 @@ export class SolveProblemComponent implements OnInit {
         component.route.params.subscribe(params => {
             component.problemFileName = params['problem-name'];
             component.loadProblem(component.problemFileName, component);
+            component.makeInputsResizable(component);
         });
-        component.makeInputsResizable(component);
+        component.initializeEditors();
+
     }
+
+    initializeEditors(): void {
+        const options = {
+            lineNumbers: true,
+            mode: 'javascript',
+            theme: 'default',
+            viewportMargin: Infinity,
+            indentWithTabs: true,
+            tabSize: 4
+        };
+        const textEditorIDs = this.objectKeys(this.textAreaVariableMap);
+        for (let i = 0; i < textEditorIDs.length; i++) {
+            let id = textEditorIDs[i];
+            const textArea = document.getElementById(id);
+            this.codeMirrorMap[id] = CodeMirror.fromTextArea(textArea, options);
+        }
+        this.populateCodeEditors();
+    }
+
+    populateCodeEditors(): void {
+        const textEditorIDs = this.objectKeys(this.textAreaVariableMap);
+        for (let i = 0; i < textEditorIDs.length; i++) {
+            const id = textEditorIDs[i];
+            const variable = this.textAreaVariableMap[id];
+            this.codeMirrorMap[id].setValue(this.solution[variable]);
+        }
+    }
+
+    getCodeFromEditors(): void {
+        // top down
+        if (this.approach === this.approaches[1]) {
+            this.solution.initializationCode = this.codeMirrorMap['top-down-initialization-textarea'].getValue();
+            this.solution.setNextEntryCode = this.codeMirrorMap['top-down-set-next-entry-textarea'].getValue();
+        } else {
+            this.solution.initializationCode = this.codeMirrorMap['initialization-textarea'].getValue();
+            this.solution.setNextEntryCode = this.codeMirrorMap['set-next-entry-textarea'].getValue();
+        }
+        this.solution.returnValueCode = this.codeMirrorMap['return-value-textarea'].getValue();
+    }
+
+    makeEditorCodeEqual(approach: string) {
+        let from = ['initialization-textarea', 'set-next-entry-textarea'];
+        let to = ['top-down-initialization-textarea', 'top-down-set-next-entry-textarea'];
+        if (approach === this.approaches[0]) {
+            let temp = from;
+            from = to;
+            to = temp;
+        }
+        for (let i = 0; i < from.length; i++) {
+            const copyValue = this.codeMirrorMap[from[i]].getValue();
+            const toCodeMirror = this.codeMirrorMap[to[i]];
+            toCodeMirror.setValue(copyValue);
+            setTimeout(function() {
+                toCodeMirror.refresh();
+            },1);
+        }
+    }
+
 
     makeInputsResizable(component: SolveProblemComponent) {
         const smallInputFields = document.getElementsByClassName('input-field-small');
@@ -283,6 +355,7 @@ export class SolveProblemComponent implements OnInit {
 
     // Returns result of running the test case, as well as the table
     runAllTestsWithUserSolution(): void {
+        this.getCodeFromEditors();
         this.numRunTestCases = 0;
         this.numCorrectFinalAnswerTestCases = 0;
         this.numIncorrectFinalAnswerTestCases = 0;
@@ -681,6 +754,7 @@ export class SolveProblemComponent implements OnInit {
                     }
                 }
                 component.makeInputsResizable(component);
+                component.populateCodeEditors();
                 component.runAllTestsWithUserSolution();
             }
         });
