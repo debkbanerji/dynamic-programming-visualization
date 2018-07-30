@@ -255,12 +255,14 @@
                         'text-green': numCorrectSolutions === numRunTestCases,
                         'text-yellow': numCorrectSolutions < numRunTestCases
                     }"><span *ngIf="numCorrectSolutions === numRunTestCases">&#x2714; </span>{{numCorrectSolutions}}
-                            correct solution{{numCorrectSolutions === 1? '' : 's'}}</b>
+                            matching solution{{numCorrectSolutions === 1? '' : 's'}}</b>
                         <br>
-                        <b class="text-red" *ngIf="numIncorrectSolutions > 0">
-                            &#x2718; {{numIncorrectSolutions}} incorrect solution{{numIncorrectSolutions === 1? '' :
+                        <b class="text-yellow" *ngIf="numIncorrectSolutions > 0">
+                            &#x2718; {{numIncorrectSolutions}} non matching solution{{numIncorrectSolutions === 1? '' :
                             's'}}
                         </b>
+                        <br>
+                        <span><small>Note: Depending on the problem, there may exist multiple solutions that lead to the same result</small></span>
                     </div>
                     <b class="text-red" *ngIf="numCrashedTestCases > 0">
                         &#x2718; {{numCrashedTestCases}} test{{numCrashedTestCases === 1? '' : 's'}} crashed
