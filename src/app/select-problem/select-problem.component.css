@@ -7,6 +7,14 @@
     font-weight: bold;
 }
 
+#custom-problem-file-select {
+    padding-top: 10px;
+}
+
+#custom-problem-error-text {
+    padding-top: 10px;
+}
+
 .section-title {
     font-weight: bolder;
 }

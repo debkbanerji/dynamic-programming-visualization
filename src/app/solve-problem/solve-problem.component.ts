@@ -4,6 +4,7 @@ import {MatDialog} from "@angular/material";
 import {ConfirmationDialogComponent} from "../dialogs/confirmation-dialog/confirmation-dialog.component";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Title} from "@angular/platform-browser";
+import {CustomProblemService} from "../providers/custom-problem.service";
 
 const encodedTableName = '___TABLE___';
 const auxiliaryTableName = '___AUX_TABLE___';
@@ -102,15 +103,23 @@ export class SolveProblemComponent implements OnInit {
                 private router: Router,
                 private http: HttpClient,
                 private titleService: Title,
-                public dialog: MatDialog) {
+                public dialog: MatDialog,
+                private customProblemService: CustomProblemService
+    ) {
     }
 
     ngOnInit() {
         const component: SolveProblemComponent = this;
         component.route.params.subscribe(params => {
-            component.problemFileName = params['problem-name'];
-            component.loadProblem(component.problemFileName, component);
-            component.makeInputsResizable(component);
+            const problemFileName = params['problem-name'];
+            if (problemFileName === 'custom') {
+                component.setProblem(component, component.customProblemService.popCustomProblem());
+            } else {
+                console.log(problemFileName);
+                component.problemFileName = problemFileName;
+                component.loadProblem(component.problemFileName, component);
+                component.makeInputsResizable(component);
+            }
         });
         component.initializeEditors();
 
@@ -167,9 +176,9 @@ export class SolveProblemComponent implements OnInit {
             const copyValue = this.codeMirrorMap[from[i]].getValue();
             const toCodeMirror = this.codeMirrorMap[to[i]];
             toCodeMirror.setValue(copyValue);
-            setTimeout(function() {
+            setTimeout(function () {
                 toCodeMirror.refresh();
-            },1);
+            }, 1);
         }
     }
 
@@ -184,15 +193,20 @@ export class SolveProblemComponent implements OnInit {
 
     loadProblem(problemFileName: string, component: SolveProblemComponent): void {
         component.http.get('../assets/problems/' + problemFileName + '.dp.json').subscribe(data => {
-            component.problem = data;
-            component.providedSolution = component.problem['provided-solution'];
-            component.testCases = component.problem['test-cases'];
-            component.problemDefined = true;
-            component.titleService.setTitle(component.problem.name);
-            component.recalculateExpectedResults();
+            this.setProblem(component, data);
         }, _ => {
             component.router.navigate(['select-problem']);
         });
+    }
+
+    private setProblem(component: SolveProblemComponent, data) {
+        console.log(data);
+        component.problem = data;
+        component.providedSolution = component.problem['provided-solution'];
+        component.testCases = component.problem['test-cases'];
+        component.problemDefined = true;
+        component.titleService.setTitle(component.problem.name);
+        component.recalculateExpectedResults();
     }
 
     recalculateExpectedResults() {
