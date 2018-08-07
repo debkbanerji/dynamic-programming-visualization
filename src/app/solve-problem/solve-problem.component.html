@@ -6,7 +6,11 @@
                     (click)="goHome()"
                     class="glyphicon glyphicon-circle-arrow-left home-button">
                 </span>
-                {{problem['name']}}</p>
+                {{problem['name']}}
+                <mat-slide-toggle [(ngModel)]="isDarkTheme" class="dark-mode-toggle">
+                    Dark Mode
+                </mat-slide-toggle>
+            </p>
         </mat-card>
     </div>
     <div id="editor-container" class="col-xs-12 col-md-6">

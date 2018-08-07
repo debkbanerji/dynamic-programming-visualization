@@ -20,6 +20,13 @@
     font-size: x-large;
 }
 
+.dark-mode-toggle {
+    display: inline-block;
+    float: right;
+    margin: 0;
+    padding: 6px;
+}
+
 .section-header {
     font-weight: bold;
     font-size: large;
