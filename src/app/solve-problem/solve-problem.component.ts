@@ -22,6 +22,7 @@ export class SolveProblemComponent implements OnInit {
     isDarkTheme: boolean = false;
 
     objectKeys = Object.keys;
+    min = Math.min;
 
     // Maps textareas to the variables they correspond to
     textAreaVariableMap: any = {
@@ -100,6 +101,7 @@ export class SolveProblemComponent implements OnInit {
     numIncorrectSolutions: number = 0;
     numExpectedAuxiliaryTables: number = 0;
     testsCurrentlyRunning: boolean = false;
+    testsCurrentlyRunningForProvided: boolean = false;
 
     constructor(private route: ActivatedRoute,
                 private router: Router,
@@ -214,6 +216,7 @@ export class SolveProblemComponent implements OnInit {
         component.problemDefined = true;
         component.titleService.setTitle(component.problem.name);
         component.testsCurrentlyRunning = true;
+        component.testsCurrentlyRunningForProvided = true;
         setTimeout(() => {
             component.recalculateExpectedResults();
         }, 1000);
@@ -229,6 +232,7 @@ export class SolveProblemComponent implements OnInit {
             component.providedSolution.detailedSetNextEntryCode,
             component.providedSolution.detailedSetNextEntryCode && component.providedSolution.useAuxiliaryTableWithDetailedSolution);
         component.testsCurrentlyRunning = true;
+        component.testsCurrentlyRunningForProvided = true;
         component.runTestsWithProvidedSolution(component, 0, code);
 
     }
@@ -268,6 +272,7 @@ export class SolveProblemComponent implements OnInit {
             }
         } else {
             component.testsCurrentlyRunning = false;
+            component.testsCurrentlyRunningForProvided = false;
         }
     }
 
@@ -447,7 +452,9 @@ export class SolveProblemComponent implements OnInit {
             });
         }
         else {
-            this.testsCurrentlyRunning = false;
+            setTimeout(() => {
+                component.testsCurrentlyRunning = false;
+            }, 250);
         }
     }
 

@@ -240,8 +240,15 @@
                     <br>
                     <span>Running {{testCases.length}} tests...</span>
                     <mat-progress-bar
+                        *ngIf="!testsCurrentlyRunningForProvided"
+                        mode="buffer"
                         [value]="100 * numRunTestCases / testCases.length"
+                        [bufferValue]="100 * min((numRunTestCases + 1), testCases.length) / testCases.length"
                         color="primary">
+                    </mat-progress-bar>
+                    <mat-progress-bar
+                        *ngIf="testsCurrentlyRunningForProvided"
+                        mode="indeterminate">
                     </mat-progress-bar>
                 </div>
                 <div *ngIf="!testsCurrentlyRunning && numRunTestCases > 0">
