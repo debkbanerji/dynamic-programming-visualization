@@ -19,7 +19,7 @@ export class SelectProblemComponent implements OnInit {
     // Register any new problems within the appropriate section
     sections = [
         {
-            name: 'Knapsack',
+            name: 'Knapsack Variations',
             problems: [
                 {
                     name: 'Knapsack Without Repetition',
