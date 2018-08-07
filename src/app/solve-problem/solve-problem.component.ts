@@ -19,6 +19,8 @@ declare let CodeMirror: any;
 })
 export class SolveProblemComponent implements OnInit {
 
+    isDarkTheme: boolean = false;
+
     objectKeys = Object.keys;
     min = Math.min;
 
@@ -127,8 +129,10 @@ export class SolveProblemComponent implements OnInit {
                 component.makeInputsResizable(component);
             }
         });
+        component.route.queryParams.subscribe(params => {
+            component.isDarkTheme = params['dark-mode'];
+        });
         component.initializeEditors();
-
     }
 
     initializeEditors(): void {

@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {CustomProblemService} from "../providers/custom-problem.service";
 import {DOCUMENT} from "@angular/common";
 
@@ -9,6 +9,8 @@ import {DOCUMENT} from "@angular/common";
     styleUrls: ['./select-problem.component.css']
 })
 export class SelectProblemComponent implements OnInit {
+
+    isDarkTheme: boolean = false;
 
     customProblemFile: any;
     customProblemErrorText: string;
@@ -30,11 +32,16 @@ export class SelectProblemComponent implements OnInit {
     constructor(
         private router: Router,
         private customProblemService: CustomProblemService,
-        @Inject(DOCUMENT) document
+        @Inject(DOCUMENT) document,
+        private route: ActivatedRoute
     ) {
     }
 
     ngOnInit() {
+        const component = this;
+        this.route.queryParams.subscribe(params => {
+            component.isDarkTheme = params['dark-mode'];
+        });
     }
 
     openProblem(id: string): void {

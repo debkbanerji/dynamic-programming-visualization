@@ -1,30 +1,36 @@
-<mat-card>
-    <div id="main-title-div">
-        <h3 id="main-title">
-            Dynamic Programming Problems
-        </h3>
-    </div>
+<div [ngClass]="{'dark-theme': isDarkTheme}" class="main-content-container">
     <mat-card>
-        <h4 class="section-title">Custom Problem</h4>
-        <input id="custom-problem-file-select" [(ngModel)]="customProblemFile" type="file" (change)="solveCustomProblem()">
-        <span id="custom-problem-error-text">{{customProblemErrorText}}</span>
-    </mat-card>
-    <div>
-        <mat-expansion-panel *ngFor="let section of sections" [expanded]="true">
-            <mat-expansion-panel-header>
-                <h4 class="section-title" [innerHTML]="section.name"></h4>
-            </mat-expansion-panel-header>
-            <div class="row">
-                <div *ngFor="let problem of section.problems" class="col-xs-6 col-md-4">
-                    <mat-card class="problem-link"
-                              (click)="openProblem(problem.id)">
+        <div id="main-title-div">
+            <h3 id="main-title">
+                Dynamic Programming Problems
+            </h3>
+            <mat-slide-toggle [(ngModel)]="isDarkTheme" class="dark-mode-toggle">
+                Dark Mode
+            </mat-slide-toggle>
+        </div>
+        <mat-card>
+            <h4 class="section-title">Custom Problem</h4>
+            <input id="custom-problem-file-select" [(ngModel)]="customProblemFile" type="file"
+                   (change)="solveCustomProblem()">
+            <span id="custom-problem-error-text">{{customProblemErrorText}}</span>
+        </mat-card>
+        <div>
+            <mat-expansion-panel *ngFor="let section of sections" [expanded]="true">
+                <mat-expansion-panel-header>
+                    <h4 class="section-title" [innerHTML]="section.name"></h4>
+                </mat-expansion-panel-header>
+                <div class="row">
+                    <div *ngFor="let problem of section.problems" class="col-xs-6 col-md-4">
+                        <mat-card class="problem-link"
+                                  (click)="openProblem(problem.id)">
                         <span>
                             <span [innerHTML]="problem.name">
                             </span>
                         </span>
-                    </mat-card>
+                        </mat-card>
+                    </div>
                 </div>
-            </div>
-        </mat-expansion-panel>
-    </div>
-</mat-card>
+            </mat-expansion-panel>
+        </div>
+    </mat-card>
+</div>
