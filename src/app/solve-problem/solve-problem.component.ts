@@ -83,7 +83,7 @@ export class SolveProblemComponent implements OnInit {
 
     testResults: any = {};
 
-    testTimeLimit = 3000; // Time limit in milliseconds per test
+    testTimeLimit = 500; // Time limit per test in milliseconds
 
     transpose2dTable: boolean = false;
 

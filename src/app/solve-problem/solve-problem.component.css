@@ -126,6 +126,11 @@
     text-underline: none;
 }
 
+.run-tests-button {
+    font-size: large;
+    padding-bottom: 4px;
+}
+
 #reveal-solution-button {
     margin-left: 10px;
 }
@@ -137,4 +142,8 @@
 .test-result-label {
     display: inline;
     vertical-align: middle;
+}
+
+.glyphicon-time {
+    padding-right: 4px;
 }
