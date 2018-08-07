@@ -203,7 +203,6 @@ export class SolveProblemComponent implements OnInit {
     }
 
     private setProblem(component: SolveProblemComponent, data) {
-        console.log(data);
         component.problem = data;
         component.providedSolution = component.problem['provided-solution'];
         component.testCases = component.problem['test-cases'];
@@ -1016,5 +1015,9 @@ export class SolveProblemComponent implements OnInit {
             el.addEventListener(e[i], resize, false);
         }
         resize();
+    }
+
+    goHome() {
+        this.router.navigate(['select-problem']);
     }
 }

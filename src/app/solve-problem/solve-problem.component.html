@@ -1,7 +1,12 @@
 <div class="row no-gutter" id="main-container">
     <div class="col-xs-12" *ngIf="problemDefined">
         <mat-card class="main-header-card">
-            <p class="main-header">{{problem['name']}}</p>
+            <p class="main-header">
+                <span
+                    (click)="goHome()"
+                    class="glyphicon glyphicon-circle-arrow-left home-button">
+                </span>
+                {{problem['name']}}</p>
         </mat-card>
     </div>
     <div id="editor-container" class="col-xs-12 col-md-6">
