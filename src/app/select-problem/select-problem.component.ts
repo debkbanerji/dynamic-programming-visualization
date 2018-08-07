@@ -19,7 +19,7 @@ export class SelectProblemComponent implements OnInit {
     // Register any new problems within the appropriate section
     sections = [
         {
-            name: 'Knapsack',
+            name: 'Knapsack Variations',
             problems: [
                 {
                     name: 'Knapsack Without Repetition',
@@ -42,13 +42,13 @@ export class SelectProblemComponent implements OnInit {
     ngOnInit() {
         const component = this;
         this.route.queryParams.subscribe(params => {
-            component.isDarkTheme = params['dark-mode'];
+            component.isDarkTheme = (params['dark-mode'] == 'true');
         });
         component.titleService.setTitle('Dynamic Programming');
     }
 
     openProblem(id: string): void {
-        this.router.navigate(['problem/' + id]);
+        this.router.navigate(['problem/' + id], {queryParams: {'dark-mode': this.isDarkTheme}});
     }
 
     solveCustomProblem(): void {
@@ -62,11 +62,15 @@ export class SelectProblemComponent implements OnInit {
                 const fileText = target.result;
                 const problem = JSON.parse(fileText);
                 component.customProblemService.setCustomProblem(problem);
-                component.router.navigate(['problem/custom']);
+                component.router.navigate(['problem/custom'], {queryParams: {'dark-mode': component.isDarkTheme}});
             } catch (err) {
                 component.customProblemErrorText = err.message;
             }
         };
         reader.readAsText(problemFile);
+    }
+
+    onDarkModeChange() {
+        this.router.navigate(['select-problem'], {queryParams: {'dark-mode': this.isDarkTheme}});
     }
 }

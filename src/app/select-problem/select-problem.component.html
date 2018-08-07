@@ -4,7 +4,10 @@
             <h3 id="main-title">
                 Dynamic Programming Problems
             </h3>
-            <mat-slide-toggle [(ngModel)]="isDarkTheme" class="dark-mode-toggle">
+            <mat-slide-toggle
+                [(ngModel)]="isDarkTheme"
+                (change)="onDarkModeChange()"
+                class="dark-mode-toggle">
                 Dark Mode
             </mat-slide-toggle>
         </div>
