@@ -8,12 +8,17 @@
                 Dark Mode
             </mat-slide-toggle>
         </div>
-        <mat-card>
-            <h4 class="section-title">Custom Problem</h4>
+        <mat-expansion-panel *ngFor="let section of sections" [expanded]="false">
+            <mat-expansion-panel-header>
+                <h4 class="section-title">Custom Problem</h4>
+            </mat-expansion-panel-header>
+            <p>Here you can solve a problem from a file on your computer</p>
+            <p class="text-red">Be careful when choosing a file, as depending on where it came from, it may contain
+                mistakes or try to do sketchy things to your computer</p>
             <input id="custom-problem-file-select" [(ngModel)]="customProblemFile" type="file"
                    (change)="solveCustomProblem()">
             <span id="custom-problem-error-text">{{customProblemErrorText}}</span>
-        </mat-card>
+        </mat-expansion-panel>
         <div>
             <mat-expansion-panel *ngFor="let section of sections" [expanded]="true">
                 <mat-expansion-panel-header>
