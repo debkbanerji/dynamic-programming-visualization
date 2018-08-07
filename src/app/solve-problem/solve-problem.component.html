@@ -261,7 +261,7 @@
                             &#x2718; {{numIncorrectSolutions}} non matching solution{{numIncorrectSolutions === 1? '' :
                             's'}}
                         </b>
-                        <br>
+                        <br *ngIf="numIncorrectSolutions > 0">
                         <span><small>Note: Depending on the problem, there may exist multiple solutions that lead to the same result</small></span>
                     </div>
                     <b class="text-red" *ngIf="numCrashedTestCases > 0">
@@ -296,7 +296,7 @@
                     <span><small>Note: If a top down approach was used, only non null entries of tables were checked</small></span>
                     <span
                         *ngIf="numExpectedTables < numRunTestCases && numCorrectFinalAnswerTestCases === numRunTestCases">
-                        This may not be an issue, since all your final results are correct.
+                        <small>This may not be an issue, since all your final results are correct.</small>
                         <br>
                         <button *ngIf="solution['tableShape'] === '2d'" mat-raised-button (click)="transposeTable()">Transpose provided table</button>
                     </span>
