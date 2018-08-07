@@ -19,6 +19,8 @@ declare let CodeMirror: any;
 })
 export class SolveProblemComponent implements OnInit {
 
+    isDarkTheme: boolean = false;
+
     objectKeys = Object.keys;
 
     // Maps textareas to the variables they correspond to
@@ -124,8 +126,10 @@ export class SolveProblemComponent implements OnInit {
                 component.makeInputsResizable(component);
             }
         });
+        component.route.queryParams.subscribe(params => {
+            component.isDarkTheme = params['dark-mode'];
+        });
         component.initializeEditors();
-
     }
 
     initializeEditors(): void {
