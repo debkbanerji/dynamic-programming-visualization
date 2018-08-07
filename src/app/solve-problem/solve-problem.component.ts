@@ -203,7 +203,6 @@ export class SolveProblemComponent implements OnInit {
     }
 
     private setProblem(component: SolveProblemComponent, data) {
-        console.log(data);
         component.problem = data;
         component.providedSolution = component.problem['provided-solution'];
         component.testCases = component.problem['test-cases'];
@@ -1016,5 +1015,26 @@ export class SolveProblemComponent implements OnInit {
             el.addEventListener(e[i], resize, false);
         }
         resize();
+    }
+
+    goHome() {
+        const component: SolveProblemComponent = this;
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+            data: {
+                'title': 'Are you sure?',
+                'info': 'Returning to the problem selection page will erase your progress',
+                'cancelText': 'Cancel',
+                'acceptText': 'Return to Problem Selection',
+                'acceptColor': 'warn',
+                'titleClass': 'text-red',
+                'infoClass': ''
+            }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                component.router.navigate(['select-problem']);
+            }
+        });
     }
 }
