@@ -1,4 +1,9 @@
 <div class="row no-gutter" id="main-container">
+    <div class="col-xs-12" *ngIf="problemDefined">
+        <mat-card class="main-header-card">
+            <p class="main-header">{{problem['name']}}</p>
+        </mat-card>
+    </div>
     <div id="editor-container" class="col-xs-12 col-md-6">
         <mat-card>
             <mat-card-header>
@@ -321,7 +326,7 @@
         <mat-expansion-panel [expanded]="true">
             <mat-expansion-panel-header>
                 <mat-panel-title>
-                    <p class="section-header">{{problem['name']}}</p>
+                    <p class="section-header">Problem Definition</p>
                 </mat-panel-title>
                 <!--<mat-panel-description>-->
                 <!--{{problem['name']}}-->

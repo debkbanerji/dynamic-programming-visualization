@@ -3,6 +3,15 @@
     margin-right: 0;
 }
 
+.main-header-card {
+    padding: 5px;
+}
+
+.main-header {
+    font-weight: bold;
+    font-size: x-large;
+}
+
 .section-header {
     font-weight: bold;
     font-size: large;
