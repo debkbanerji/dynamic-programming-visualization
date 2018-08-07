@@ -14,7 +14,7 @@ $app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
     color: $light-primary-text;
     $dark-primary: mat-palette($mat-pink);
     $dark-accent: mat-palette($mat-pink, A200, A100, A400);
-    $dark-warn: mat-palette($mat-deep-orange);
+    $dark-warn: mat-palette($mat-red);
 
     $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
 
@@ -31,6 +31,10 @@ $app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
 input {
     background-color: rgba(0, 0, 0, 0.1);
     border: rgba(0, 0, 0, 0.5);
+}
+
+mat-dialog-container {
+    padding: 0 !important;
 }
 
 .text-red {

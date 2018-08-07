@@ -750,7 +750,8 @@ export class SolveProblemComponent implements OnInit {
                 'acceptText': 'Show Solution',
                 'acceptColor': 'warn',
                 'titleClass': 'text-red',
-                'infoClass': ''
+                'infoClass': '',
+                'isDarkTheme': component.isDarkTheme
             }
         });
 
@@ -1042,7 +1043,8 @@ export class SolveProblemComponent implements OnInit {
                 'acceptText': 'Return to Problem Selection',
                 'acceptColor': 'warn',
                 'titleClass': 'text-red',
-                'infoClass': ''
+                'infoClass': '',
+                'isDarkTheme': component.isDarkTheme
             }
         });
 
