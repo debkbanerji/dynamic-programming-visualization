@@ -117,6 +117,7 @@ export class SolveProblemComponent implements OnInit {
             if (problemFileName === 'custom') {
                 if (component.customProblemService.customProblemExists()) {
                     component.setProblem(component, component.customProblemService.popCustomProblem());
+                    component.makeInputsResizable(component);
                 } else {
                     component.router.navigate(['select-problem']);
                 }
@@ -212,7 +213,10 @@ export class SolveProblemComponent implements OnInit {
         component.testCases = component.problem['test-cases'];
         component.problemDefined = true;
         component.titleService.setTitle(component.problem.name);
-        component.recalculateExpectedResults();
+        component.testsCurrentlyRunning = true;
+        setTimeout(() => {
+            component.recalculateExpectedResults();
+        }, 1000);
     }
 
     recalculateExpectedResults() {
