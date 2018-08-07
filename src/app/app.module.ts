@@ -46,7 +46,6 @@ const routes: Routes = [
         MatCardModule,
         MatFormFieldModule,
         MatInputModule,
-        MatIconModule,
         MatSelectModule,
         MatExpansionModule,
         MatTabsModule,

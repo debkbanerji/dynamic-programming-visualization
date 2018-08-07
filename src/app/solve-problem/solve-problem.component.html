@@ -229,7 +229,7 @@
                     <!--Generate Code and Run Tests-->
                     <!--</button>-->
                     <button mat-fab (click)="runAllTestsWithUserSolution()">
-                        <mat-icon aria-label="Run code button">play_arrow</mat-icon>
+                        <span class="glyphicon glyphicon-play run-tests-button"></span>
                     </button>
                     <button mat-button id="reveal-solution-button"
                             (click)="openPopulateGivenSolutionDialog()">
@@ -279,7 +279,7 @@
                     </b>
                     <br *ngIf="numCrashedTestCases > 0">
                     <b class="text-orange" *ngIf="numTimedOutTestCases > 0">
-                        <mat-icon class="test-result-label">access_time</mat-icon>
+                        <span class="glyphicon glyphicon-time"></span>
                         <span class="test-result-label">{{numTimedOutTestCases}} test{{numTimedOutTestCases === 1? '' : 's'}} timed out</span>
                     </b>
                     <br *ngIf="numTimedOutTestCases > 0">
@@ -439,8 +439,8 @@
                                 <br>
                                 <br>
                                 <div *ngIf="testResults[testCaseIndex]['timed-out']">
-                                    <b class="text-orange">
-                                        <mat-icon class="test-result-label">access_time</mat-icon>
+                                    <b class="text-orange" style="vertical-align: middle">
+                                        <span class="glyphicon glyphicon-time"></span>
                                         <span class="test-result-label"> Test timed out (took longer than {{testTimeLimit}} milliseconds)
                                         </span>
                                     </b>
