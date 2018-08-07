@@ -239,37 +239,37 @@ export class SolveProblemComponent implements OnInit {
 
     runTestsWithProvidedSolution(component: SolveProblemComponent, testCaseIndex: number, code: string): void {
         if (testCaseIndex < component.testCases.length) {
-            const testCase = component.testCases[testCaseIndex];
-            if (!testCase['expected-result'] && !testCase['expected-table']) {
-                const detailedSolution = component.providedSolution.detailedSetNextEntryCode && component.providedSolution.detailedReturnValueCode;
-                const auxiliaryTable = detailedSolution && component.providedSolution.useAuxiliaryTableWithDetailedSolution;
-                component.runTest(testCaseIndex, code, component, false, detailedSolution, auxiliaryTable, function (testResult) {
-                    if (testResult['error']) {
-                        console.log('Test error', testResult['error']);
-                        component.raiseProvidedSolutionError(testResult['error'].message);
-                    } else if (testResult['timed-out']) {
-                        component.raiseProvidedSolutionError('Test ' + testCaseIndex + ' timed out');
-                    } else {
-                        const testCase = component.testCases[testCaseIndex];
-                        testCase['log'] = testResult['log'];
-                        if (!testCase['expected-result'] && !testCase['expected-table']) {
-                            testCase['expected-result'] = testResult['result'];
-                            testCase['expected-table'] = testResult['table'];
-                            // testCase['detailed-solution'] = detailedSolution;
-                            // testCase['auxiliaryTable'] = testResult;
-                            if (detailedSolution) {
-                                testCase['expected-solution'] = testResult['solution'];
-                                if (auxiliaryTable) {
-                                    testCase['expected-auxiliary-table'] = testResult['auxiliary-table'];
-                                }
-                            }
+            // const testCase = component.testCases[testCaseIndex];
+            // if (!testCase['expected-result'] && !testCase['expected-table']) {
+            const detailedSolution = component.providedSolution.detailedSetNextEntryCode && component.providedSolution.detailedReturnValueCode;
+            const auxiliaryTable = detailedSolution && component.providedSolution.useAuxiliaryTableWithDetailedSolution;
+            component.runTest(testCaseIndex, code, component, false, detailedSolution, auxiliaryTable, function (testResult) {
+                if (testResult['error']) {
+                    console.log('Test error', testResult['error']);
+                    component.raiseProvidedSolutionError(testResult['error'].message);
+                } else if (testResult['timed-out']) {
+                    component.raiseProvidedSolutionError('Test ' + testCaseIndex + ' timed out');
+                } else {
+                    const testCase = component.testCases[testCaseIndex];
+                    testCase['log'] = testResult['log'];
+                    // if (!testCase['expected-result'] && !testCase['expected-table']) {
+                    testCase['expected-result'] = testResult['result'];
+                    testCase['expected-table'] = testResult['table'];
+                    // testCase['detailed-solution'] = detailedSolution;
+                    // testCase['auxiliaryTable'] = testResult;
+                    if (detailedSolution) {
+                        testCase['expected-solution'] = testResult['solution'];
+                        if (auxiliaryTable) {
+                            testCase['expected-auxiliary-table'] = testResult['auxiliary-table'];
                         }
-                        component.runTestsWithProvidedSolution(component, testCaseIndex + 1, code);
                     }
-                });
-            } else {
-                component.runTestsWithProvidedSolution(component, testCaseIndex + 1, code);
-            }
+                    // }
+                    component.runTestsWithProvidedSolution(component, testCaseIndex + 1, code);
+                }
+            });
+            // } else {
+            //     component.runTestsWithProvidedSolution(component, testCaseIndex + 1, code);
+            // }
         } else {
             component.testsCurrentlyRunning = false;
             component.testsCurrentlyRunningForProvided = false;
