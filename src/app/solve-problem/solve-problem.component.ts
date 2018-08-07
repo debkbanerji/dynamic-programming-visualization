@@ -130,7 +130,7 @@ export class SolveProblemComponent implements OnInit {
             }
         });
         component.route.queryParams.subscribe(params => {
-            component.isDarkTheme = params['dark-mode'];
+            component.isDarkTheme = (params['dark-mode'] == 'true');
         });
         component.initializeEditors();
     }
@@ -151,6 +151,10 @@ export class SolveProblemComponent implements OnInit {
             this.codeMirrorMap[id] = CodeMirror.fromTextArea(textArea, options);
         }
         this.populateCodeEditors();
+    }
+
+    onDarkModeChange() {
+        this.router.navigate(['problem/' + this.problemFileName], {queryParams: {'dark-mode': this.isDarkTheme}});
     }
 
     populateCodeEditors(): void {

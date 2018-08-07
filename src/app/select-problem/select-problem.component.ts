@@ -42,7 +42,7 @@ export class SelectProblemComponent implements OnInit {
     ngOnInit() {
         const component = this;
         this.route.queryParams.subscribe(params => {
-            component.isDarkTheme = params['dark-mode'];
+            component.isDarkTheme = (params['dark-mode'] == 'true');
         });
         component.titleService.setTitle('Dynamic Programming');
     }
@@ -68,5 +68,9 @@ export class SelectProblemComponent implements OnInit {
             }
         };
         reader.readAsText(problemFile);
+    }
+
+    onDarkModeChange() {
+        this.router.navigate(['select-problem'], {queryParams: {'dark-mode': this.isDarkTheme}});
     }
 }
