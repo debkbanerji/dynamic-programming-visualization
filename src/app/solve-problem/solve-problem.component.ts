@@ -1018,6 +1018,23 @@ export class SolveProblemComponent implements OnInit {
     }
 
     goHome() {
-        this.router.navigate(['select-problem']);
+        const component: SolveProblemComponent = this;
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+            data: {
+                'title': 'Are you sure?',
+                'info': 'Returning to the problem selection page will erase your progress',
+                'cancelText': 'Cancel',
+                'acceptText': 'Return to Problem Selection',
+                'acceptColor': 'warn',
+                'titleClass': 'text-red',
+                'infoClass': ''
+            }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                component.router.navigate(['select-problem']);
+            }
+        });
     }
 }
