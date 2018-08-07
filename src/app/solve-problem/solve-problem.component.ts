@@ -113,9 +113,12 @@ export class SolveProblemComponent implements OnInit {
         component.route.params.subscribe(params => {
             const problemFileName = params['problem-name'];
             if (problemFileName === 'custom') {
-                component.setProblem(component, component.customProblemService.popCustomProblem());
+                if (component.customProblemService.customProblemExists()) {
+                    component.setProblem(component, component.customProblemService.popCustomProblem());
+                } else {
+                    component.router.navigate(['select-problem']);
+                }
             } else {
-                console.log(problemFileName);
                 component.problemFileName = problemFileName;
                 component.loadProblem(component.problemFileName, component);
                 component.makeInputsResizable(component);

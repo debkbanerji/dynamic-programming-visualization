@@ -10,7 +10,6 @@ import {DOCUMENT} from "@angular/common";
 })
 export class SelectProblemComponent implements OnInit {
 
-    expectCustomProblem: boolean = false;
     customProblemFile: any;
     customProblemErrorText: string;
 

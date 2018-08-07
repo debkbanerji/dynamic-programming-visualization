@@ -4,16 +4,12 @@
             Dynamic Programming Problems
         </h3>
     </div>
-    <mat-slide-toggle [(ngModel)]="expectCustomProblem"
-                      (change)="customProblemFile = null; customProblemErrorText = null;">
-        Custom Problem
-    </mat-slide-toggle>
-    <mat-card *ngIf="expectCustomProblem">
-        <h3>Upload problem file</h3>
+    <mat-card>
+        <h4 class="section-title">Custom Problem</h4>
         <input id="custom-problem-file-select" [(ngModel)]="customProblemFile" type="file" (change)="solveCustomProblem()">
         <span id="custom-problem-error-text">{{customProblemErrorText}}</span>
     </mat-card>
-    <div *ngIf="!expectCustomProblem">
+    <div>
         <mat-expansion-panel *ngFor="let section of sections" [expanded]="true">
             <mat-expansion-panel-header>
                 <h4 class="section-title" [innerHTML]="section.name"></h4>
