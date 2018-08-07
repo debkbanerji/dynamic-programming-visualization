@@ -48,7 +48,7 @@ export class SelectProblemComponent implements OnInit {
     }
 
     openProblem(id: string): void {
-        this.router.navigate(['problem/' + id]);
+        this.router.navigate(['problem/' + id], {queryParams: {'dark-mode': this.isDarkTheme}});
     }
 
     solveCustomProblem(): void {
@@ -62,7 +62,7 @@ export class SelectProblemComponent implements OnInit {
                 const fileText = target.result;
                 const problem = JSON.parse(fileText);
                 component.customProblemService.setCustomProblem(problem);
-                component.router.navigate(['problem/custom']);
+                component.router.navigate(['problem/custom'], {queryParams: {'dark-mode': component.isDarkTheme}});
             } catch (err) {
                 component.customProblemErrorText = err.message;
             }

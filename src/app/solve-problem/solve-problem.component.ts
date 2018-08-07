@@ -121,7 +121,7 @@ export class SolveProblemComponent implements OnInit {
                     component.setProblem(component, component.customProblemService.popCustomProblem());
                     component.makeInputsResizable(component);
                 } else {
-                    component.router.navigate(['select-problem']);
+                    component.router.navigate(['select-problem'], {queryParams: {'dark-mode': this.isDarkTheme}});
                 }
             } else {
                 component.problemFileName = problemFileName;
@@ -205,7 +205,7 @@ export class SolveProblemComponent implements OnInit {
         component.http.get('../assets/problems/' + problemFileName + '.dp.json').subscribe(data => {
             this.setProblem(component, data);
         }, _ => {
-            component.router.navigate(['select-problem']);
+            component.router.navigate(['select-problem'], {queryParams: {'dark-mode': this.isDarkTheme}});
         });
     }
 
@@ -1050,7 +1050,7 @@ export class SolveProblemComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                component.router.navigate(['select-problem']);
+                component.router.navigate(['select-problem'], {queryParams: {'dark-mode': this.isDarkTheme}});
             }
         });
     }
