@@ -28,6 +28,11 @@ $app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
     height: 100vh;
 }
 
+input {
+    background-color: rgba(0, 0, 0, 0.1);
+    border: rgba(0, 0, 0, 0.5);
+}
+
 .text-red {
     color: #DC3545;
 }
