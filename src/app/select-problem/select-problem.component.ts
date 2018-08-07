@@ -2,6 +2,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {CustomProblemService} from "../providers/custom-problem.service";
 import {DOCUMENT} from "@angular/common";
+import {Title} from "@angular/platform-browser";
 
 @Component({
     selector: 'app-select-problem',
@@ -33,7 +34,8 @@ export class SelectProblemComponent implements OnInit {
         private router: Router,
         private customProblemService: CustomProblemService,
         @Inject(DOCUMENT) document,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private titleService: Title,
     ) {
     }
 
@@ -42,6 +44,7 @@ export class SelectProblemComponent implements OnInit {
         this.route.queryParams.subscribe(params => {
             component.isDarkTheme = params['dark-mode'];
         });
+        component.titleService.setTitle('Dynamic Programming');
     }
 
     openProblem(id: string): void {
