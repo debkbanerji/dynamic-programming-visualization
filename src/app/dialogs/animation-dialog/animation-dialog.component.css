@@ -117,3 +117,23 @@ mat-card {
     /*right: 0;*/
     height: 100%;
 }
+
+.set-entry {
+    color: #00c5ff;
+}
+
+.get-entry {
+    color: yellow;
+}
+
+.frames-progress-bar {
+    margin: 4px;
+}
+
+.control-button {
+    margin: 4px;
+}
+
+.control-glyphicon {
+    padding-bottom: 4px;
+}

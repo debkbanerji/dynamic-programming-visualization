@@ -19,6 +19,13 @@ export class AnimationDialogComponent implements OnInit {
     currentMainTable: any;
     isMainTable2d: boolean;
 
+    currentFrame: number;
+    totalFrames: number;
+
+    lastAffectedIndex1: number = -1;
+    lastAffectedIndex2: number = -1;
+    lastOperation: string = null;
+
     constructor(
         public dialogRef: MatDialogRef<AnimationDialogComponent>,
         public animationDataService: AnimationDataService,
@@ -31,10 +38,71 @@ export class AnimationDialogComponent implements OnInit {
         this.mainTableDimension2 = animationDataService.mainTableDimension2;
     }
 
-
     ngOnInit() {
         this.isMainTable2d = this.mainTableDimension2 >= 0;
         this.resetMainTable();
+        this.currentFrame = 0;
+        this.totalFrames = this.log.length;
+    }
+
+    stepBackward(): void {
+        const entry = this.log[this.currentFrame - 1];
+        const table = this.getRelevantTable(entry);
+        const cell = this.getTableCell(table, entry.index1, entry.index2);
+        if (entry.action == 'set') {
+            cell.pop();
+        }
+        const lastOperationFrame = this.currentFrame - 2;
+        if (lastOperationFrame > 0) {
+            const lastOperationEntry = this.log[lastOperationFrame];
+            this.lastOperation = lastOperationEntry.action;
+            this.lastAffectedIndex1 = lastOperationEntry.index1;
+            this.lastAffectedIndex2 = lastOperationEntry.index2;
+        } else {
+            this.lastAffectedIndex1 = -1;
+            this.lastAffectedIndex2 = -1;
+            this.lastOperation = null;
+        }
+        this.currentFrame--;
+    }
+
+    stepForward(): void {
+        const entry = this.log[this.currentFrame];
+        const table = this.getRelevantTable(entry);
+        const cell = this.getTableCell(table, entry.index1, entry.index2);
+        if (entry.action == 'set') {
+            cell.push(entry.value)
+        }
+        this.lastOperation = entry.action;
+        this.lastAffectedIndex1 = entry.index1;
+        this.lastAffectedIndex2 = entry.index2;
+        this.currentFrame++;
+    }
+
+    canStepBackward(): boolean {
+        return this.currentFrame > 0;
+    }
+
+    canStepForward(): boolean {
+        return this.currentFrame < this.totalFrames;
+    }
+
+    getRelevantTable(logEntry) {
+        if (logEntry.table === 'T') {
+            return this.currentMainTable;
+        }
+    }
+
+    getTableCell(table, i, j) {
+        let is2d;
+        if (table === this.currentMainTable) {
+            is2d = this.isMainTable2d;
+        }
+        if (!is2d) {
+            return table[i];
+        } else {
+            return table[i][j];
+        }
     }
 
     getTableDisplayedValue(table, i, j) {

@@ -646,12 +646,12 @@ export class SolveProblemComponent implements OnInit {
             code.push('\n\tif(i === null || i === undefined || ', encodedTableName, '[0].length <= j || j < 0) {');
             code.push('\n\t\tthrow new Error(\'Could not get entry: \' + j + \' is not a valid table dimension 2 index\');');
             code.push('\n\t}\n');
-            code.push('\n\t', logName, '.push({"table": tableName, "action":"get","row":i,"column":j,"value":', encodedTableName, '[i][j]});\n');
+            code.push('\n\t', logName, '.push({"table": tableName, "action":"get","index1":i,"index2":j,"value":', encodedTableName, '[i][j]});\n');
         } else {
             code.push('\n\tif(i === null || i === undefined || ', encodedTableName, '.length <= i || i < 0) {');
             code.push('\n\t\tthrow new Error(\'Could not get entry: \' + i + \' is not a valid table index\');');
             code.push('\n\t}\n');
-            code.push('\n\t', logName, '.push({"table": tableName, "action":"get","index":i,"value":', encodedTableName, '[i]});\n');
+            code.push('\n\t', logName, '.push({"table": tableName, "action":"get","index1":i,"value":', encodedTableName, '[i]});\n');
         }
         code.push('\n\treturn ', encodedTableName, '[i]');
         if (is2d) {
@@ -707,9 +707,9 @@ export class SolveProblemComponent implements OnInit {
         }
         code.push(' = val;\n');
         if (is2d) {
-            code.push('\n\t', logName, '.push({"table": tableName, "action":"set","row":i,"column":j,"value":', encodedTableName, '[i][j]});\n');
+            code.push('\n\t', logName, '.push({"table": tableName, "action":"set","index1":i,"index2":j,"value":', encodedTableName, '[i][j]});\n');
         } else {
-            code.push('\n\t', logName, '.push({"table": tableName, "action":"set","index":i,"value":', encodedTableName, '[i]});\n');
+            code.push('\n\t', logName, '.push({"table": tableName, "action":"set","index1":i,"value":', encodedTableName, '[i]});\n');
         }
         code.push('\n\n};');
         return code.join('');

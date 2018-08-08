@@ -17,6 +17,10 @@
                         <td class="dp-td"
                             *ngFor="let i of range(0, mainTableDimension1);">
                             <span class="dp-table-cell"
+                                  [ngClass]="{
+                                                'get-entry': lastAffectedIndex1 === i && lastOperation === 'get',
+                                                'set-entry': lastAffectedIndex1 === i && lastOperation === 'set'
+                                             }"
                                   [innerHTML]="getTableDisplayedValue(currentMainTable, i, -1)">
                             </span>
                         </td>
@@ -27,6 +31,10 @@
                         <td class="dp-td"
                             *ngFor="let j of range(0, mainTableDimension2);">
                                 <span class="dp-table-cell"
+                                      [ngClass]="{
+                                                'get-entry': lastAffectedIndex1 === i && lastAffectedIndex2 === j && lastOperation === 'get',
+                                                'set-entry': lastAffectedIndex1 === i && lastAffectedIndex2 === j && lastOperation === 'set'
+                                             }"
                                       [innerHTML]="getTableDisplayedValue(currentMainTable, i, j)">
                                 </span>
                         </td>
@@ -38,6 +46,27 @@
     <div class="bottom-container">
         <mat-card class="controls-card">
             <mat-card-content>
+                <div class="frames-progress-bar">
+                    <mat-progress-bar
+                        mode="determinate"
+                        [value]="100* currentFrame / totalFrames">
+                    </mat-progress-bar>
+                </div>
+                <div class="controls-container">
+                    <button mat-mini-fab
+                            [disabled]="!canStepBackward()"
+                            disabled
+                            (click)="stepBackward()"
+                            class="control-button">
+                        <span class="glyphicon glyphicon-step-backward control-glyphicon"></span>
+                    </button>
+                    <button mat-mini-fab
+                            [disabled]="!canStepForward()"
+                            (click)="stepForward()"
+                            class="control-button">
+                        <span class="glyphicon glyphicon-step-forward control-glyphicon"></span>
+                    </button>
+                </div>
             </mat-card-content>
         </mat-card>
     </div>
