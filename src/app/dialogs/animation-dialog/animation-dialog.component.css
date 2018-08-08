@@ -118,12 +118,14 @@ mat-card {
     height: 100%;
 }
 
-.set-entry {
+.get-entry {
     color: #00c5ff;
+    font-size: large;
 }
 
-.get-entry {
-    color: yellow;
+.set-entry {
+    color: #ff1744;
+    font-size: large;
 }
 
 .frames-progress-bar {
