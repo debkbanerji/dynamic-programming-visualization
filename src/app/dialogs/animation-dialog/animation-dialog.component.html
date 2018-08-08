@@ -1,8 +1,23 @@
 <div class="main-container" [ngClass]="{'dark-theme': data.isDarkTheme}">
-    <div class="col-xs-12 no-padding">
+    <div class="header-container">
         <mat-card>
             <mat-card-content>
-                <p class="main-header">{{title}}</p>
+                <p>
+                    <span class="main-header">{{title}}</span>
+                    <span class="result-header">Result: {{result}}</span>
+                </p>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div class="table-container">
+        <mat-card class="table-card">
+            <mat-card-content>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div class="bottom-container">
+        <mat-card class="controls-card">
+            <mat-card-content>
             </mat-card-content>
         </mat-card>
     </div>

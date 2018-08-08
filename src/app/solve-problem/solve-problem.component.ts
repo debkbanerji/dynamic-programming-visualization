@@ -1063,14 +1063,14 @@ export class SolveProblemComponent implements OnInit {
     }
 
     viewTestCaseAnimation(testCase) {
-        console.log(testCase);
         let mainTableDimension1 = testCase['expected-table'].length;
         let mainTableDimension2 = -1;
         if (this.isRectangular2dArray(testCase['expected-table'])) {
             mainTableDimension2 = testCase['expected-table'][0].length
         }
         this.viewAnimation(
-            testCase['name'],
+            testCase['name'] + ' - provided solution',
+            testCase['expected-result'],
             testCase['log'],
             mainTableDimension1,
             mainTableDimension2
@@ -1079,6 +1079,7 @@ export class SolveProblemComponent implements OnInit {
 
     viewAnimation(
         title: string,
+        result,
         log,
         mainTableDimension1: number,
         mainTableDimension2: number
@@ -1086,6 +1087,7 @@ export class SolveProblemComponent implements OnInit {
         const component: SolveProblemComponent = this;
         component.animationDataService.initialize(
             title,
+            result,
             log,
             mainTableDimension1,
             mainTableDimension2

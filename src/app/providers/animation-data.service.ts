@@ -6,6 +6,7 @@ import {Injectable} from '@angular/core';
 export class AnimationDataService {
 
     public title: string;
+    public result;
     public log: any;
     public mainTableDimension1: any;
     public mainTableDimension2: any;
@@ -15,19 +16,16 @@ export class AnimationDataService {
 
     initialize(
         title,
+        result,
         log,
         mainTableDimension1,
         mainTableDimension2
     ) {
         this.title = title;
+        this.result = result;
         this.log = log;
         this.mainTableDimension1 = mainTableDimension1;
         this.mainTableDimension2 = mainTableDimension2;
-
-        console.log(title);
-        console.log(log);
-        console.log(mainTableDimension1);
-        console.log(mainTableDimension2);
     }
 
     is2d() {
@@ -36,6 +34,7 @@ export class AnimationDataService {
 
     clear() {
         this.title = null;
+        this.result = null;
         this.log = null;
         this.mainTableDimension1 = null;
         this.mainTableDimension2 = null;

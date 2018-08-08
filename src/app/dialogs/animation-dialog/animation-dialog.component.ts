@@ -11,6 +11,8 @@ export class AnimationDialogComponent {
 
     isDarkTheme: boolean;
     title: string;
+    result;
+    log;
 
     constructor(
         public dialogRef: MatDialogRef<AnimationDialogComponent>,
@@ -18,6 +20,8 @@ export class AnimationDialogComponent {
         @Inject(MAT_DIALOG_DATA) public data: any) {
         this.isDarkTheme = data.isDarkTheme;
         this.title = animationDataService.title;
+        this.result = animationDataService.result;
+        this.log = animationDataService.log;
     }
 
     onNoClick(): void {
