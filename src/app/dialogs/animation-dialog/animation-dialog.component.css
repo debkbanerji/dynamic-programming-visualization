@@ -77,7 +77,7 @@ mat-card {
 
 .main-container {
     width: 75vw;
-    height: 95vh;
+    max-height: 95vh;
     padding: 5px;
     overflow: hidden;
 }
