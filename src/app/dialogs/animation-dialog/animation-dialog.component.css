@@ -86,3 +86,34 @@ mat-card {
     height: 100%;
     flex-grow: 1;
 }
+
+/*DP Table*/
+
+.dp-table {
+    width: 100%;
+    height: 100%;
+}
+
+.dp-tr {
+    height: 5vw;
+}
+
+.dp-td {
+    width: 5vw;
+    height: 5vw;
+    padding: 0;
+    border: 1px solid #AAAAAA;
+    text-align: center;
+}
+
+.dp-td:after {
+}
+
+.dp-table-data {
+    position: absolute;
+    /*top: 0;*/
+    /*bottom: 0;*/
+    /*left: 0;*/
+    /*right: 0;*/
+    height: 100%;
+}

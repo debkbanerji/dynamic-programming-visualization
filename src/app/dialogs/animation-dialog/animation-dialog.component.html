@@ -12,6 +12,26 @@
     <div class="table-container">
         <mat-card class="table-card">
             <mat-card-content>
+                <table class="dp-table" *ngIf="!isMainTable2d">
+                    <tr class="dp-tr">
+                        <td class="dp-td"
+                            *ngFor="let i of range(0, mainTableDimension1);">
+                            <span class="dp-table-cell"
+                                  [innerHTML]="getTableDisplayedValue(currentMainTable, i, -1)">
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+                <table class="dp-table" *ngIf="isMainTable2d">
+                    <tr class="dp-tr" *ngFor="let i of range(0, mainTableDimension1);">
+                        <td class="dp-td"
+                            *ngFor="let j of range(0, mainTableDimension2);">
+                                <span class="dp-table-cell"
+                                      [innerHTML]="getTableDisplayedValue(currentMainTable, i, j)">
+                                </span>
+                        </td>
+                    </tr>
+                </table>
             </mat-card-content>
         </mat-card>
     </div>

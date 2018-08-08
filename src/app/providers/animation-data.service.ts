@@ -28,10 +28,6 @@ export class AnimationDataService {
         this.mainTableDimension2 = mainTableDimension2;
     }
 
-    is2d() {
-        return this.mainTableDimension2 >= 0;
-    }
-
     clear() {
         this.title = null;
         this.result = null;
