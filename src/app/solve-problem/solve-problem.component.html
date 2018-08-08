@@ -1,4 +1,7 @@
-<div class="row no-gutter" id="main-container" [ngClass]="{'dark-theme': isDarkTheme}">
+<div class="row no-gutter loading-spinner-container" [ngClass]="{'dark-theme': isDarkTheme}" [hidden]="problemDefined">
+    <mat-spinner class="page-loading-spinner"></mat-spinner>
+</div>
+<div class="row no-gutter" [ngClass]="{'dark-theme': isDarkTheme}" [hidden]="!problemDefined">
     <div class="col-xs-12" *ngIf="problemDefined">
         <mat-card class="main-header-card">
             <p class="main-header">
@@ -399,7 +402,7 @@
                     </small>
                     <br *ngIf="expectDetailedSolution && providedSolution.useAuxiliaryTableWithDetailedSolution">
                     <mat-slide-toggle [(ngModel)]="expectDetailedSolution" *ngIf="!testsCurrentlyRunning"
-                                      (change)="recalculateExpectedResults(); runAllTestsWithUserSolution();">
+                                      (change)="recalculateExpectedResults(null); runAllTestsWithUserSolution();">
                         Expect full solution
                     </mat-slide-toggle>
                 </div>

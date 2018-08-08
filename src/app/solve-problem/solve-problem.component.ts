@@ -217,16 +217,17 @@ export class SolveProblemComponent implements OnInit {
         component.problem = data;
         component.providedSolution = component.problem['provided-solution'];
         component.testCases = component.problem['test-cases'];
-        component.problemDefined = true;
         component.titleService.setTitle(component.problem.name);
         component.testsCurrentlyRunning = true;
         component.testsCurrentlyRunningForProvided = true;
         setTimeout(() => {
-            component.recalculateExpectedResults();
+            component.recalculateExpectedResults(function () {
+                component.problemDefined = true;
+            });
         }, 1000);
     }
 
-    recalculateExpectedResults() {
+    recalculateExpectedResults(callback) {
         const component = this;
         // We're always calculating the detailed solution if we're using the provided solution
         const code = SolveProblemComponent.getPlainRunnableCode(
@@ -238,7 +239,9 @@ export class SolveProblemComponent implements OnInit {
         component.testsCurrentlyRunning = true;
         component.testsCurrentlyRunningForProvided = true;
         component.runTestsWithProvidedSolution(component, 0, code);
-
+        if (callback) {
+            callback();
+        }
     }
 
     runTestsWithProvidedSolution(component: SolveProblemComponent, testCaseIndex: number, code: string): void {

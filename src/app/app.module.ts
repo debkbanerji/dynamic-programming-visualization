@@ -14,11 +14,13 @@ import {
     MatCheckboxModule,
     MatExpansionModule,
     MatFormFieldModule,
-    MatIconModule,
     MatInputModule,
     MatSelectModule,
     MatDialogModule,
-    MatTabsModule, MatProgressBarModule, MatSlideToggleModule
+    MatTabsModule,
+    MatProgressBarModule,
+    MatSlideToggleModule,
+    MatProgressSpinnerModule
 } from "@angular/material";
 import {HttpClientModule} from "@angular/common/http";
 import {ConfirmationDialogComponent} from './dialogs/confirmation-dialog/confirmation-dialog.component';
@@ -54,6 +56,7 @@ const routes: Routes = [
         MatSlideToggleModule,
         MatDialogModule,
         MatProgressBarModule,
+        MatProgressSpinnerModule,
         RouterModule.forRoot(routes)
     ],
     entryComponents: [
