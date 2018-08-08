@@ -42,18 +42,20 @@ export class AnimationDialogComponent implements OnInit {
         this.isMainTable2d = this.mainTableDimension2 >= 0;
         this.resetMainTable();
         this.currentFrame = 0;
-        this.totalFrames = this.log.length;
+        this.totalFrames = this.log.length + 1;
     }
 
     stepBackward(): void {
-        const entry = this.log[this.currentFrame - 1];
-        const table = this.getRelevantTable(entry);
-        const cell = this.getTableCell(table, entry.index1, entry.index2);
-        if (entry.action == 'set') {
-            cell.pop();
+        if (this.currentFrame <= this.log.length) {
+            const entry = this.log[this.currentFrame - 1];
+            const table = this.getRelevantTable(entry);
+            const cell = this.getTableCell(table, entry.index1, entry.index2);
+            if (entry.action == 'set') {
+                cell.pop();
+            }
         }
         const lastOperationFrame = this.currentFrame - 2;
-        if (lastOperationFrame >= 0) {
+        if (lastOperationFrame >= 0 && lastOperationFrame < this.log.length) {
             const lastOperationEntry = this.log[lastOperationFrame];
             this.lastOperation = lastOperationEntry.action;
             this.lastAffectedIndex1 = lastOperationEntry.index1;
@@ -67,15 +69,21 @@ export class AnimationDialogComponent implements OnInit {
     }
 
     stepForward(): void {
-        const entry = this.log[this.currentFrame];
-        const table = this.getRelevantTable(entry);
-        const cell = this.getTableCell(table, entry.index1, entry.index2);
-        if (entry.action == 'set') {
-            cell.push(entry.value)
+        if (this.currentFrame < this.log.length) {
+            const entry = this.log[this.currentFrame];
+            const table = this.getRelevantTable(entry);
+            const cell = this.getTableCell(table, entry.index1, entry.index2);
+            if (entry.action == 'set') {
+                cell.push(entry.value)
+            }
+            this.lastOperation = entry.action;
+            this.lastAffectedIndex1 = entry.index1;
+            this.lastAffectedIndex2 = entry.index2;
+        } else {
+            this.lastAffectedIndex1 = -1;
+            this.lastAffectedIndex2 = -1;
+            this.lastOperation = null;
         }
-        this.lastOperation = entry.action;
-        this.lastAffectedIndex1 = entry.index1;
-        this.lastAffectedIndex2 = entry.index2;
         this.currentFrame++;
     }
 
