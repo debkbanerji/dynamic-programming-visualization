@@ -53,7 +53,7 @@ export class AnimationDialogComponent implements OnInit {
             cell.pop();
         }
         const lastOperationFrame = this.currentFrame - 2;
-        if (lastOperationFrame > 0) {
+        if (lastOperationFrame >= 0) {
             const lastOperationEntry = this.log[lastOperationFrame];
             this.lastOperation = lastOperationEntry.action;
             this.lastAffectedIndex1 = lastOperationEntry.index1;
