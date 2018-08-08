@@ -53,15 +53,29 @@
                     </mat-progress-bar>
                 </div>
                 <div class="controls-container">
-                    <button mat-mini-fab
-                            [disabled]="!canStepBackward()"
+                    <button mat-icon-button
+                            [disabled]="!canStepBackward() || isCurrentlyPlayingAnimation || currentlySwitchingPlayState"
                             disabled
                             (click)="stepBackward()"
                             class="control-button">
                         <span class="glyphicon glyphicon-step-backward control-glyphicon"></span>
                     </button>
                     <button mat-mini-fab
-                            [disabled]="!canStepForward()"
+                            [disabled]="currentlySwitchingPlayState"
+                            *ngIf="!isCurrentlyPlayingAnimation"
+                            (click)="playAnimation()"
+                            class="control-button">
+                        <span class="glyphicon glyphicon-play control-glyphicon"></span>
+                    </button>
+                    <button mat-mini-fab
+                            [disabled]="currentlySwitchingPlayState"
+                            *ngIf="isCurrentlyPlayingAnimation"
+                            (click)="stopPlayingAnimation()"
+                            class="control-button">
+                        <span class="glyphicon glyphicon-pause control-glyphicon"></span>
+                    </button>
+                    <button mat-icon-button
+                            [disabled]="!canStepForward() || isCurrentlyPlayingAnimation || currentlySwitchingPlayState"
                             (click)="stepForward()"
                             class="control-button">
                         <span class="glyphicon glyphicon-step-forward control-glyphicon"></span>

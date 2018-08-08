@@ -21,6 +21,10 @@ export class AnimationDialogComponent implements OnInit {
 
     currentFrame: number;
     totalFrames: number;
+    isCurrentlyPlayingAnimation: boolean = false;
+    currentlyPlayingIntervalVariable: any = null;
+    playIntervalTimeMS: number = 250;
+    currentlySwitchingPlayState: boolean = false;
 
     lastAffectedIndex1: number = -1;
     lastAffectedIndex2: number = -1;
@@ -43,6 +47,34 @@ export class AnimationDialogComponent implements OnInit {
         this.resetMainTable();
         this.currentFrame = 0;
         this.totalFrames = this.log.length + 1;
+    }
+
+    playAnimation(): void {
+        const component = this;
+        component.isCurrentlyPlayingAnimation = true;
+        component.currentlySwitchingPlayState = false;
+        component.currentlyPlayingIntervalVariable = setInterval(function () {
+            if (component.isCurrentlyPlayingAnimation) {
+                if (component.canStepForward()) {
+                    component.stepForward();
+                } else {
+                    component.stopPlayingAnimation();
+                }
+            }
+        }, component.playIntervalTimeMS);
+    }
+
+    stopPlayingAnimation(): void {
+        const component = this;
+        component.isCurrentlyPlayingAnimation = false;
+        component.currentlySwitchingPlayState = true;
+        if (component.currentlyPlayingIntervalVariable) {
+            clearInterval(component.currentlyPlayingIntervalVariable);
+            component.currentlyPlayingIntervalVariable = null;
+        }
+        setTimeout(function () {
+            component.currentlySwitchingPlayState = false;
+        }, component.playIntervalTimeMS + 10)
     }
 
     stepBackward(): void {

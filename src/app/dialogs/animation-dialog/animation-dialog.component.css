@@ -118,6 +118,11 @@ mat-card {
     height: 100%;
 }
 
+.glyphicon-stop {
+    padding-bottom: 2px;
+    padding-right: 2px;
+}
+
 .get-entry {
     color: #00c5ff;
     font-size: large;
