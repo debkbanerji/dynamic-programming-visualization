@@ -5,6 +5,8 @@ import {ConfirmationDialogComponent} from "../dialogs/confirmation-dialog/confir
 import {ActivatedRoute, Router} from "@angular/router";
 import {Title} from "@angular/platform-browser";
 import {CustomProblemService} from "../providers/custom-problem.service";
+import {AnimationDataService} from "../providers/animation-data.service";
+import {AnimationDialogComponent} from "../dialogs/animation-dialog/animation-dialog.component";
 
 const encodedTableName = '___TABLE___';
 const auxiliaryTableName = '___AUX_TABLE___';
@@ -108,7 +110,8 @@ export class SolveProblemComponent implements OnInit {
                 private http: HttpClient,
                 private titleService: Title,
                 public dialog: MatDialog,
-                private customProblemService: CustomProblemService
+                private customProblemService: CustomProblemService,
+                private animationDataService: AnimationDataService
     ) {
     }
 
@@ -1057,5 +1060,45 @@ export class SolveProblemComponent implements OnInit {
                 component.router.navigate(['select-problem'], {queryParams: {'dark-mode': this.isDarkTheme}});
             }
         });
+    }
+
+    viewTestCaseAnimation(testCase) {
+        console.log(testCase);
+        let mainTableDimension1 = testCase['expected-table'].length;
+        let mainTableDimension2 = -1;
+        if (this.isRectangular2dArray(testCase['expected-table'])) {
+            mainTableDimension2 = testCase['expected-table'][0].length
+        }
+        this.viewAnimation(
+            testCase['name'],
+            testCase['log'],
+            mainTableDimension1,
+            mainTableDimension2
+        );
+    }
+
+    viewAnimation(
+        title: string,
+        log,
+        mainTableDimension1: number,
+        mainTableDimension2: number
+    ) {
+        const component: SolveProblemComponent = this;
+        component.animationDataService.initialize(
+            title,
+            log,
+            mainTableDimension1,
+            mainTableDimension2
+        );
+        const dialogRef = this.dialog.open(AnimationDialogComponent, {
+            data: {
+                'isDarkTheme': component.isDarkTheme,
+            }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            component.animationDataService.clear();
+        });
+
     }
 }
