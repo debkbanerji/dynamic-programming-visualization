@@ -54,6 +54,13 @@
         <mat-card class="table-card">
             <p class="table-card-header">
                 <span class="slightly-bold-label">{{useAuxiliaryTable ? 'Primary Table' : 'Table'}}</span>
+                <span class="table-operation-count-container" *ngIf="useAuxiliaryTable">
+                    <span
+                        class="get-entry operation-count">{{mainTableGets}} {{mainTableGets === 1 ? 'read' : 'reads'}}</span>
+                    &nbsp;
+                    <span class="set-entry operation-count">{{mainTableSets}} {{mainTableSets === 1 ? 'write' : 'writes'}}</span>
+                    &nbsp;
+                </span>
             </p>
             <mat-card-content>
                 <table class="dp-table" *ngIf="!isTable2d">
@@ -91,6 +98,13 @@
         <mat-card class="table-card">
             <p class="table-card-header">
                 <span class="slightly-bold-label">Secondary Table</span>
+                <span class="table-operation-count-container" *ngIf="useAuxiliaryTable">
+                    <span
+                        class="get-entry operation-count">{{auxiliaryTableGets}} {{auxiliaryTableGets === 1 ? 'read' : 'reads'}}</span>
+                    &nbsp;
+                    <span class="set-entry operation-count">{{auxiliaryTableSets}} {{auxiliaryTableSets === 1 ? 'write' : 'writes'}}</span>
+                    &nbsp;
+                </span>
             </p>
             <mat-card-content>
                 <table class="dp-table" *ngIf="!isTable2d">

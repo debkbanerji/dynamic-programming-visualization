@@ -36,6 +36,8 @@ mat-expansion-panel-header {
 
 .table-card-header {
     padding-left: 3px;
+    display: inline-block;
+    width: 100%;
 }
 
 .slightly-bold-label {
@@ -128,6 +130,11 @@ mat-expansion-panel-header {
 
 .operation-count {
     font-size: small;
+}
+
+.table-operation-count-container {
+    display: inline-block;
+    float: right;
 }
 
 .control-button {

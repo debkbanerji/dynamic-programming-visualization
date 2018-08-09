@@ -27,6 +27,10 @@ export class AnimationDialogComponent implements OnInit {
 
     totalGets: number;
     totalSets: number;
+    mainTableGets: number;
+    mainTableSets: number;
+    auxiliaryTableGets: number;
+    auxiliaryTableSets: number;
 
     currentFrame: number;
     totalFrames: number;
@@ -71,12 +75,26 @@ export class AnimationDialogComponent implements OnInit {
         this.totalFrames = this.log.length + 1;
         this.totalGets = 0;
         this.totalSets = 0;
+        this.mainTableGets = 0;
+        this.mainTableSets = 0;
+        this.auxiliaryTableGets = 0;
+        this.auxiliaryTableSets = 0;
         for (let i = 0; i < this.log.length; i++) {
             const entry = this.log[i];
             if (entry.action === 'set') {
                 this.totalSets++;
+                if (this.getRelevantTable(entry) === this.currentMainTable) {
+                    this.mainTableSets++
+                } else {
+                    this.auxiliaryTableSets++;
+                }
             } else if (entry.action === 'get') {
                 this.totalGets++;
+                if (this.getRelevantTable(entry) === this.currentMainTable) {
+                    this.mainTableGets++
+                } else {
+                    this.auxiliaryTableGets++;
+                }
             }
         }
     }
