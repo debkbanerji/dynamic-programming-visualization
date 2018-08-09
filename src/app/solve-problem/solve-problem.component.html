@@ -402,9 +402,9 @@
                     <b>Table entry definition: </b>
                     <p [innerHTML]="providedSolution['tableEntryDefinition']"></p>
                 </div>
-                <div *ngIf="providedSolution['AuxiliaryTableEntryDefinition'] && expectDetailedSolution">
+                <div *ngIf="providedSolution['auxiliaryTableEntryDefinition'] && expectDetailedSolution">
                     <b>Second table entry definition: </b>
-                    <p [innerHTML]="providedSolution['AuxiliaryTableEntryDefinition']"></p>
+                    <p [innerHTML]="providedSolution['auxiliaryTableEntryDefinition']"></p>
                 </div>
             </div>
         </mat-expansion-panel>
@@ -506,14 +506,14 @@
                                         <div
                                             *ngIf="!(deepEquals(testResults[testCaseIndex]['solution'], testCase['expected-solution']))">
                                             <b *ngIf="!isArray(testResults[testCaseIndex]['solution'])"
-                                               class="text-red">
-                                                &#x2718; Incorrect Solution - Expected
+                                               class="text-yellow">
+                                                Non Matching Solution - Expected
                                                 {{getDisplayedValue(testCase['expected-solution'])}}
                                                 but got
                                                 {{getDisplayedValue(testResults[testCaseIndex]['solution'])}}
                                             </b>
                                             <div *ngIf="isArray(testResults[testCaseIndex]['solution'])">
-                                                <b class="text-red">&#x2718; Incorrect Solution</b>
+                                                <b class="text-yellow">Non Matching Solution</b>
                                                 <div *ngIf="shouldDisplayArray(testResults[testCaseIndex]['solution'])">
                                                     <table class="dp-table"
                                                            *ngIf="!isRectangular2dArray(testResults[testCaseIndex]['solution'])">
