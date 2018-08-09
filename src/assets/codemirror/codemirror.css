@@ -52,7 +52,7 @@
 /* CURSOR */
 
 .CodeMirror-cursor {
-    border-left: 1px solid black;
+    border-left: 1px solid #868686;
     border-right: none;
     width: 0;
 }
