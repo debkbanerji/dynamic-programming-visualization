@@ -79,17 +79,24 @@
                         </button>
                         <button mat-fab
                                 [disabled]="currentlySwitchingPlayState"
-                                *ngIf="!isCurrentlyPlayingAnimation"
+                                *ngIf="isCurrentlyPlayingAnimation"
+                                (click)="stopPlayingAnimation()"
+                                class="control-button">
+                            <span class="glyphicon glyphicon-pause control-glyphicon"></span>
+                        </button>
+                        <button mat-fab
+                                [disabled]="currentlySwitchingPlayState"
+                                *ngIf="!isCurrentlyPlayingAnimation && canStepForward()"
                                 (click)="playAnimation()"
                                 class="control-button">
                             <span class="glyphicon glyphicon-play control-glyphicon"></span>
                         </button>
                         <button mat-fab
                                 [disabled]="currentlySwitchingPlayState"
-                                *ngIf="isCurrentlyPlayingAnimation"
-                                (click)="stopPlayingAnimation()"
+                                *ngIf="!isCurrentlyPlayingAnimation && !canStepForward()"
+                                (click)="resetAnimation()"
                                 class="control-button">
-                            <span class="glyphicon glyphicon-pause control-glyphicon"></span>
+                            <span class="glyphicon glyphicon-repeat control-glyphicon"></span>
                         </button>
                         <button mat-icon-button
                                 [disabled]="!canStepForward() || isCurrentlyPlayingAnimation || currentlySwitchingPlayState"
