@@ -1,6 +1,6 @@
 {
     "name": "Knapsack Without Repetition",
-    "problem-statement": "Description of the knapsack optimization problem with repetition",
+    "problem-statement": "You are a roguish thief who has broken into a comically well decorated house. You have with you a knapsack of weight capacity <b>W</b>, where <b>W</b> is an integer. There are <b>n</b> items in the house, each of integer weight and some value. It is your goal to maximize the combined value of the items that you can fit in your knapsack.<br><br>For this version of the problem, there exists exactly one of each item, so you cannot take the same item twice.",
     "input": {
         "W": "Maximum Capacity",
         "n": "Number of Items",
@@ -37,8 +37,8 @@
         "detailedReturnValueCode": "const result = T(n, W);\n\nconst solution = [];\nlet i = n;\nlet j = W;\n\nwhile (i > 0 && j > 0) {\n   if (T(i - 1, j) !== T(i, j)) {\n        solution.unshift(i - 1); // appending correct item index to front of solution\n        j = j - weights[i - 1];  \n    }\n    i = i - 1;\n}",
         "detailedSetNextEntryTopDownCode": "if (i == 0 || j == 0) {\n\tentry = 0;\n} else {\n\tlet itemWeight = weights[i - 1];\n\tlet valueWithoutLastItem = getTableEntry(i - 1, j);\n\tif (itemWeight > j) {\n\t\tentry = valueWithoutLastItem;\n\t} else {\n\t\tlet valueWithLastItem = getTableEntry(i - 1, j - itemWeight) + values[i - 1];\n\t\tif (valueWithLastItem > valueWithoutLastItem) {\n\t\t\tentry = valueWithLastItem;\n\t\t} else {\n\t\t\tentry = valueWithoutLastItem;\n\t\t}\n\t}\n}",
         "detailedReturnValueTopDownCode": "const result = getTableEntry(n, W);\n\nconst solution = [];\nlet i = n;\nlet j = W;\n\nwhile (i > 0 && j > 0) {\n    if (T(i - 1, j) !== T(i, j)) {\n        solution.unshift(i - 1); // appending correct item index to front of solution\n        j = j - weights[i - 1];  \n    }\n    i = i - 1;\n}",
-        "tableEntryDefinition": "T[ i ][ j ] Is the maximum value obtainable with a knapsack of capacity i using the first j items.",
-        "solutionNotes": "(Additional solution notes here)"
+        "tableEntryDefinition": "<b>T[ i ][ j ]</b> Is the maximum value obtainable with a knapsack of capacity <b>i</b> using the first <b>j</b> items.",
+        "solutionNotes": "This solution runs in <b>O(nW)</b> time. When populating <b>T[ i ][ j ]</b>, we consider the case where we would take item <b>j</b>, as well as the case where we would not take item <b>j</b>."
     },
     "test-cases": [
         {
