@@ -13,7 +13,8 @@ mat-card {
 
 .result-header {
     float: right;
-    font-size: large;
+    padding-top: 3px;
+    padding-right: 3px;
 }
 
 .main-container {
@@ -135,6 +136,39 @@ mat-card {
 
 .frames-progress-bar {
     margin: 4px;
+}
+
+.controls-container {
+    width: 100%;
+    display: inline-block;
+}
+
+.controls-center-container {
+    display: inline-block;
+    width: 60%;
+    text-align: center;
+    vertical-align: top;
+}
+
+.controls-left-container {
+    display: inline-block;
+    width: 20%;
+    vertical-align: top;
+}
+
+.controls-right-container {
+    display: inline-block;
+    text-align: right;
+    width: 20%;
+    vertical-align: top;
+}
+
+.operation-count-container {
+    padding-left: 4px;
+}
+
+.operation-count {
+    font-size: small;
 }
 
 .control-button {

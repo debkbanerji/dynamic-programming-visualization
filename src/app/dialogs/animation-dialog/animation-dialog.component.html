@@ -53,33 +53,46 @@
                     </mat-progress-bar>
                 </div>
                 <div class="controls-container">
-                    <button mat-icon-button
-                            [disabled]="!canStepBackward() || isCurrentlyPlayingAnimation || currentlySwitchingPlayState"
-                            disabled
-                            (click)="stepBackward()"
-                            class="control-button">
-                        <span class="glyphicon glyphicon-step-backward control-glyphicon"></span>
-                    </button>
-                    <button mat-mini-fab
-                            [disabled]="currentlySwitchingPlayState"
-                            *ngIf="!isCurrentlyPlayingAnimation"
-                            (click)="playAnimation()"
-                            class="control-button">
-                        <span class="glyphicon glyphicon-play control-glyphicon"></span>
-                    </button>
-                    <button mat-mini-fab
-                            [disabled]="currentlySwitchingPlayState"
-                            *ngIf="isCurrentlyPlayingAnimation"
-                            (click)="stopPlayingAnimation()"
-                            class="control-button">
-                        <span class="glyphicon glyphicon-pause control-glyphicon"></span>
-                    </button>
-                    <button mat-icon-button
-                            [disabled]="!canStepForward() || isCurrentlyPlayingAnimation || currentlySwitchingPlayState"
-                            (click)="stepForward()"
-                            class="control-button">
-                        <span class="glyphicon glyphicon-step-forward control-glyphicon"></span>
-                    </button>
+                    <div class="controls-left-container">
+                        <div class="operation-count-container">
+                            <span>{{log.length}} total operations</span>
+                            <br>
+                            <span class="get-entry operation-count">{{totalGets}} reads</span>
+                            <br>
+                            <span class="set-entry operation-count">{{totalSets}} writes</span>
+                        </div>
+                    </div>
+                    <div class="controls-center-container">
+                        <button mat-icon-button
+                                [disabled]="!canStepBackward() || isCurrentlyPlayingAnimation || currentlySwitchingPlayState"
+                                disabled
+                                (click)="stepBackward()"
+                                class="control-button">
+                            <span class="glyphicon glyphicon-step-backward control-glyphicon"></span>
+                        </button>
+                        <button mat-fab
+                                [disabled]="currentlySwitchingPlayState"
+                                *ngIf="!isCurrentlyPlayingAnimation"
+                                (click)="playAnimation()"
+                                class="control-button">
+                            <span class="glyphicon glyphicon-play control-glyphicon"></span>
+                        </button>
+                        <button mat-fab
+                                [disabled]="currentlySwitchingPlayState"
+                                *ngIf="isCurrentlyPlayingAnimation"
+                                (click)="stopPlayingAnimation()"
+                                class="control-button">
+                            <span class="glyphicon glyphicon-pause control-glyphicon"></span>
+                        </button>
+                        <button mat-icon-button
+                                [disabled]="!canStepForward() || isCurrentlyPlayingAnimation || currentlySwitchingPlayState"
+                                (click)="stepForward()"
+                                class="control-button">
+                            <span class="glyphicon glyphicon-step-forward control-glyphicon"></span>
+                        </button>
+                    </div>
+                    <div class="controls-right-container">
+                    </div>
                 </div>
             </mat-card-content>
         </mat-card>
