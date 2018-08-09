@@ -141,6 +141,15 @@
 
 .view-animation-button {
     float: right;
+    display: inline-block;
+}
+
+.play-animation-glyphicon {
+    font-size: smaller;
+    padding-right: 2px;
+    vertical-align: top;
+    position: relative;
+    padding-bottom: 4px;
 }
 
 .transpose-button {
