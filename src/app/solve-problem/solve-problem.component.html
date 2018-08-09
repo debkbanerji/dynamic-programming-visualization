@@ -369,24 +369,6 @@
             <div *ngFor="let variable of objectKeys(problem.input)">
                 <span><b class="code">{{variable}}</b> : <small [innerHTML]="problem.input[variable]"></small></span>
             </div>
-            <div
-                *ngIf="revealedProvidedSolution">
-                <br *ngIf="providedSolution['solutionNotes']">
-                <div *ngIf="providedSolution['solutionNotes']">
-                    <b>Solution notes</b>
-                    <br>
-                    <p [innerHTML]="providedSolution['solutionNotes']"></p>
-                </div>
-                <!--<br *ngIf="providedSolution['tableEntryDefinition']">-->
-                <div *ngIf="providedSolution['tableEntryDefinition']">
-                    <b>Table entry definition: </b>
-                    <p [innerHTML]="providedSolution['tableEntryDefinition']"></p>
-                </div>
-                <div *ngIf="providedSolution['AuxiliaryTableEntryDefinition'] && expectDetailedSolution">
-                    <b>Second table entry definition: </b>
-                    <p [innerHTML]="providedSolution['AuxiliaryTableEntryDefinition']"></p>
-                </div>
-            </div>
             <div *ngIf="problem['output']['result']">
                 <br>
                 <b>Output</b>
@@ -405,6 +387,24 @@
                                       (change)="recalculateExpectedResults(null); runAllTestsWithUserSolution();">
                         Expect full solution
                     </mat-slide-toggle>
+                </div>
+            </div>
+            <div
+                *ngIf="revealedProvidedSolution">
+                <br *ngIf="providedSolution['solutionNotes']">
+                <div *ngIf="providedSolution['solutionNotes']">
+                    <b>Solution notes</b>
+                    <br>
+                    <p [innerHTML]="providedSolution['solutionNotes']"></p>
+                </div>
+                <!--<br *ngIf="providedSolution['tableEntryDefinition']">-->
+                <div *ngIf="providedSolution['tableEntryDefinition']">
+                    <b>Table entry definition: </b>
+                    <p [innerHTML]="providedSolution['tableEntryDefinition']"></p>
+                </div>
+                <div *ngIf="providedSolution['AuxiliaryTableEntryDefinition'] && expectDetailedSolution">
+                    <b>Second table entry definition: </b>
+                    <p [innerHTML]="providedSolution['AuxiliaryTableEntryDefinition']"></p>
                 </div>
             </div>
         </mat-expansion-panel>
