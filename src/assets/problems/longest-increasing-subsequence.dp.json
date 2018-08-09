@@ -1,0 +1,59 @@
+{
+    "name": "Longest Increasing Subsequence",
+    "problem-statement": "",
+    "input": {
+        "arr": "Input Array",
+        "n": "Length of Input Array"
+    },
+    "output": {
+        "result": "The length of the longest increasing subsequence",
+        "solution_NOT": "The longest increasing subsequence"
+    },
+    "provided-solution": {
+        "tableShape": "1d",
+        "tableDimension1": "n",
+        "initializationCode": "// No other initialization necessary",
+        "for1Variable": "i",
+        "for1Init": "0",
+        "for1Condition": "i < n",
+        "for1Update": "i = i + 1",
+        "setNextEntryCode": "// In the worst case, the longest increasing subsequence ending\n// at i is the element at i itself, with length 1\n// We start with this assumption, then see if we can improve it\n\nfor (j = 0; j < i; j++) {\n    // for every previous index j, check if we can get a better\n    // result by extending the sequence ending at that index\n    if (arr[i] > arr[j] && entry < T(j) + 1) {\n        entry = T(j) + 1;\n    }\n}",
+        "defaultTableEntry": "1",
+        "useDefaultTableEntry": true,
+        "returnValueCode": "let result = 0;\n\n// We need to return the max of the table entries\nfor (let i = 0; i < n; i++) {\n   const possibleMax = T(i);\n if (possibleMax > result) {\n       result = possibleMax;\n }\n}",
+        "nextEntryIndex1": "i",
+        "useAuxiliaryTableWithDetailedSolution": true,
+        "tableEntryDefinition": "TODO: ADD",
+        "solutionNotes": "TODO: ADD"
+    },
+    "test-cases": [
+        {
+            "name": "Test Case 1",
+            "input": {
+                "n": 20,
+                "arr": [
+                    0,
+                    1,
+                    1,
+                    8,
+                    9,
+                    9,
+                    9,
+                    8,
+                    8,
+                    1,
+                    9,
+                    9,
+                    9,
+                    1,
+                    1,
+                    9,
+                    7,
+                    2,
+                    5,
+                    3
+                ]
+            }
+        }
+    ]
+}
