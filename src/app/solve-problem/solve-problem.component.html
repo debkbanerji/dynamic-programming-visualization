@@ -292,7 +292,7 @@
                             matching solution{{numCorrectSolutions === 1? '' : 's'}}</b>
                         <br>
                         <b class="text-yellow" *ngIf="numIncorrectSolutions > 0">
-                            &#x2718; {{numIncorrectSolutions}} non matching solution{{numIncorrectSolutions === 1? '' :
+                            {{numIncorrectSolutions}} non matching solution{{numIncorrectSolutions === 1? '' :
                             's'}}
                         </b>
                         <br *ngIf="numIncorrectSolutions > 0">
@@ -402,9 +402,9 @@
                     <b>Table entry definition: </b>
                     <p [innerHTML]="providedSolution['tableEntryDefinition']"></p>
                 </div>
-                <div *ngIf="providedSolution['AuxiliaryTableEntryDefinition'] && expectDetailedSolution">
+                <div *ngIf="providedSolution['auxiliaryTableEntryDefinition'] && expectDetailedSolution">
                     <b>Second table entry definition: </b>
-                    <p [innerHTML]="providedSolution['AuxiliaryTableEntryDefinition']"></p>
+                    <p [innerHTML]="providedSolution['auxiliaryTableEntryDefinition']"></p>
                 </div>
             </div>
         </mat-expansion-panel>
@@ -506,14 +506,14 @@
                                         <div
                                             *ngIf="!(deepEquals(testResults[testCaseIndex]['solution'], testCase['expected-solution']))">
                                             <b *ngIf="!isArray(testResults[testCaseIndex]['solution'])"
-                                               class="text-red">
-                                                &#x2718; Incorrect Solution - Expected
+                                               class="text-yellow">
+                                                Non Matching Solution - Expected
                                                 {{getDisplayedValue(testCase['expected-solution'])}}
                                                 but got
                                                 {{getDisplayedValue(testResults[testCaseIndex]['solution'])}}
                                             </b>
                                             <div *ngIf="isArray(testResults[testCaseIndex]['solution'])">
-                                                <b class="text-red">&#x2718; Incorrect Solution</b>
+                                                <b class="text-yellow">Non Matching Solution</b>
                                                 <div *ngIf="shouldDisplayArray(testResults[testCaseIndex]['solution'])">
                                                     <table class="dp-table"
                                                            *ngIf="!isRectangular2dArray(testResults[testCaseIndex]['solution'])">
@@ -567,6 +567,8 @@
                                            *ngIf="testResults[testCaseIndex]['has-expected-table']">
                                             &#x2714; Created expected table
                                         </b>
+                                        <br *ngIf="testResults[testCaseIndex]['has-expected-table']">
+                                        <span *ngIf="testResults[testCaseIndex]['has-expected-table']"><small>Note: If a top down approach was used, only non null entries of the table were checked</small></span>
                                         <div
                                             *ngIf="!testResults[testCaseIndex]['has-expected-table']">
                                             <span class="text-yellow">Did not create expected table</span>
@@ -638,6 +640,9 @@
                                                    *ngIf="testResults[testCaseIndex]['has-expected-auxiliary-table']">
                                                     &#x2714; Created expected second table
                                                 </b>
+                                                <br *ngIf="testResults[testCaseIndex]['has-expected-auxiliary-table']">
+                                                <span
+                                                    *ngIf="testResults[testCaseIndex]['has-expected-auxiliary-table']"><small>Note: If a top down approach was used, only non null entries of the table were checked</small></span>
                                                 <div
                                                     *ngIf="!testResults[testCaseIndex]['has-expected-auxiliary-table']">
                                                     <span

@@ -1,13 +1,13 @@
 {
     "name": "Longest Increasing Subsequence",
-    "problem-statement": "",
+    "problem-statement": "In this problem, the input is an array of <b>n</b> numbers <b>arr[0], . . . , arr[n-1]</b>. A subsequence is any subset of these numbers taken in order, of the form <b>arr[i0], arr[i1], ... , arr[ik]</b> where <b>0 <= i0 < i1 < · · · < ik < n</b>, and an increasing subsequence is one in which the numbers are getting strictly larger. The goal of the problem is to find the increasing subsequence of greatest length.",
     "input": {
         "arr": "Input Array",
         "n": "Length of Input Array"
     },
     "output": {
         "result": "The length of the longest increasing subsequence",
-        "solution_NOT": "The longest increasing subsequence"
+        "solution": "The indices of the elements in longest increasing subsequence"
     },
     "provided-solution": {
         "tableShape": "1d",
@@ -22,8 +22,15 @@
         "useDefaultTableEntry": true,
         "returnValueCode": "let result = 0;\n\n// We need to return the max of the table entries\nfor (let i = 0; i < n; i++) {\n   const possibleMax = T(i);\n if (possibleMax > result) {\n       result = possibleMax;\n }\n}",
         "nextEntryIndex1": "i",
+        "setNextEntryTopDownCode": "// In the worst case, the longest increasing subsequence ending\n// at i is the element at i itself, with length 1\n// We start with this assumption, then see if we can improve it\n\nfor (j = 0; j < i; j++) {\n    // for every previous index j, check if we can get a better\n    // result by extending the sequence ending at that index\n    if (arr[i] > arr[j] && entry < T(j) + 1) {\n        entry = getTableEntry(j) + 1;\n    }\n}",
+        "returnValueTopDownCode": "let result = 0;\n\n// We need to return the max of the table entries\nfor (let i = 0; i < n; i++) {\n    const possibleMax = getTableEntry(i);\n    if (possibleMax > result) {\n        result = possibleMax;\n    }\n}",
         "useAuxiliaryTableWithDetailedSolution": true,
+        "detailedSetNextEntryCode": "// In the worst case, the longest increasing subsequence ending\n// at i is the element at i itself, with length 1\n// We start with this assumption, then see if we can improve it\n\n// We also store the index of the last element of the\n// subsequence that was extended (initially null)\nlet secondaryEntry = null;\n\nfor (j = 0; j < i; j++) {\n    // for every previous index j, check if we can get a better\n    // result by extending the sequence ending at that index\n    if (arr[i] > arr[j] && entry < T(j) + 1) {\n        entry = T(j) + 1;\n        secondaryEntry = j;\n    }\n}",
+        "detailedReturnValueCode": "let result = 0;\nlet lastItemIndex = null;\n\n// We need to return the max of the table entries\nfor (let i = 0; i < n; i++) {\n    const possibleMax = T(i);\n    if (possibleMax > result) {\n        result = possibleMax;\n        lastItemIndex = i;\n    }\n}\n\nlet solution = [];\n// backtrack from the end\nwhile (lastItemIndex !== null) {\n    solution.unshift(lastItemIndex); // append to front\n    lastItemIndex = T2(lastItemIndex);\n}",
+        "detailedSetNextEntryTopDownCode": "// In the worst case, the longest increasing subsequence ending\n// at i is the element at i itself, with length 1\n// We start with this assumption, then see if we can improve it\n\n// We also store the index of the last element of the\n// subsequence that was extended (initially null)\nlet secondaryEntry = null;\n\nfor (j = 0; j < i; j++) {\n    // for every previous index j, check if we can get a better\n    // result by extending the sequence ending at that index\n    if (arr[i] > arr[j] && entry < T(j) + 1) {\n        entry = getTableEntry(j) + 1;\n        secondaryEntry = j;\n    }\n}",
+        "detailedReturnValueTopDownCode": "let result = 0;\nlet lastItemIndex = null;\n\n// We need to return the max of the table entries\nfor (let i = 0; i < n; i++) {\n    const possibleMax = getTableEntry(i);\n    if (possibleMax > result) {\n        result = possibleMax;\n        lastItemIndex = i;\n    }\n}\n\nlet solution = [];\n// backtrack from the end\nwhile (lastItemIndex !== null) {\n    solution.unshift(lastItemIndex); // append to front\n    lastItemIndex = T2(lastItemIndex);\n}",
         "tableEntryDefinition": "TODO: ADD",
+        "auxiliaryTableEntryDefinition": "TODO: ADD",
         "solutionNotes": "TODO: ADD"
     },
     "test-cases": [
