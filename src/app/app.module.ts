@@ -20,7 +20,8 @@ import {
     MatTabsModule,
     MatProgressBarModule,
     MatSlideToggleModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatTooltipModule
 } from "@angular/material";
 import {HttpClientModule} from "@angular/common/http";
 import {ConfirmationDialogComponent} from './dialogs/confirmation-dialog/confirmation-dialog.component';
@@ -59,6 +60,7 @@ const routes: Routes = [
         MatDialogModule,
         MatProgressBarModule,
         MatProgressSpinnerModule,
+        MatTooltipModule,
         RouterModule.forRoot(routes)
     ],
     entryComponents: [

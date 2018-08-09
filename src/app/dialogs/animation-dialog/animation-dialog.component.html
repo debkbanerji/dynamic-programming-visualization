@@ -24,7 +24,7 @@
                     *ngIf="isArray(input[inputField]) && shouldDisplayArray(input[inputField])">
                     <table class="dp-table" *ngIf="!isRectangular2dArray(input[inputField])">
                         <tr class="dp-tr">
-                            <td class="dp-td"
+                            <td class="dp-td" matTooltip="{{i}}"
                                 *ngFor="let i of range(input[inputField].length);">
                                 <span class="dp-table-cell"
                                       [innerHTML]="getDisplayedValue(input[inputField][i])">
@@ -34,7 +34,7 @@
                     </table>
                     <table class="dp-table" *ngIf="isRectangular2dArray(input[inputField])">
                         <tr class="dp-tr" *ngFor="let i of range(input[inputField].length);">
-                            <td class="dp-td"
+                            <td class="dp-td" matTooltip="{{i}}, {{j}}"
                                 *ngFor="let j of range(input[inputField][0].length);">
                                 <span class="dp-table-cell"
                                       [innerHTML]="getDisplayedValue(input[inputField][i][j])">
@@ -65,7 +65,7 @@
             <mat-card-content>
                 <table class="dp-table" *ngIf="!isTable2d">
                     <tr class="dp-tr">
-                        <td class="dp-td"
+                        <td class="dp-td" matTooltip="{{i}}"
                             *ngFor="let i of range(0, tableDimension1);"
                             [ngClass]="{
                                                 'get-animation': lastAffectedIndex1 === i && lastOperation === 'get' && lastAffectedTable === currentMainTable,
@@ -79,7 +79,7 @@
                 </table>
                 <table class="dp-table" *ngIf="isTable2d">
                     <tr class="dp-tr" *ngFor="let i of range(0, tableDimension1);">
-                        <td class="dp-td"
+                        <td class="dp-td" matTooltip="{{i}}, {{j}}"
                             *ngFor="let j of range(0, tableDimension2);"
                             [ngClass]="{
                                                 'get-animation': lastAffectedIndex1 === i && lastAffectedIndex2 === j && lastOperation === 'get' && lastAffectedTable === currentMainTable,
@@ -109,7 +109,7 @@
             <mat-card-content>
                 <table class="dp-table" *ngIf="!isTable2d">
                     <tr class="dp-tr">
-                        <td class="dp-td"
+                        <td class="dp-td" matTooltip="{{i}}"
                             *ngFor="let i of range(0, tableDimension1);"
                             [ngClass]="{
                                                 'get-animation': lastAffectedIndex1 === i && lastOperation === 'get' && lastAffectedTable === currentAuxiliaryTable,
@@ -123,7 +123,7 @@
                 </table>
                 <table class="dp-table" *ngIf="isTable2d">
                     <tr class="dp-tr" *ngFor="let i of range(0, tableDimension1);">
-                        <td class="dp-td"
+                        <td class="dp-td" matTooltip="{{i}}, {{j}}"
                             *ngFor="let j of range(0, tableDimension2);"
                             [ngClass]="{
                                                 'get-animation': lastAffectedIndex1 === i && lastAffectedIndex2 === j && lastOperation === 'get' && lastAffectedTable === currentAuxiliaryTable,
