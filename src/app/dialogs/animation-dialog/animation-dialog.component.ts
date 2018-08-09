@@ -19,6 +19,9 @@ export class AnimationDialogComponent implements OnInit {
     currentMainTable: any;
     isMainTable2d: boolean;
 
+    totalGets: number;
+    totalSets: number;
+
     currentFrame: number;
     totalFrames: number;
     isCurrentlyPlayingAnimation: boolean = false;
@@ -34,19 +37,29 @@ export class AnimationDialogComponent implements OnInit {
         public dialogRef: MatDialogRef<AnimationDialogComponent>,
         public animationDataService: AnimationDataService,
         @Inject(MAT_DIALOG_DATA) public data: any) {
-        this.isDarkTheme = data.isDarkTheme;
-        this.title = animationDataService.title;
-        this.result = animationDataService.result;
-        this.log = animationDataService.log;
-        this.mainTableDimension1 = animationDataService.mainTableDimension1;
-        this.mainTableDimension2 = animationDataService.mainTableDimension2;
     }
 
     ngOnInit() {
+        this.isDarkTheme = this.data.isDarkTheme;
+        this.title = this.animationDataService.title;
+        this.result = this.animationDataService.result;
+        this.log = this.animationDataService.log;
+        this.mainTableDimension1 = this.animationDataService.mainTableDimension1;
+        this.mainTableDimension2 = this.animationDataService.mainTableDimension2;
         this.isMainTable2d = this.mainTableDimension2 >= 0;
         this.resetMainTable();
         this.currentFrame = 0;
         this.totalFrames = this.log.length + 1;
+        this.totalGets = 0;
+        this.totalSets = 0;
+        for (let i = 0; i < this.log.length; i++) {
+            const entry = this.log[i];
+            if (entry.action === 'set') {
+                this.totalSets++;
+            } else if (entry.action === 'get') {
+                this.totalGets++;
+            }
+        }
     }
 
     playAnimation(): void {
