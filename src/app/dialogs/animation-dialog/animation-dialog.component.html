@@ -1,5 +1,5 @@
 <div class="main-container" [ngClass]="{'dark-theme': data.isDarkTheme}">
-    <div class="header-container">
+    <div>
         <mat-card>
             <mat-card-content>
                 <p>
@@ -9,7 +9,7 @@
             </mat-card-content>
         </mat-card>
     </div>
-    <div class="table-container">
+    <div>
         <mat-card class="table-card">
             <mat-card-content>
                 <table class="dp-table" *ngIf="!isMainTable2d">
@@ -30,20 +30,20 @@
                     <tr class="dp-tr" *ngFor="let i of range(0, mainTableDimension1);">
                         <td class="dp-td"
                             *ngFor="let j of range(0, mainTableDimension2);">
-                                <span class="dp-table-cell"
-                                      [ngClass]="{
-                                                'get-entry': lastAffectedIndex1 === i && lastAffectedIndex2 === j && lastOperation === 'get',
-                                                'set-entry': lastAffectedIndex1 === i && lastAffectedIndex2 === j && lastOperation === 'set'
-                                             }"
-                                      [innerHTML]="getTableDisplayedValue(currentMainTable, i, j)">
-                                </span>
+                            <span class="dp-table-cell"
+                                  [ngClass]="{
+                                            'get-entry': lastAffectedIndex1 === i && lastAffectedIndex2 === j && lastOperation === 'get',
+                                            'set-entry': lastAffectedIndex1 === i && lastAffectedIndex2 === j && lastOperation === 'set'
+                                         }"
+                                  [innerHTML]="getTableDisplayedValue(currentMainTable, i, j)">
+                            </span>
                         </td>
                     </tr>
                 </table>
             </mat-card-content>
         </mat-card>
     </div>
-    <div class="bottom-container">
+    <div>
         <mat-card class="controls-card">
             <mat-card-content>
                 <div class="frames-progress-bar">
