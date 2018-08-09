@@ -26,8 +26,17 @@ export class AnimationDialogComponent implements OnInit {
     totalFrames: number;
     isCurrentlyPlayingAnimation: boolean = false;
     currentlyPlayingIntervalVariable: any = null;
-    playIntervalTimeMS: number = 250;
     currentlySwitchingPlayState: boolean = false;
+
+    playIntervalTimeMSOptions = [
+        {text: 'Slower', value: 1000},
+        {text: 'Slow', value: 500},
+        {text: 'Medium', value: 250},
+        {text: 'Fast', value: 50},
+        {text: 'Faster', value: 25},
+        {text: '&#x1F5F2;', value: 10}
+    ];
+    playIntervalTimeMS: number = this.playIntervalTimeMSOptions[2].value;
 
     lastAffectedIndex1: number = -1;
     lastAffectedIndex2: number = -1;
@@ -77,7 +86,7 @@ export class AnimationDialogComponent implements OnInit {
         }, component.playIntervalTimeMS);
     }
 
-    resetAnimation(): void{
+    resetAnimation(): void {
         this.currentFrame = 0;
         this.resetMainTable();
     }

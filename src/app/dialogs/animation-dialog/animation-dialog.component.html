@@ -99,6 +99,16 @@
                         </button>
                     </div>
                     <div class="controls-right-container">
+                        <mat-form-field class="animation-speed-selector">
+                            <mat-select placeholder="Animation Speed"
+                                        [disabled]="isCurrentlyPlayingAnimation || currentlySwitchingPlayState"
+                                        [(ngModel)]="playIntervalTimeMS">
+                                <mat-option *ngFor="let option of playIntervalTimeMSOptions"
+                                            [value]="option.value">
+                                    <span [innerHTML]="option.text"></span>
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
                     </div>
                 </div>
             </mat-card-content>
