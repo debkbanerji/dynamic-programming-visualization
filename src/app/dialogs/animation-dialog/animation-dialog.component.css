@@ -87,12 +87,18 @@ mat-expansion-panel-header {
 
 .get-entry {
     color: #00c5ff;
-    font-size: large;
 }
 
 .set-entry {
     color: #ff1744;
-    font-size: large;
+}
+
+.get-animation {
+    background-color: rgba(0, 197, 255, 0.25);
+}
+
+.set-animation {
+    background-color: rgba(255, 23, 68, 0.25);
 }
 
 .frames-progress-bar {

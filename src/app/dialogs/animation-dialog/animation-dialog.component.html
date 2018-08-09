@@ -66,12 +66,12 @@
                 <table class="dp-table" *ngIf="!isTable2d">
                     <tr class="dp-tr">
                         <td class="dp-td"
-                            *ngFor="let i of range(0, tableDimension1);">
+                            *ngFor="let i of range(0, tableDimension1);"
+                            [ngClass]="{
+                                                'get-animation': lastAffectedIndex1 === i && lastOperation === 'get' && lastAffectedTable === currentMainTable,
+                                                'set-animation': lastAffectedIndex1 === i && lastOperation === 'set' && lastAffectedTable === currentMainTable
+                                             }">
                             <span class="dp-table-cell"
-                                  [ngClass]="{
-                                                'get-entry': lastAffectedIndex1 === i && lastOperation === 'get' && lastAffectedTable === currentMainTable,
-                                                'set-entry': lastAffectedIndex1 === i && lastOperation === 'set' && lastAffectedTable === currentMainTable
-                                             }"
                                   [innerHTML]="getTableDisplayedValue(currentMainTable, i, -1)">
                             </span>
                         </td>
@@ -80,12 +80,12 @@
                 <table class="dp-table" *ngIf="isTable2d">
                     <tr class="dp-tr" *ngFor="let i of range(0, tableDimension1);">
                         <td class="dp-td"
-                            *ngFor="let j of range(0, tableDimension2);">
+                            *ngFor="let j of range(0, tableDimension2);"
+                            [ngClass]="{
+                                                'get-animation': lastAffectedIndex1 === i && lastAffectedIndex2 === j && lastOperation === 'get' && lastAffectedTable === currentMainTable,
+                                                'set-animation': lastAffectedIndex1 === i && lastAffectedIndex2 === j && lastOperation === 'set' && lastAffectedTable === currentMainTable
+                                             }">
                             <span class="dp-table-cell"
-                                  [ngClass]="{
-                                                'get-entry': lastAffectedIndex1 === i && lastAffectedIndex2 === j && lastOperation === 'get' && lastAffectedTable === currentMainTable,
-                                                'set-entry': lastAffectedIndex1 === i && lastAffectedIndex2 === j && lastOperation === 'set' && lastAffectedTable === currentMainTable
-                                             }"
                                   [innerHTML]="getTableDisplayedValue(currentMainTable, i, j)">
                             </span>
                         </td>
@@ -110,12 +110,12 @@
                 <table class="dp-table" *ngIf="!isTable2d">
                     <tr class="dp-tr">
                         <td class="dp-td"
-                            *ngFor="let i of range(0, tableDimension1);">
+                            *ngFor="let i of range(0, tableDimension1);"
+                            [ngClass]="{
+                                                'get-animation': lastAffectedIndex1 === i && lastOperation === 'get' && lastAffectedTable === currentAuxiliaryTable,
+                                                'set-animation': lastAffectedIndex1 === i && lastOperation === 'set' && lastAffectedTable === currentAuxiliaryTable
+                                             }">
                             <span class="dp-table-cell"
-                                  [ngClass]="{
-                                                'get-entry': lastAffectedIndex1 === i && lastOperation === 'get' && lastAffectedTable === currentAuxiliaryTable,
-                                                'set-entry': lastAffectedIndex1 === i && lastOperation === 'set' && lastAffectedTable === currentAuxiliaryTable
-                                             }"
                                   [innerHTML]="getTableDisplayedValue(currentAuxiliaryTable, i, -1)">
                             </span>
                         </td>
@@ -124,12 +124,12 @@
                 <table class="dp-table" *ngIf="isTable2d">
                     <tr class="dp-tr" *ngFor="let i of range(0, tableDimension1);">
                         <td class="dp-td"
-                            *ngFor="let j of range(0, tableDimension2);">
+                            *ngFor="let j of range(0, tableDimension2);"
+                            [ngClass]="{
+                                                'get-animation': lastAffectedIndex1 === i && lastAffectedIndex2 === j && lastOperation === 'get' && lastAffectedTable === currentAuxiliaryTable,
+                                                'set-animation': lastAffectedIndex1 === i && lastAffectedIndex2 === j && lastOperation === 'set' && lastAffectedTable === currentAuxiliaryTable
+                                             }">
                             <span class="dp-table-cell"
-                                  [ngClass]="{
-                                                'get-entry': lastAffectedIndex1 === i && lastAffectedIndex2 === j && lastOperation === 'get' && lastAffectedTable === currentAuxiliaryTable,
-                                                'set-entry': lastAffectedIndex1 === i && lastAffectedIndex2 === j && lastOperation === 'set' && lastAffectedTable === currentAuxiliaryTable
-                                             }"
                                   [innerHTML]="getTableDisplayedValue(currentAuxiliaryTable, i, j)">
                             </span>
                         </td>
