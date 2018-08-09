@@ -25,6 +25,10 @@ mat-card {
     overflow-x: hidden;
 }
 
+.main-header-container {
+    padding-bottom: 2px;
+}
+
 .slightly-bold-label {
     font-weight: 600;
 }

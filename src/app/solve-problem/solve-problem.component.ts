@@ -1074,13 +1074,17 @@ export class SolveProblemComponent implements OnInit {
             tableDimension2 = testCase['expected-table'][0].length
         }
 
+        let useAuxiliaryTable = component.providedSolution.detailedSetNextEntryCode
+            && component.providedSolution.useAuxiliaryTableWithDetailedSolution;
         this.viewAnimation(
             testCase['name'] + ' - provided solution',
+            useAuxiliaryTable ?
+                'Note: this animation assumes the algorithm calculates a detailed solution through use of a secondary table' :
+                'Note: if the problem allows for searching for a detailed solution, this animation will include the steps required to find it',
             testCase['expected-result'],
             testCase['input'],
             testCase['log'],
-            component.providedSolution.detailedSetNextEntryCode
-            && component.providedSolution.useAuxiliaryTableWithDetailedSolution,
+            useAuxiliaryTable,
             tableDimension1,
             tableDimension2
         );
@@ -1088,6 +1092,7 @@ export class SolveProblemComponent implements OnInit {
 
     viewAnimation(
         title: string,
+        subtitle: string,
         result,
         input,
         log,
@@ -1105,6 +1110,7 @@ export class SolveProblemComponent implements OnInit {
         const component: SolveProblemComponent = this;
         component.animationDataService.initialize(
             title,
+            subtitle,
             result,
             input,
             filteredLog,

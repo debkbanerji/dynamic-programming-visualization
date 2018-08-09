@@ -13,6 +13,7 @@ export class AnimationDialogComponent implements OnInit {
 
     isDarkTheme: boolean;
     title: string;
+    subtitle: string;
     result;
     input;
     log;
@@ -57,6 +58,7 @@ export class AnimationDialogComponent implements OnInit {
     ngOnInit() {
         this.isDarkTheme = this.data.isDarkTheme;
         this.title = this.animationDataService.title;
+        this.subtitle = this.animationDataService.subtitle;
         this.result = this.animationDataService.result;
         this.input = this.animationDataService.input;
         this.log = this.animationDataService.log;

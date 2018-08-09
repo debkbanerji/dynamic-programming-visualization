@@ -2,10 +2,11 @@
     <div>
         <mat-card>
             <mat-card-content>
-                <p>
+                <div class="main-header-container">
                     <span class="main-header">{{title}}</span>
                     <span class="result-header">Result: {{result}}</span>
-                </p>
+                </div>
+                <small *ngIf="subtitle">{{subtitle}}</small>
             </mat-card-content>
         </mat-card>
     </div>

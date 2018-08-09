@@ -6,6 +6,7 @@ import {Injectable} from '@angular/core';
 export class AnimationDataService {
 
     public title: string;
+    public subtitle: string;
     public result;
     public input: any;
     public log: any;
@@ -18,6 +19,7 @@ export class AnimationDataService {
 
     initialize(
         title,
+        subtitle,
         result,
         input,
         log,
@@ -26,6 +28,7 @@ export class AnimationDataService {
         mainTableDimension2
     ) {
         this.title = title;
+        this.subtitle = subtitle;
         this.result = result;
         this.input = input;
         this.log = log;
@@ -36,6 +39,7 @@ export class AnimationDataService {
 
     clear() {
         this.title = null;
+        this.subtitle = null;
         this.result = null;
         this.input = null;
         this.log = null;
