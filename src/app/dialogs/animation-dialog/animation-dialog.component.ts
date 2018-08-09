@@ -16,11 +16,13 @@ export class AnimationDialogComponent implements OnInit {
     result;
     input;
     log;
-    mainTableDimension1: number;
-    mainTableDimension2: number;
+    useAuxiliaryTable: boolean;
+    tableDimension1: number;
+    tableDimension2: number;
 
     currentMainTable: any;
-    isMainTable2d: boolean;
+    currentAuxiliaryTable: any;
+    isTable2d: boolean;
 
     totalGets: number;
     totalSets: number;
@@ -44,6 +46,7 @@ export class AnimationDialogComponent implements OnInit {
     lastAffectedIndex1: number = -1;
     lastAffectedIndex2: number = -1;
     lastOperation: string = null;
+    lastAffectedTable: string = null;
 
     constructor(
         public dialogRef: MatDialogRef<AnimationDialogComponent>,
@@ -57,10 +60,11 @@ export class AnimationDialogComponent implements OnInit {
         this.result = this.animationDataService.result;
         this.input = this.animationDataService.input;
         this.log = this.animationDataService.log;
-        this.mainTableDimension1 = this.animationDataService.mainTableDimension1;
-        this.mainTableDimension2 = this.animationDataService.mainTableDimension2;
-        this.isMainTable2d = this.mainTableDimension2 >= 0;
-        this.resetMainTable();
+        this.useAuxiliaryTable = this.animationDataService.useAuxiliaryTable;
+        this.tableDimension1 = this.animationDataService.mainTableDimension1;
+        this.tableDimension2 = this.animationDataService.mainTableDimension2;
+        this.isTable2d = this.tableDimension2 >= 0;
+        this.resetTables();
         this.currentFrame = 0;
         this.totalFrames = this.log.length + 1;
         this.totalGets = 0;
@@ -92,7 +96,7 @@ export class AnimationDialogComponent implements OnInit {
 
     resetAnimation(): void {
         this.currentFrame = 0;
-        this.resetMainTable();
+        this.resetTables();
     }
 
     stopPlayingAnimation(): void {
@@ -120,13 +124,15 @@ export class AnimationDialogComponent implements OnInit {
         const lastOperationFrame = this.currentFrame - 2;
         if (lastOperationFrame >= 0 && lastOperationFrame < this.log.length) {
             const lastOperationEntry = this.log[lastOperationFrame];
-            this.lastOperation = lastOperationEntry.action;
             this.lastAffectedIndex1 = lastOperationEntry.index1;
             this.lastAffectedIndex2 = lastOperationEntry.index2;
+            this.lastOperation = lastOperationEntry.action;
+            this.lastAffectedTable = this.getRelevantTable(lastOperationEntry);
         } else {
             this.lastAffectedIndex1 = -1;
             this.lastAffectedIndex2 = -1;
             this.lastOperation = null;
+            this.lastAffectedTable = null;
         }
         this.currentFrame--;
     }
@@ -142,10 +148,12 @@ export class AnimationDialogComponent implements OnInit {
             this.lastOperation = entry.action;
             this.lastAffectedIndex1 = entry.index1;
             this.lastAffectedIndex2 = entry.index2;
+            this.lastAffectedTable = table;
         } else {
             this.lastAffectedIndex1 = -1;
             this.lastAffectedIndex2 = -1;
             this.lastOperation = null;
+            this.lastAffectedTable = null;
         }
         this.currentFrame++;
     }
@@ -161,15 +169,13 @@ export class AnimationDialogComponent implements OnInit {
     getRelevantTable(logEntry) {
         if (logEntry.table === 'T') {
             return this.currentMainTable;
+        } else if (logEntry.table === 'T2') {
+            return this.currentAuxiliaryTable;
         }
     }
 
     getTableCell(table, i, j) {
-        let is2d;
-        if (table === this.currentMainTable) {
-            is2d = this.isMainTable2d;
-        }
-        if (!is2d) {
+        if (!this.isTable2d) {
             return table[i];
         } else {
             return table[i][j];
@@ -239,21 +245,24 @@ export class AnimationDialogComponent implements OnInit {
         }
     }
 
-    resetMainTable() {
+    resetTables() {
         this.currentMainTable = [];
-        if (this.isMainTable2d) {
-            for (let i = 0; i < this.mainTableDimension1; i++) {
-                let nextArray = [];
-                for (let i = 0; i < this.mainTableDimension2; i++) {
-                    nextArray.push([]);
+        this.currentAuxiliaryTable = [];
+        [this.currentMainTable, this.currentAuxiliaryTable].forEach(table => {
+            if (this.isTable2d) {
+                for (let i = 0; i < this.tableDimension1; i++) {
+                    let nextArray = [];
+                    for (let i = 0; i < this.tableDimension2; i++) {
+                        nextArray.push([]);
+                    }
+                    table.push(nextArray);
                 }
-                this.currentMainTable.push(nextArray);
+            } else {
+                for (let i = 0; i < this.tableDimension1; i++) {
+                    table.push([]);
+                }
             }
-        } else {
-            for (let i = 0; i < this.mainTableDimension1; i++) {
-                this.currentMainTable.push([]);
-            }
-        }
+        });
     }
 
     onNoClick(): void {

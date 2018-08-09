@@ -9,6 +9,7 @@ export class AnimationDataService {
     public result;
     public input: any;
     public log: any;
+    public useAuxiliaryTable: boolean;
     public mainTableDimension1: any;
     public mainTableDimension2: any;
 
@@ -20,6 +21,7 @@ export class AnimationDataService {
         result,
         input,
         log,
+        useAuxiliaryTable: boolean,
         mainTableDimension1,
         mainTableDimension2
     ) {
@@ -27,6 +29,7 @@ export class AnimationDataService {
         this.result = result;
         this.input = input;
         this.log = log;
+        this.useAuxiliaryTable = useAuxiliaryTable;
         this.mainTableDimension1 = mainTableDimension1;
         this.mainTableDimension2 = mainTableDimension2;
     }
@@ -36,6 +39,7 @@ export class AnimationDataService {
         this.result = null;
         this.input = null;
         this.log = null;
+        this.useAuxiliaryTable = null;
         this.mainTableDimension1 = null;
         this.mainTableDimension2 = null;
     }

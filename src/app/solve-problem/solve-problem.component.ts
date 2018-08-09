@@ -79,7 +79,7 @@ export class SolveProblemComponent implements OnInit {
         nextEntryIndex1: 'i',
         nextEntryIndex2: 'j',
 
-        useAuxillaryTable: false,
+        useAuxiliaryTableWithDetailedSolution: false,
     };
 
     generatedCode: string = null;
@@ -1066,18 +1066,23 @@ export class SolveProblemComponent implements OnInit {
     }
 
     viewTestCaseAnimation(testCase) {
-        let mainTableDimension1 = testCase['expected-table'].length;
-        let mainTableDimension2 = -1;
+        const component: SolveProblemComponent = this;
+
+        let tableDimension1 = testCase['expected-table'].length;
+        let tableDimension2 = -1;
         if (this.isRectangular2dArray(testCase['expected-table'])) {
-            mainTableDimension2 = testCase['expected-table'][0].length
+            tableDimension2 = testCase['expected-table'][0].length
         }
+
         this.viewAnimation(
             testCase['name'] + ' - provided solution',
             testCase['expected-result'],
             testCase['input'],
             testCase['log'],
-            mainTableDimension1,
-            mainTableDimension2
+            component.providedSolution.detailedSetNextEntryCode
+            && component.providedSolution.useAuxiliaryTableWithDetailedSolution,
+            tableDimension1,
+            tableDimension2
         );
     }
 
@@ -1086,17 +1091,26 @@ export class SolveProblemComponent implements OnInit {
         result,
         input,
         log,
-        mainTableDimension1: number,
-        mainTableDimension2: number
+        useAuxiliaryTable: boolean,
+        tableDimension1: number,
+        tableDimension2: number
     ) {
+        let filteredLog = [];
+        for (let i = 0; i < log.length; i++) {
+            const logEntry = log[i];
+            if (logEntry.table === 'T' || useAuxiliaryTable) {
+                filteredLog.push(logEntry)
+            }
+        }
         const component: SolveProblemComponent = this;
         component.animationDataService.initialize(
             title,
             result,
             input,
-            log,
-            mainTableDimension1,
-            mainTableDimension2
+            filteredLog,
+            useAuxiliaryTable,
+            tableDimension1,
+            tableDimension2
         );
         const dialogRef = this.dialog.open(AnimationDialogComponent, {
             data: {
