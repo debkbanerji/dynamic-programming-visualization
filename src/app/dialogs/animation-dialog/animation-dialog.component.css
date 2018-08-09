@@ -29,6 +29,15 @@ mat-card {
     padding-bottom: 2px;
 }
 
+mat-expansion-panel-header {
+    padding-left: 8px !important;
+    height: 36px !important;
+}
+
+.table-card-header {
+    padding-left: 3px;
+}
+
 .slightly-bold-label {
     font-weight: 600;
 }

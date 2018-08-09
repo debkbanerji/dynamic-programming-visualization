@@ -52,9 +52,9 @@
     </div>
     <div>
         <mat-card class="table-card">
-            <P>
+            <p class="table-card-header">
                 <span class="slightly-bold-label">{{useAuxiliaryTable ? 'Primary Table' : 'Table'}}</span>
-            </P>
+            </p>
             <mat-card-content>
                 <table class="dp-table" *ngIf="!isTable2d">
                     <tr class="dp-tr">
@@ -89,7 +89,7 @@
     </div>
     <div *ngIf="useAuxiliaryTable">
         <mat-card class="table-card">
-            <p>
+            <p class="table-card-header">
                 <span class="slightly-bold-label">Secondary Table</span>
             </p>
             <mat-card-content>
