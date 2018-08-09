@@ -224,7 +224,7 @@ export class AnimationDialogComponent implements OnInit {
     }
 
     isRectangular2dArray(item: any): boolean {
-        if (this.isArray(item) && item.constructor === Array && item.length > 0) {
+        if (this.isArray(item) && item.constructor === Array && item.length > 0 && item[0]) {
             if (item[0].constructor !== Array) {
                 return false;
             }
