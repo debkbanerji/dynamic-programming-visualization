@@ -1,6 +1,6 @@
 {
     "name": "Longest Increasing Subsequence",
-    "problem-statement": "",
+    "problem-statement": "In this problem, the input is an array of <b>n</b> numbers <b>arr[0], . . . , arr[n-1]</b>. A subsequence is any subset of these numbers taken in order, of the form <b>arr[i0], arr[i1], ... , arr[ik]</b> where <b>0 <= i0 < i1 < · · · < ik < n</b>, and an increasing subsequence is one in which the numbers are getting strictly larger. The goal of the problem is to find the increasing subsequence of greatest length.",
     "input": {
         "arr": "Input Array",
         "n": "Length of Input Array"

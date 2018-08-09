@@ -332,7 +332,7 @@ export class SolveProblemComponent implements OnInit {
         code.push('\nself.close();\n\n}');
 
         const joinedCode = code.join('');
-        console.log(joinedCode);
+        // console.log(joinedCode);
 
         const result = {};
 
