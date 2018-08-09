@@ -352,63 +352,66 @@
         </mat-card>
     </div>
     <div id="input-and-table-container" class="col-xs-12 col-md-6" *ngIf="problemDefined">
-        <mat-expansion-panel [expanded]="true">
-            <mat-expansion-panel-header>
-                <mat-panel-title>
-                    <p class="section-header">Problem Definition</p>
-                </mat-panel-title>
-                <!--<mat-panel-description>-->
-                <!--{{problem['name']}}-->
-                <!--</mat-panel-description>-->
-            </mat-expansion-panel-header>
-            <div [innerHTML]="problem['problem-statement']"></div>
-            <br>
-            <b>
-                Inputs
-            </b>
-            <div *ngFor="let variable of objectKeys(problem.input)">
-                <span><b class="code">{{variable}}</b> : <small [innerHTML]="problem.input[variable]"></small></span>
-            </div>
-            <div *ngIf="problem['output']['result']">
+        <div class="problem-definition-panel">
+            <mat-expansion-panel [expanded]="true">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <p class="section-header">Problem Definition</p>
+                    </mat-panel-title>
+                    <!--<mat-panel-description>-->
+                    <!--{{problem['name']}}-->
+                    <!--</mat-panel-description>-->
+                </mat-expansion-panel-header>
+                <div [innerHTML]="problem['problem-statement']"></div>
                 <br>
-                <b>Output</b>
-                <div><b class="code">Result: </b>
-                    <small [innerHTML]="problem['output']['result']"></small>
+                <b>
+                    Inputs
+                </b>
+                <div *ngFor="let variable of objectKeys(problem.input)">
+                    <span><b class="code">{{variable}}</b> : <small
+                        [innerHTML]="problem.input[variable]"></small></span>
                 </div>
-                <div *ngIf="expectDetailedSolution"><b class="code">Solution: </b>
-                    <small [innerHTML]="problem['output']['solution']"></small>
-                </div>
-                <div *ngIf="problem['output']['solution']">
-                    <small *ngIf="expectDetailedSolution && providedSolution.useAuxiliaryTableWithDetailedSolution">
-                        Note: Obtaining the full solution may require use of a second table
-                    </small>
-                    <br *ngIf="expectDetailedSolution && providedSolution.useAuxiliaryTableWithDetailedSolution">
-                    <mat-slide-toggle [(ngModel)]="expectDetailedSolution" *ngIf="!testsCurrentlyRunning"
-                                      (change)="recalculateExpectedResults(null); runAllTestsWithUserSolution();">
-                        Expect full solution
-                    </mat-slide-toggle>
-                </div>
-            </div>
-            <div
-                *ngIf="revealedProvidedSolution">
-                <br *ngIf="providedSolution['solutionNotes']">
-                <div *ngIf="providedSolution['solutionNotes']">
-                    <b>Solution notes</b>
+                <div *ngIf="problem['output']['result']">
                     <br>
-                    <p [innerHTML]="providedSolution['solutionNotes']"></p>
+                    <b>Output</b>
+                    <div><b class="code">Result: </b>
+                        <small [innerHTML]="problem['output']['result']"></small>
+                    </div>
+                    <div *ngIf="expectDetailedSolution"><b class="code">Solution: </b>
+                        <small [innerHTML]="problem['output']['solution']"></small>
+                    </div>
+                    <div *ngIf="problem['output']['solution']">
+                        <small *ngIf="expectDetailedSolution && providedSolution.useAuxiliaryTableWithDetailedSolution">
+                            Note: Obtaining the full solution may require use of a second table
+                        </small>
+                        <br *ngIf="expectDetailedSolution && providedSolution.useAuxiliaryTableWithDetailedSolution">
+                        <mat-slide-toggle [(ngModel)]="expectDetailedSolution" *ngIf="!testsCurrentlyRunning"
+                                          (change)="recalculateExpectedResults(null); runAllTestsWithUserSolution();">
+                            Expect full solution
+                        </mat-slide-toggle>
+                    </div>
                 </div>
-                <!--<br *ngIf="providedSolution['tableEntryDefinition']">-->
-                <div *ngIf="providedSolution['tableEntryDefinition']">
-                    <b>Table entry definition: </b>
-                    <p [innerHTML]="providedSolution['tableEntryDefinition']"></p>
+                <div
+                    *ngIf="revealedProvidedSolution">
+                    <br *ngIf="providedSolution['solutionNotes']">
+                    <div *ngIf="providedSolution['solutionNotes']">
+                        <b>Solution notes</b>
+                        <br>
+                        <p [innerHTML]="providedSolution['solutionNotes']"></p>
+                    </div>
+                    <!--<br *ngIf="providedSolution['tableEntryDefinition']">-->
+                    <div *ngIf="providedSolution['tableEntryDefinition']">
+                        <b>Table entry definition: </b>
+                        <p [innerHTML]="providedSolution['tableEntryDefinition']"></p>
+                    </div>
+                    <div *ngIf="providedSolution['auxiliaryTableEntryDefinition'] && expectDetailedSolution">
+                        <b>Second table entry definition: </b>
+                        <p [innerHTML]="providedSolution['auxiliaryTableEntryDefinition']"></p>
+                    </div>
                 </div>
-                <div *ngIf="providedSolution['auxiliaryTableEntryDefinition'] && expectDetailedSolution">
-                    <b>Second table entry definition: </b>
-                    <p [innerHTML]="providedSolution['auxiliaryTableEntryDefinition']"></p>
-                </div>
-            </div>
-        </mat-expansion-panel>
-        <mat-card>
+            </mat-expansion-panel>
+        </div>
+        <mat-card class="test-cases-card">
             <mat-card-content>
                 <p class="section-header">Test Cases</p>
                 <mat-tab-group id="test-case-group">

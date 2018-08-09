@@ -105,6 +105,14 @@
     min-width: 100%;
 }
 
+.problem-definition-panel {
+    padding-bottom: 5px;
+}
+
+.test-cases-card {
+    margin-top: 0;
+}
+
 /*DP Table*/
 
 .dp-table {
