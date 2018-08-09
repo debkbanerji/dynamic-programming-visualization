@@ -9,9 +9,12 @@ import {AnimationDataService} from "../../providers/animation-data.service";
 })
 export class AnimationDialogComponent implements OnInit {
 
+    objectKeys = Object.keys;
+
     isDarkTheme: boolean;
     title: string;
     result;
+    input;
     log;
     mainTableDimension1: number;
     mainTableDimension2: number;
@@ -52,6 +55,7 @@ export class AnimationDialogComponent implements OnInit {
         this.isDarkTheme = this.data.isDarkTheme;
         this.title = this.animationDataService.title;
         this.result = this.animationDataService.result;
+        this.input = this.animationDataService.input;
         this.log = this.animationDataService.log;
         this.mainTableDimension1 = this.animationDataService.mainTableDimension1;
         this.mainTableDimension2 = this.animationDataService.mainTableDimension2;
@@ -204,6 +208,34 @@ export class AnimationDialogComponent implements OnInit {
             return value;
         } else {
             return JSON.stringify(value);
+        }
+    }
+
+    isArray(item: any): boolean {
+        return item && item.constructor === Array;
+    }
+
+    shouldDisplayArray(item: any): boolean {
+        if (this.isRectangular2dArray(item)) {
+            return item.length > 0 && item[0].length > 0;
+        } else {
+            return item.length > 0;
+        }
+    }
+
+    isRectangular2dArray(item: any): boolean {
+        if (this.isArray(item) && item.constructor === Array && item.length > 0) {
+            if (item[0].constructor !== Array) {
+                return false;
+            }
+            for (let i = 1; i < item.length; i++) {
+                if (item[i].constructor !== Array || item[i].length !== item[i - 1].length) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return false;
         }
     }
 

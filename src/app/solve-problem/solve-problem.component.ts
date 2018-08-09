@@ -1074,6 +1074,7 @@ export class SolveProblemComponent implements OnInit {
         this.viewAnimation(
             testCase['name'] + ' - provided solution',
             testCase['expected-result'],
+            testCase['input'],
             testCase['log'],
             mainTableDimension1,
             mainTableDimension2
@@ -1083,6 +1084,7 @@ export class SolveProblemComponent implements OnInit {
     viewAnimation(
         title: string,
         result,
+        input,
         log,
         mainTableDimension1: number,
         mainTableDimension2: number
@@ -1091,6 +1093,7 @@ export class SolveProblemComponent implements OnInit {
         component.animationDataService.initialize(
             title,
             result,
+            input,
             log,
             mainTableDimension1,
             mainTableDimension2

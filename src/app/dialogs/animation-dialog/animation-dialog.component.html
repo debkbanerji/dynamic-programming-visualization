@@ -10,6 +10,46 @@
         </mat-card>
     </div>
     <div>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <span class="slightly-bold-label">Input Values</span>
+            </mat-expansion-panel-header>
+            <div *ngFor="let inputField of objectKeys(input)">
+                <span class="slightly-bold-label">{{inputField}}:</span>
+                <span *ngIf="!isArray(input[inputField])"
+                      [innerHTML]="' ' + getDisplayedValue(input[inputField])">
+                </span>
+                <div
+                    *ngIf="isArray(input[inputField]) && shouldDisplayArray(input[inputField])">
+                    <table class="dp-table" *ngIf="!isRectangular2dArray(input[inputField])">
+                        <tr class="dp-tr">
+                            <td class="dp-td"
+                                *ngFor="let i of range(input[inputField].length);">
+                                <span class="dp-table-cell"
+                                      [innerHTML]="getDisplayedValue(input[inputField][i])">
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                    <table class="dp-table" *ngIf="isRectangular2dArray(input[inputField])">
+                        <tr class="dp-tr" *ngFor="let i of range(input[inputField].length);">
+                            <td class="dp-td"
+                                *ngFor="let j of range(input[inputField][0].length);">
+                                <span class="dp-table-cell"
+                                      [innerHTML]="getDisplayedValue(input[inputField][i][j])">
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div
+                    *ngIf="isArray(input[inputField]) && !shouldDisplayArray(input[inputField])">
+                    empty Array
+                </div>
+            </div>
+        </mat-expansion-panel>
+    </div>
+    <div>
         <mat-card class="table-card">
             <mat-card-content>
                 <table class="dp-table" *ngIf="!isMainTable2d">
@@ -57,7 +97,8 @@
                         <div class="operation-count-container">
                             <span>{{log.length}} table {{log.length === 1 ? 'operation' : 'operations'}}</span>
                             <br>
-                            <span class="get-entry operation-count">{{totalGets}} {{totalGets === 1 ? 'read' : 'reads'}}</span>
+                            <span
+                                class="get-entry operation-count">{{totalGets}} {{totalGets === 1 ? 'read' : 'reads'}}</span>
                             <br>
                             <span class="set-entry operation-count">{{totalSets}} {{totalSets === 1 ? 'write' : 'writes'}}</span>
                         </div>

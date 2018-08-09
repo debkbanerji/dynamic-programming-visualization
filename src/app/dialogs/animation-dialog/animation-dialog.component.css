@@ -25,6 +25,10 @@ mat-card {
     overflow-x: hidden;
 }
 
+.slightly-bold-label {
+    font-weight: 600;
+}
+
 .table-card {
     height: 100%;
     flex-grow: 1;
