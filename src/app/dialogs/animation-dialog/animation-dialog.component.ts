@@ -41,9 +41,9 @@ export class AnimationDialogComponent implements OnInit {
     playIntervalTimeMSOptions = [
         {text: 'Slower', value: 750},
         {text: 'Slow', value: 300},
-        {text: 'Medium', value: 100},
-        {text: 'Fast', value: 25},
-        {text: 'Faster', value: 5},
+        {text: 'Medium', value: 180},
+        {text: 'Fast', value: 80},
+        {text: 'Faster', value: 25},
         {text: '&#x1F5F2;', value: 2}
     ];
     playIntervalTimeMS: number = this.playIntervalTimeMSOptions[2].value;
