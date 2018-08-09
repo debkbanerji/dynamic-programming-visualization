@@ -1,0 +1,157 @@
+.no-padding {
+    padding: 0;
+}
+
+mat-card {
+    padding: 5px;
+}
+
+.main-header {
+    font-weight: bold;
+    font-size: large;
+}
+
+.result-header {
+    float: right;
+    padding-top: 3px;
+    padding-right: 3px;
+}
+
+.main-container {
+    width: 75vw;
+    max-height: 95vh;
+    padding: 5px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.main-header-container {
+    padding-bottom: 2px;
+}
+
+mat-expansion-panel-header {
+    padding-left: 8px !important;
+    height: 36px !important;
+}
+
+.table-card-header {
+    padding-left: 3px;
+    display: inline-block;
+    width: 100%;
+}
+
+.slightly-bold-label {
+    font-weight: 600;
+}
+
+.table-card {
+    height: 100%;
+    flex-grow: 1;
+}
+
+/*DP Table*/
+
+.dp-table {
+    width: 100%;
+    height: 100%;
+}
+
+.dp-tr {
+    height: 5vw;
+}
+
+.dp-td {
+    width: 5vw;
+    height: 5vw;
+    padding: 0;
+    border: 1px solid #AAAAAA;
+    text-align: center;
+}
+
+.dp-td:after {
+}
+
+.dp-table-data {
+    position: absolute;
+    /*top: 0;*/
+    /*bottom: 0;*/
+    /*left: 0;*/
+    /*right: 0;*/
+    height: 100%;
+}
+
+.glyphicon-stop {
+    padding-bottom: 2px;
+    padding-right: 2px;
+}
+
+.get-entry {
+    color: #00c5ff;
+}
+
+.set-entry {
+    color: #ff1744;
+}
+
+.get-animation {
+    background-color: rgba(0, 197, 255, 0.25);
+}
+
+.set-animation {
+    background-color: rgba(255, 23, 68, 0.25);
+}
+
+.frames-progress-bar {
+    margin: 4px;
+}
+
+.controls-container {
+    width: 100%;
+    display: inline-block;
+}
+
+.controls-left-container {
+    display: inline-block;
+    width: 20%;
+    vertical-align: top;
+}
+
+.controls-center-container {
+    display: inline-block;
+    width: 50%;
+    text-align: center;
+    vertical-align: top;
+}
+
+.controls-right-container {
+    display: inline-block;
+    text-align: right;
+    width: 30%;
+    vertical-align: top;
+}
+
+.operation-count-container {
+    padding-left: 4px;
+}
+
+.operation-count {
+    font-size: small;
+}
+
+.table-operation-count-container {
+    display: inline-block;
+    float: right;
+}
+
+.control-button {
+    margin: 4px;
+}
+
+.control-glyphicon {
+    padding-bottom: 4px;
+}
+
+.animation-speed-selector {
+    padding-top: 8px;
+    padding-right: 4px;
+}

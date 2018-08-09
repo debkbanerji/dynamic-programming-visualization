@@ -25,6 +25,7 @@ import {
 import {HttpClientModule} from "@angular/common/http";
 import {ConfirmationDialogComponent} from './dialogs/confirmation-dialog/confirmation-dialog.component';
 import {SelectProblemComponent} from './select-problem/select-problem.component';
+import {AnimationDialogComponent} from "./dialogs/animation-dialog/animation-dialog.component";
 
 const routes: Routes = [
     {path: 'problem/:problem-name', component: SolveProblemComponent},
@@ -38,6 +39,7 @@ const routes: Routes = [
         AppComponent,
         SolveProblemComponent,
         ConfirmationDialogComponent,
+        AnimationDialogComponent,
         SelectProblemComponent
     ],
     imports: [
@@ -60,7 +62,8 @@ const routes: Routes = [
         RouterModule.forRoot(routes)
     ],
     entryComponents: [
-        ConfirmationDialogComponent
+        ConfirmationDialogComponent,
+        AnimationDialogComponent
     ],
     providers: [],
     bootstrap: [AppComponent]

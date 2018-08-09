@@ -5,6 +5,8 @@ import {ConfirmationDialogComponent} from "../dialogs/confirmation-dialog/confir
 import {ActivatedRoute, Router} from "@angular/router";
 import {Title} from "@angular/platform-browser";
 import {CustomProblemService} from "../providers/custom-problem.service";
+import {AnimationDataService} from "../providers/animation-data.service";
+import {AnimationDialogComponent} from "../dialogs/animation-dialog/animation-dialog.component";
 
 const encodedTableName = '___TABLE___';
 const auxiliaryTableName = '___AUX_TABLE___';
@@ -77,7 +79,7 @@ export class SolveProblemComponent implements OnInit {
         nextEntryIndex1: 'i',
         nextEntryIndex2: 'j',
 
-        useAuxillaryTable: false,
+        useAuxiliaryTableWithDetailedSolution: false,
     };
 
     generatedCode: string = null;
@@ -108,7 +110,8 @@ export class SolveProblemComponent implements OnInit {
                 private http: HttpClient,
                 private titleService: Title,
                 public dialog: MatDialog,
-                private customProblemService: CustomProblemService
+                private customProblemService: CustomProblemService,
+                private animationDataService: AnimationDataService
     ) {
     }
 
@@ -246,37 +249,37 @@ export class SolveProblemComponent implements OnInit {
 
     runTestsWithProvidedSolution(component: SolveProblemComponent, testCaseIndex: number, code: string): void {
         if (testCaseIndex < component.testCases.length) {
-            const testCase = component.testCases[testCaseIndex];
-            if (!testCase['expected-result'] && !testCase['expected-table']) {
-                const detailedSolution = component.providedSolution.detailedSetNextEntryCode && component.providedSolution.detailedReturnValueCode;
-                const auxiliaryTable = detailedSolution && component.providedSolution.useAuxiliaryTableWithDetailedSolution;
-                component.runTest(testCaseIndex, code, component, false, detailedSolution, auxiliaryTable, function (testResult) {
-                    if (testResult['error']) {
-                        console.log('Test error', testResult['error']);
-                        component.raiseProvidedSolutionError(testResult['error'].message);
-                    } else if (testResult['timed-out']) {
-                        component.raiseProvidedSolutionError('Test ' + testCaseIndex + ' timed out');
-                    } else {
-                        const testCase = component.testCases[testCaseIndex];
-                        testCase['log'] = testResult['log'];
-                        if (!testCase['expected-result'] && !testCase['expected-table']) {
-                            testCase['expected-result'] = testResult['result'];
-                            testCase['expected-table'] = testResult['table'];
-                            // testCase['detailed-solution'] = detailedSolution;
-                            // testCase['auxiliaryTable'] = testResult;
-                            if (detailedSolution) {
-                                testCase['expected-solution'] = testResult['solution'];
-                                if (auxiliaryTable) {
-                                    testCase['expected-auxiliary-table'] = testResult['auxiliary-table'];
-                                }
-                            }
+            // const testCase = component.testCases[testCaseIndex];
+            // if (!testCase['expected-result'] && !testCase['expected-table']) {
+            const detailedSolution = component.providedSolution.detailedSetNextEntryCode && component.providedSolution.detailedReturnValueCode;
+            const auxiliaryTable = detailedSolution && component.providedSolution.useAuxiliaryTableWithDetailedSolution;
+            component.runTest(testCaseIndex, code, component, false, detailedSolution, auxiliaryTable, function (testResult) {
+                if (testResult['error']) {
+                    console.log('Test error', testResult['error']);
+                    component.raiseProvidedSolutionError(testResult['error'].message);
+                } else if (testResult['timed-out']) {
+                    component.raiseProvidedSolutionError('Test ' + testCaseIndex + ' timed out');
+                } else {
+                    const testCase = component.testCases[testCaseIndex];
+                    testCase['log'] = testResult['log'];
+                    // if (!testCase['expected-result'] && !testCase['expected-table']) {
+                    testCase['expected-result'] = testResult['result'];
+                    testCase['expected-table'] = testResult['table'];
+                    // testCase['detailed-solution'] = detailedSolution;
+                    // testCase['auxiliaryTable'] = testResult;
+                    if (detailedSolution) {
+                        testCase['expected-solution'] = testResult['solution'];
+                        if (auxiliaryTable) {
+                            testCase['expected-auxiliary-table'] = testResult['auxiliary-table'];
                         }
-                        component.runTestsWithProvidedSolution(component, testCaseIndex + 1, code);
                     }
-                });
-            } else {
-                component.runTestsWithProvidedSolution(component, testCaseIndex + 1, code);
-            }
+                    // }
+                    component.runTestsWithProvidedSolution(component, testCaseIndex + 1, code);
+                }
+            });
+            // } else {
+            //     component.runTestsWithProvidedSolution(component, testCaseIndex + 1, code);
+            // }
         } else {
             component.testsCurrentlyRunning = false;
             component.testsCurrentlyRunningForProvided = false;
@@ -646,12 +649,12 @@ export class SolveProblemComponent implements OnInit {
             code.push('\n\tif(i === null || i === undefined || ', encodedTableName, '[0].length <= j || j < 0) {');
             code.push('\n\t\tthrow new Error(\'Could not get entry: \' + j + \' is not a valid table dimension 2 index\');');
             code.push('\n\t}\n');
-            code.push('\n\t', logName, '.push({"table": tableName, "action":"get","row":i,"column":j,"value":', encodedTableName, '[i][j]});\n');
+            code.push('\n\t', logName, '.push({"table": tableName, "action":"get","index1":i,"index2":j,"value":', encodedTableName, '[i][j]});\n');
         } else {
             code.push('\n\tif(i === null || i === undefined || ', encodedTableName, '.length <= i || i < 0) {');
             code.push('\n\t\tthrow new Error(\'Could not get entry: \' + i + \' is not a valid table index\');');
             code.push('\n\t}\n');
-            code.push('\n\t', logName, '.push({"table": tableName, "action":"get","index":i,"value":', encodedTableName, '[i]});\n');
+            code.push('\n\t', logName, '.push({"table": tableName, "action":"get","index1":i,"value":', encodedTableName, '[i]});\n');
         }
         code.push('\n\treturn ', encodedTableName, '[i]');
         if (is2d) {
@@ -707,9 +710,9 @@ export class SolveProblemComponent implements OnInit {
         }
         code.push(' = val;\n');
         if (is2d) {
-            code.push('\n\t', logName, '.push({"table": tableName, "action":"set","row":i,"column":j,"value":', encodedTableName, '[i][j]});\n');
+            code.push('\n\t', logName, '.push({"table": tableName, "action":"set","index1":i,"index2":j,"value":', encodedTableName, '[i][j]});\n');
         } else {
-            code.push('\n\t', logName, '.push({"table": tableName, "action":"set","index":i,"value":', encodedTableName, '[i]});\n');
+            code.push('\n\t', logName, '.push({"table": tableName, "action":"set","index1":i,"value":', encodedTableName, '[i]});\n');
         }
         code.push('\n\n};');
         return code.join('');
@@ -1060,5 +1063,70 @@ export class SolveProblemComponent implements OnInit {
                 component.router.navigate(['select-problem'], {queryParams: {'dark-mode': this.isDarkTheme}});
             }
         });
+    }
+
+    viewTestCaseAnimation(testCase) {
+        const component: SolveProblemComponent = this;
+
+        let tableDimension1 = testCase['expected-table'].length;
+        let tableDimension2 = -1;
+        if (this.isRectangular2dArray(testCase['expected-table'])) {
+            tableDimension2 = testCase['expected-table'][0].length
+        }
+
+        let useAuxiliaryTable = component.providedSolution.detailedSetNextEntryCode
+            && component.providedSolution.useAuxiliaryTableWithDetailedSolution;
+        this.viewAnimation(
+            testCase['name'] + ' - provided solution',
+            useAuxiliaryTable ?
+                'Note: this animation assumes the algorithm calculates a detailed solution through use of a secondary table' :
+                'Note: if the problem allows for searching for a detailed solution, this animation will include the steps required to find it',
+            testCase['expected-result'],
+            testCase['input'],
+            testCase['log'],
+            useAuxiliaryTable,
+            tableDimension1,
+            tableDimension2
+        );
+    }
+
+    viewAnimation(
+        title: string,
+        subtitle: string,
+        result,
+        input,
+        log,
+        useAuxiliaryTable: boolean,
+        tableDimension1: number,
+        tableDimension2: number
+    ) {
+        let filteredLog = [];
+        for (let i = 0; i < log.length; i++) {
+            const logEntry = log[i];
+            if (logEntry.table === 'T' || useAuxiliaryTable) {
+                filteredLog.push(logEntry)
+            }
+        }
+        const component: SolveProblemComponent = this;
+        component.animationDataService.initialize(
+            title,
+            subtitle,
+            result,
+            input,
+            filteredLog,
+            useAuxiliaryTable,
+            tableDimension1,
+            tableDimension2
+        );
+        const dialogRef = this.dialog.open(AnimationDialogComponent, {
+            data: {
+                'isDarkTheme': component.isDarkTheme,
+            }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            component.animationDataService.clear();
+        });
+
     }
 }

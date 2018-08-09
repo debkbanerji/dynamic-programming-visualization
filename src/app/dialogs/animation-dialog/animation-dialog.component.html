@@ -1,0 +1,220 @@
+<div class="main-container" [ngClass]="{'dark-theme': data.isDarkTheme}">
+    <div>
+        <mat-card>
+            <mat-card-content>
+                <div class="main-header-container">
+                    <span class="main-header">{{title}}</span>
+                    <span class="result-header">Result: {{result}}</span>
+                </div>
+                <small *ngIf="subtitle">{{subtitle}}</small>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <span class="slightly-bold-label">Input Values</span>
+            </mat-expansion-panel-header>
+            <div *ngFor="let inputField of objectKeys(input)">
+                <span class="slightly-bold-label">{{inputField}}:</span>
+                <span *ngIf="!isArray(input[inputField])"
+                      [innerHTML]="' ' + getDisplayedValue(input[inputField])">
+                </span>
+                <div
+                    *ngIf="isArray(input[inputField]) && shouldDisplayArray(input[inputField])">
+                    <table class="dp-table" *ngIf="!isRectangular2dArray(input[inputField])">
+                        <tr class="dp-tr">
+                            <td class="dp-td"
+                                *ngFor="let i of range(input[inputField].length);">
+                                <span class="dp-table-cell"
+                                      [innerHTML]="getDisplayedValue(input[inputField][i])">
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                    <table class="dp-table" *ngIf="isRectangular2dArray(input[inputField])">
+                        <tr class="dp-tr" *ngFor="let i of range(input[inputField].length);">
+                            <td class="dp-td"
+                                *ngFor="let j of range(input[inputField][0].length);">
+                                <span class="dp-table-cell"
+                                      [innerHTML]="getDisplayedValue(input[inputField][i][j])">
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div
+                    *ngIf="isArray(input[inputField]) && !shouldDisplayArray(input[inputField])">
+                    empty Array
+                </div>
+            </div>
+        </mat-expansion-panel>
+    </div>
+    <div>
+        <mat-card class="table-card">
+            <p class="table-card-header">
+                <span class="slightly-bold-label">{{useAuxiliaryTable ? 'Primary Table' : 'Table'}}</span>
+                <span class="table-operation-count-container" *ngIf="useAuxiliaryTable">
+                    <span
+                        class="get-entry operation-count">{{mainTableGets}} {{mainTableGets === 1 ? 'read' : 'reads'}}</span>
+                    &nbsp;
+                    <span class="set-entry operation-count">{{mainTableSets}} {{mainTableSets === 1 ? 'write' : 'writes'}}</span>
+                    &nbsp;
+                </span>
+            </p>
+            <mat-card-content>
+                <table class="dp-table" *ngIf="!isTable2d">
+                    <tr class="dp-tr">
+                        <td class="dp-td"
+                            *ngFor="let i of range(0, tableDimension1);"
+                            [ngClass]="{
+                                                'get-animation': lastAffectedIndex1 === i && lastOperation === 'get' && lastAffectedTable === currentMainTable,
+                                                'set-animation': lastAffectedIndex1 === i && lastOperation === 'set' && lastAffectedTable === currentMainTable
+                                             }">
+                            <span class="dp-table-cell"
+                                  [innerHTML]="getTableDisplayedValue(currentMainTable, i, -1)">
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+                <table class="dp-table" *ngIf="isTable2d">
+                    <tr class="dp-tr" *ngFor="let i of range(0, tableDimension1);">
+                        <td class="dp-td"
+                            *ngFor="let j of range(0, tableDimension2);"
+                            [ngClass]="{
+                                                'get-animation': lastAffectedIndex1 === i && lastAffectedIndex2 === j && lastOperation === 'get' && lastAffectedTable === currentMainTable,
+                                                'set-animation': lastAffectedIndex1 === i && lastAffectedIndex2 === j && lastOperation === 'set' && lastAffectedTable === currentMainTable
+                                             }">
+                            <span class="dp-table-cell"
+                                  [innerHTML]="getTableDisplayedValue(currentMainTable, i, j)">
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div *ngIf="useAuxiliaryTable">
+        <mat-card class="table-card">
+            <p class="table-card-header">
+                <span class="slightly-bold-label">Secondary Table</span>
+                <span class="table-operation-count-container" *ngIf="useAuxiliaryTable">
+                    <span
+                        class="get-entry operation-count">{{auxiliaryTableGets}} {{auxiliaryTableGets === 1 ? 'read' : 'reads'}}</span>
+                    &nbsp;
+                    <span class="set-entry operation-count">{{auxiliaryTableSets}} {{auxiliaryTableSets === 1 ? 'write' : 'writes'}}</span>
+                    &nbsp;
+                </span>
+            </p>
+            <mat-card-content>
+                <table class="dp-table" *ngIf="!isTable2d">
+                    <tr class="dp-tr">
+                        <td class="dp-td"
+                            *ngFor="let i of range(0, tableDimension1);"
+                            [ngClass]="{
+                                                'get-animation': lastAffectedIndex1 === i && lastOperation === 'get' && lastAffectedTable === currentAuxiliaryTable,
+                                                'set-animation': lastAffectedIndex1 === i && lastOperation === 'set' && lastAffectedTable === currentAuxiliaryTable
+                                             }">
+                            <span class="dp-table-cell"
+                                  [innerHTML]="getTableDisplayedValue(currentAuxiliaryTable, i, -1)">
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+                <table class="dp-table" *ngIf="isTable2d">
+                    <tr class="dp-tr" *ngFor="let i of range(0, tableDimension1);">
+                        <td class="dp-td"
+                            *ngFor="let j of range(0, tableDimension2);"
+                            [ngClass]="{
+                                                'get-animation': lastAffectedIndex1 === i && lastAffectedIndex2 === j && lastOperation === 'get' && lastAffectedTable === currentAuxiliaryTable,
+                                                'set-animation': lastAffectedIndex1 === i && lastAffectedIndex2 === j && lastOperation === 'set' && lastAffectedTable === currentAuxiliaryTable
+                                             }">
+                            <span class="dp-table-cell"
+                                  [innerHTML]="getTableDisplayedValue(currentAuxiliaryTable, i, j)">
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div>
+        <mat-card class="controls-card">
+            <mat-card-content>
+                <div class="frames-progress-bar">
+                    <mat-progress-bar
+                        mode="determinate"
+                        [value]="100* currentFrame / totalFrames">
+                    </mat-progress-bar>
+                </div>
+                <div class="controls-container">
+                    <div class="controls-left-container">
+                        <div class="operation-count-container">
+                            <span>{{log.length}} table {{log.length === 1 ? 'operation' : 'operations'}}</span>
+                            <br>
+                            <span
+                                class="get-entry operation-count">{{totalGets}} {{totalGets === 1 ? 'read' : 'reads'}}</span>
+                            <br>
+                            <span class="set-entry operation-count">{{totalSets}} {{totalSets === 1 ? 'write' : 'writes'}}</span>
+                        </div>
+                    </div>
+                    <div class="controls-center-container">
+                        <button mat-icon-button
+                                [disabled]="!canStepBackward() || isCurrentlyPlayingAnimation || currentlySwitchingPlayState"
+                                disabled
+                                (click)="resetAnimation()"
+                                class="control-button">
+                            <span class="glyphicon glyphicon-repeat control-glyphicon"></span>
+                        </button>
+                        <button mat-icon-button
+                                [disabled]="!canStepBackward() || isCurrentlyPlayingAnimation || currentlySwitchingPlayState"
+                                disabled
+                                (click)="stepBackward()"
+                                class="control-button">
+                            <span class="glyphicon glyphicon-step-backward control-glyphicon"></span>
+                        </button>
+                        <button mat-fab
+                                [disabled]="currentlySwitchingPlayState"
+                                *ngIf="isCurrentlyPlayingAnimation"
+                                (click)="stopPlayingAnimation()"
+                                class="control-button">
+                            <span class="glyphicon glyphicon-pause control-glyphicon"></span>
+                        </button>
+                        <button mat-fab
+                                [disabled]="currentlySwitchingPlayState"
+                                *ngIf="!isCurrentlyPlayingAnimation && canStepForward()"
+                                (click)="playAnimation()"
+                                class="control-button">
+                            <span class="glyphicon glyphicon-play control-glyphicon"></span>
+                        </button>
+                        <button mat-fab
+                                [disabled]="currentlySwitchingPlayState"
+                                *ngIf="!isCurrentlyPlayingAnimation && !canStepForward()"
+                                (click)="resetAnimation()"
+                                class="control-button">
+                            <span class="glyphicon glyphicon-repeat control-glyphicon"></span>
+                        </button>
+                        <button mat-icon-button
+                                [disabled]="!canStepForward() || isCurrentlyPlayingAnimation || currentlySwitchingPlayState"
+                                (click)="stepForward()"
+                                class="control-button">
+                            <span class="glyphicon glyphicon-step-forward control-glyphicon"></span>
+                        </button>
+                    </div>
+                    <div class="controls-right-container">
+                        <mat-form-field class="animation-speed-selector">
+                            <mat-select placeholder="Animation Speed"
+                                        [disabled]="isCurrentlyPlayingAnimation || currentlySwitchingPlayState"
+                                        [(ngModel)]="playIntervalTimeMS">
+                                <mat-option *ngFor="let option of playIntervalTimeMSOptions"
+                                            [value]="option.value">
+                                    <span [innerHTML]="option.text"></span>
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

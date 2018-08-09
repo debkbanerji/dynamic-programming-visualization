@@ -37,6 +37,11 @@ mat-dialog-container {
     padding: 0 !important;
 }
 
+app-animation-dialog {
+    overflow: hidden;
+    width: 95vw;
+}
+
 .text-red {
     color: #DC3545;
 }
