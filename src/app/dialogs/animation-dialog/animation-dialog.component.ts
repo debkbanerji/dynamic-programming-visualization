@@ -77,6 +77,11 @@ export class AnimationDialogComponent implements OnInit {
         }, component.playIntervalTimeMS);
     }
 
+    resetAnimation(): void{
+        this.currentFrame = 0;
+        this.resetMainTable();
+    }
+
     stopPlayingAnimation(): void {
         const component = this;
         component.isCurrentlyPlayingAnimation = false;

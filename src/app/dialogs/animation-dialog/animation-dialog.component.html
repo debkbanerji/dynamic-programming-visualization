@@ -66,6 +66,13 @@
                         <button mat-icon-button
                                 [disabled]="!canStepBackward() || isCurrentlyPlayingAnimation || currentlySwitchingPlayState"
                                 disabled
+                                (click)="resetAnimation()"
+                                class="control-button">
+                            <span class="glyphicon glyphicon-repeat control-glyphicon"></span>
+                        </button>
+                        <button mat-icon-button
+                                [disabled]="!canStepBackward() || isCurrentlyPlayingAnimation || currentlySwitchingPlayState"
+                                disabled
                                 (click)="stepBackward()"
                                 class="control-button">
                             <span class="glyphicon glyphicon-step-backward control-glyphicon"></span>
