@@ -22,6 +22,7 @@ mat-card {
     max-height: 95vh;
     padding: 5px;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .table-card {
