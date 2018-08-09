@@ -19,6 +19,15 @@ export class SelectProblemComponent implements OnInit {
     // Register any new problems within the appropriate section
     sections = [
         {
+            name: 'Subsequences',
+            problems: [
+                {
+                    name: 'Longest Increasing Subsequence',
+                    id: 'longest-increasing-subsequence'
+                }
+            ]
+        },
+        {
             name: 'Knapsack Variations',
             problems: [
                 {
