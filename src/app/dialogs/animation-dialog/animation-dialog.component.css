@@ -116,7 +116,7 @@ mat-expansion-panel-header {
 
 .controls-left-container {
     display: inline-block;
-    width: 20%;
+    width: 24%;
     vertical-align: top;
 }
 
@@ -130,7 +130,7 @@ mat-expansion-panel-header {
 .controls-right-container {
     display: inline-block;
     text-align: right;
-    width: 30%;
+    width: 26%;
     vertical-align: top;
 }
 
