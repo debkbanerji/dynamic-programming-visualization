@@ -1090,6 +1090,27 @@ export class SolveProblemComponent implements OnInit {
         );
     }
 
+    viewUserCodeAnimation(testName, input, testResult) {
+
+        let tableDimension1 = testResult['table'].length;
+        let tableDimension2 = -1;
+        if (this.isRectangular2dArray(testResult['table'])) {
+            tableDimension2 = testResult['table'][0].length
+        }
+
+        let useAuxiliaryTable = !!testResult['auxiliary-table'];
+        this.viewAnimation(
+            testName + ' - Your Code',
+            null,
+            testResult['result'],
+            input,
+            testResult['log'],
+            useAuxiliaryTable,
+            tableDimension1,
+            tableDimension2
+        );
+    }
+
     viewAnimation(
         title: string,
         subtitle: string,

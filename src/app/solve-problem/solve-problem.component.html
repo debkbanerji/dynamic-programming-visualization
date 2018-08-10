@@ -462,7 +462,15 @@
                         </mat-card>
                         <mat-card *ngIf="testResults[testCaseIndex] && !testsCurrentlyRunning">
                             <mat-card-content>
-                                <b class="slightly-bold-label">{{testCase['name']}} Results</b>
+                                <div>
+                                    <b class="slightly-bold-label">{{testCase['name']}} Results</b>
+                                    <button mat-raised-button class="view-animation-button"
+                                            [disabled]="!(testResults[testCaseIndex]['log'] && testResults[testCaseIndex]['table'])"
+                                            (click)="viewUserCodeAnimation(testCase['name'], testCase['input'], testResults[testCaseIndex])">
+                                        <span class="glyphicon glyphicon-play play-animation-glyphicon"></span>
+                                        View Animation
+                                    </button>
+                                </div>
                                 <br>
                                 <br>
                                 <div *ngIf="testResults[testCaseIndex]['timed-out']">
