@@ -34,7 +34,7 @@ mat-expansion-panel-header {
     height: 36px !important;
 }
 
-.table-card-header {
+.section-card-header {
     padding-left: 3px;
     display: inline-block;
     width: 100%;
@@ -42,6 +42,10 @@ mat-expansion-panel-header {
 
 .slightly-bold-label {
     font-weight: 600;
+}
+
+.result-card {
+    height: 36px;
 }
 
 .table-card {

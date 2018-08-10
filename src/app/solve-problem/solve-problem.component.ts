@@ -886,7 +886,7 @@ export class SolveProblemComponent implements OnInit {
         if (this.isRectangular2dArray(item)) {
             return item.length > 0 && item[0].length > 0;
         } else {
-            return item.length > 0;
+            return item && item.length > 0;
         }
     }
 
@@ -1082,6 +1082,7 @@ export class SolveProblemComponent implements OnInit {
                 'Note: this animation assumes the algorithm calculates a detailed solution through use of a secondary table' :
                 'Note: if the problem allows for searching for a detailed solution, this animation will include the steps required to find it',
             testCase['expected-result'],
+            testCase['expected-solution'],
             testCase['input'],
             testCase['log'],
             useAuxiliaryTable,
@@ -1103,6 +1104,7 @@ export class SolveProblemComponent implements OnInit {
             testName + ' - Your Code',
             null,
             testResult['result'],
+            testResult['solution'],
             input,
             testResult['log'],
             useAuxiliaryTable,
@@ -1115,6 +1117,7 @@ export class SolveProblemComponent implements OnInit {
         title: string,
         subtitle: string,
         result,
+        solution,
         input,
         log,
         useAuxiliaryTable: boolean,
@@ -1133,6 +1136,7 @@ export class SolveProblemComponent implements OnInit {
             title,
             subtitle,
             result,
+            solution,
             input,
             filteredLog,
             useAuxiliaryTable,

@@ -4,7 +4,6 @@
             <mat-card-content>
                 <div class="main-header-container">
                     <span class="main-header">{{title}}</span>
-                    <span class="result-header">Result: {{result}}</span>
                 </div>
                 <small *ngIf="subtitle">{{subtitle}}</small>
             </mat-card-content>
@@ -13,7 +12,7 @@
     <div>
         <mat-expansion-panel>
             <mat-expansion-panel-header>
-                <span class="slightly-bold-label">Input Values</span>
+                <span class="slightly-bold-label">Input</span>
             </mat-expansion-panel-header>
             <div *ngFor="let inputField of objectKeys(input)">
                 <span class="slightly-bold-label">{{inputField}}:</span>
@@ -49,10 +48,62 @@
                 </div>
             </div>
         </mat-expansion-panel>
+        <mat-expansion-panel *ngIf="showSolution">
+            <mat-expansion-panel-header>
+                <span class="slightly-bold-label">Output</span>
+            </mat-expansion-panel-header>
+            <span class="slightly-bold-label">Result:</span>
+            <span
+                [innerHTML]="' ' + getDisplayedValue(result)">
+            </span>
+            <br>
+            <span class="slightly-bold-label">Solution: </span>
+            <span *ngIf="!isArray(solution)"
+                  [innerHTML]="' ' + getDisplayedValue(solution)">
+            </span>
+            <div
+                *ngIf="isArray(solution) && shouldDisplayArray(solution)">
+                <table class="dp-table" *ngIf="!isRectangular2dArray(solution)">
+                    <tr class="dp-tr">
+                        <td class="dp-td" matTooltip="{{i}}"
+                            *ngFor="let i of range(solution.length);">
+                                <span class="dp-table-cell"
+                                      [innerHTML]="getDisplayedValue(solution[i])">
+                                </span>
+                        </td>
+                    </tr>
+                </table>
+                <table class="dp-table" *ngIf="isRectangular2dArray(solution)">
+                    <tr class="dp-tr" *ngFor="let i of range(solution.length);">
+                        <td class="dp-td" matTooltip="{{i}}, {{j}}"
+                            *ngFor="let j of range(solution[0].length);">
+                                <span class="dp-table-cell"
+                                      [innerHTML]="getDisplayedValue(solution[i][j])">
+                                </span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div
+                *ngIf="isArray(solution) && !shouldDisplayArray(solution)">
+                empty Array
+            </div>
+        </mat-expansion-panel>
+    </div>
+    <div *ngIf="!showSolution">
+        <mat-card class="result-card">
+            <p class="section-card-header" style="padding-top: 4px">
+                <span class="slightly-bold-label">Output:
+                </span>
+                <span
+                    [innerHTML]="' ' + getDisplayedValue(result)">
+                </span>
+            </p>
+        </mat-card>
     </div>
     <div>
         <mat-card class="table-card">
-            <p class="table-card-header">
+            <p class="section-card-header">
                 <span class="slightly-bold-label">{{useAuxiliaryTable ? 'Primary Table' : 'Table'}}</span>
                 <span class="table-operation-count-container" *ngIf="useAuxiliaryTable">
                     <span
@@ -96,7 +147,7 @@
     </div>
     <div *ngIf="useAuxiliaryTable">
         <mat-card class="table-card">
-            <p class="table-card-header">
+            <p class="section-card-header">
                 <span class="slightly-bold-label">Secondary Table</span>
                 <span class="table-operation-count-container" *ngIf="useAuxiliaryTable">
                     <span

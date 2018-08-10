@@ -15,6 +15,8 @@ export class AnimationDialogComponent implements OnInit {
     title: string;
     subtitle: string;
     result;
+    solution;
+    showSolution: boolean;
     input;
     log;
     useAuxiliaryTable: boolean;
@@ -64,6 +66,8 @@ export class AnimationDialogComponent implements OnInit {
         this.title = this.animationDataService.title;
         this.subtitle = this.animationDataService.subtitle;
         this.result = this.animationDataService.result;
+        this.solution = this.animationDataService.solution;
+        this.showSolution = !!this.solution || this.solution === 0;
         this.input = this.animationDataService.input;
         this.log = this.animationDataService.log;
         this.useAuxiliaryTable = this.animationDataService.useAuxiliaryTable;
