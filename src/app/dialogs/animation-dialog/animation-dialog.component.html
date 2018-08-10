@@ -220,6 +220,13 @@
                         <button mat-icon-button
                                 [disabled]="!canStepBackward() || isCurrentlyPlayingAnimation || currentlySwitchingPlayState"
                                 disabled
+                                (click)="skipBackward()"
+                                class="control-button">
+                            <span class="glyphicon glyphicon-fast-backward control-glyphicon"></span>
+                        </button>
+                        <button mat-icon-button
+                                [disabled]="!canStepBackward() || isCurrentlyPlayingAnimation || currentlySwitchingPlayState"
+                                disabled
                                 (click)="stepBackward()"
                                 class="control-button">
                             <span class="glyphicon glyphicon-step-backward control-glyphicon"></span>
@@ -250,6 +257,12 @@
                                 (click)="stepForward()"
                                 class="control-button">
                             <span class="glyphicon glyphicon-step-forward control-glyphicon"></span>
+                        </button>
+                        <button mat-icon-button
+                                [disabled]="!canStepForward() || isCurrentlyPlayingAnimation || currentlySwitchingPlayState"
+                                (click)="skipForward()"
+                                class="control-button">
+                            <span class="glyphicon glyphicon-fast-forward control-glyphicon"></span>
                         </button>
                     </div>
                     <div class="controls-right-container">

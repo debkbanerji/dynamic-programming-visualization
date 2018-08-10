@@ -50,6 +50,9 @@ export class AnimationDialogComponent implements OnInit {
     ];
     playIntervalTimeMS: number = this.playIntervalTimeMSOptions[2].value;
 
+    numSkipSections: number = 8;
+    skipFrames = [];
+
     lastAffectedIndex1: number = -1;
     lastAffectedIndex2: number = -1;
     lastOperation: string = null;
@@ -101,6 +104,12 @@ export class AnimationDialogComponent implements OnInit {
                 }
             }
         }
+
+        const skipSectionLength = this.totalFrames / this.numSkipSections;
+        for (let i = 0; i < this.numSkipSections; i++) {
+            this.skipFrames.push(Math.round(i * skipSectionLength));
+        }
+        this.skipFrames.push(this.totalFrames  - 1);
     }
 
     playAnimation(): void {
@@ -188,6 +197,20 @@ export class AnimationDialogComponent implements OnInit {
 
     canStepForward(): boolean {
         return this.currentFrame < this.totalFrames;
+    }
+
+    skipForward() {
+        this.stepForward();
+        while (this.canStepForward() && this.skipFrames.indexOf(this.currentFrame) < 0) {
+            this.stepForward();
+        }
+    }
+
+    skipBackward() {
+        this.stepBackward();
+        while (this.canStepBackward() && this.skipFrames.indexOf(this.currentFrame) < 0) {
+            this.stepBackward();
+        }
     }
 
     getRelevantTable(logEntry) {
