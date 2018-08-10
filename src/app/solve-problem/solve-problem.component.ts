@@ -70,7 +70,7 @@ export class SolveProblemComponent implements OnInit {
         for2Condition: 'j < (TODO: Define)',
         for2Update: 'j = j + 1',
 
-        setNextEntryCode: `// TODO: Set entry = (whatever the next entry should be)`,
+        setNextEntryCode: '// TODO: Set entry = (whatever the next entry should be)\n\n// Use T(i) or T(i, j) to access table entries\n// Note that the table is zero indexed\n\n// If a second table is being used, you can access its\n// entries using T2(i) or T2(i, j)\n\n// Everything else is just regular JavaScript, so you\n// can index into input arrays using square brackets',
         defaultTableEntry: '',
         useDefaultTableEntry: false,
 
