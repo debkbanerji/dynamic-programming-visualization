@@ -109,7 +109,7 @@ export class AnimationDialogComponent implements OnInit {
         for (let i = 0; i < this.numSkipSections; i++) {
             this.skipFrames.push(Math.round(i * skipSectionLength));
         }
-        this.skipFrames.push(this.totalFrames  - 1);
+        this.skipFrames.push(this.totalFrames);
     }
 
     playAnimation(): void {
