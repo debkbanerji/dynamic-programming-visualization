@@ -3,7 +3,7 @@
     "version": 1,
     "newProjectRoot": "projects",
     "projects": {
-        "dp-vis": {
+        "dynamic-programming-visualization": {
             "root": "",
             "sourceRoot": "src",
             "projectType": "application",
@@ -13,7 +13,7 @@
                 "build": {
                     "builder": "@angular-devkit/build-angular:browser",
                     "options": {
-                        "outputPath": "dist/dp-vis",
+                        "outputPath": "dist/dynamic-programming-visualization",
                         "index": "src/index.html",
                         "main": "src/main.ts",
                         "polyfills": "src/polyfills.ts",
@@ -51,18 +51,18 @@
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "options": {
-                        "browserTarget": "dp-vis:build"
+                        "browserTarget": "dynamic-programming-visualization:build"
                     },
                     "configurations": {
                         "production": {
-                            "browserTarget": "dp-vis:build:production"
+                            "browserTarget": "dynamic-programming-visualization:build:production"
                         }
                     }
                 },
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",
                     "options": {
-                        "browserTarget": "dp-vis:build"
+                        "browserTarget": "dynamic-programming-visualization:build"
                     }
                 },
                 "test": {
@@ -96,7 +96,7 @@
                 }
             }
         },
-        "dp-vis-e2e": {
+        "dynamic-programming-visualization-e2e": {
             "root": "e2e/",
             "projectType": "application",
             "architect": {
@@ -104,7 +104,7 @@
                     "builder": "@angular-devkit/build-angular:protractor",
                     "options": {
                         "protractorConfig": "e2e/protractor.conf.js",
-                        "devServerTarget": "dp-vis:serve"
+                        "devServerTarget": "dynamic-programming-visualization:serve"
                     }
                 },
                 "lint": {
@@ -119,5 +119,5 @@
             }
         }
     },
-    "defaultProject": "dp-vis"
+    "defaultProject": "dynamic-programming-visualization"
 }

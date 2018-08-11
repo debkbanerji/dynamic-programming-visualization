@@ -1,5 +1,5 @@
 {
-    "name": "dp-vis",
+    "name": "dynamic-programming-visualization",
     "version": "2018.5.30",
     "scripts": {
         "ng": "ng",
