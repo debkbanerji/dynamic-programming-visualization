@@ -1,5 +1,5 @@
 {
-    "name": "dp-vis",
+    "name": "dynamic-programming-visualization",
     "version": "2018.5.30",
     "scripts": {
         "ng": "ng",
@@ -7,6 +7,8 @@
         "start": "cd dist && npm start",
         "postinstall": "npm run build && cd dist && npm install",
         "build": "ng build --prod && cp -r dist-utility-files/. dist",
+        "build-base": "ng build --prod",
+        "build-gh-pages": "ng build --prod",
         "messy-build": "ng build && cp -r dist-utility-files/. dist",
         "test": "ng test",
         "lint": "ng lint",
