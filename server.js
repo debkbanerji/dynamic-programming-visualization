@@ -46,7 +46,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 // parse application/json
 app.use(bodyParser.json());
 
-const frontendFolder = path.join(__dirname, 'dynamic-programming-visualization');
+const frontendFolder = path.join(__dirname, 'docs');
 // Point static path to frontend folder
 app.use(express.static(frontendFolder));
 console.log("Serving static from " + frontendFolder);
