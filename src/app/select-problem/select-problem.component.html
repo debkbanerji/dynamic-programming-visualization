@@ -1,9 +1,17 @@
 <div [ngClass]="{'dark-theme': isDarkTheme}" class="main-content-container">
     <mat-card>
         <div id="main-title-div">
-            <h2 id="main-title">
-                Dynamic Programming Visualization + Implementation
-            </h2>
+            <div class="main-title-container">
+                <h1 class="main-title">
+                    <span class="main-title-logo-span">
+                        <img class="logo" src="{{LOGO_URL}}">
+                        Dynamic
+                    </span>
+                    Programming Visualization
+                </h1>
+            </div>
+        </div>
+        <div class="subtitle-div">
             <mat-slide-toggle
                 [(ngModel)]="isDarkTheme"
                 (change)="onDarkModeChange()"
@@ -22,7 +30,7 @@
                 </mat-expansion-panel-header>
                 <p>Here you can solve a problem from a file on your computer</p>
                 <p class="text-red">Be careful when choosing a file, as depending on where it came from, it may contain
-                    mistakes or try to do sketchy things to your computer</p>
+                    mistakes or try to do sketchy things</p>
                 <input id="custom-problem-file-select" [(ngModel)]="customProblemFile" type="file"
                        (change)="solveCustomProblem()">
                 <span id="custom-problem-error-text">{{customProblemErrorText}}</span>

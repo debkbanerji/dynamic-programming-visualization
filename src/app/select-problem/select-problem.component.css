@@ -4,19 +4,39 @@
 
 #main-title-div {
     text-align: center;
-    font-weight: normal;
     margin-top: 5px;
-    display: inline-block;
     width: 100%;
 }
 
-#main-title {
+.main-title-container {
     font-weight: bold;
+    display: inline-block;
+}
+
+.logo {
+    display: inline-block;
+    float: left;
+}
+
+.main-title-logo-span {
+    word-space: nowrap;
+    display: inline-block;
+}
+
+.logo {
+    width: 0.9em;
+    height: 0.9em;
+    position: relative;
+    top: 2px;
+    margin-right: 8px;
+}
+
+.subtitle-div {
+    text-align: center;
+    margin-bottom: 8px;
 }
 
 .dark-mode-toggle {
-    display: inline-block;
-    float: right;
 }
 
 input {
