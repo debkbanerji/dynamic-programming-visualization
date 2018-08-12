@@ -9,8 +9,12 @@
 }
 
 .main-title-container {
-    font-weight: bold;
     display: inline-block;
+}
+
+.main-title {
+    font-weight: bold;
+    margin: 0;
 }
 
 .logo {
@@ -33,10 +37,30 @@
 
 .subtitle-div {
     text-align: center;
+    margin-top: 8px;
     margin-bottom: 8px;
 }
 
+.external-link {
+    cursor: pointer;
+    color: unset;
+}
+
+.subtitle-item {
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.source-code-link {
+    vertical-align: text-bottom;
+}
+
+.version-number {
+    vertical-align: bottom;
+}
+
 .dark-mode-toggle {
+    padding-top: 8px;
 }
 
 input {
@@ -67,4 +91,9 @@ input {
 
 .problem-link:hover {
     background-color: rgba(0.7, 0.7, 0.7, 0.1);
+}
+
+.page-footer {
+    display: flex;
+    justify-content: center;
 }
