@@ -16,6 +16,7 @@ export class SelectProblemComponent implements OnInit {
 
     LOGO_URL = '/assets/images/Logo.png';
 
+    customPanelOpenState = false;
     customProblemFile: any;
     customProblemErrorText: string;
 
