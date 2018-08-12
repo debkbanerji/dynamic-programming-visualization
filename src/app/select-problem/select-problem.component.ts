@@ -20,6 +20,8 @@ export class SelectProblemComponent implements OnInit {
     customProblemFile: any;
     customProblemErrorText: string;
 
+    totalProblems: number;
+
     version = environment.VERSION;
 
     // Register any new problems within the appropriate section
@@ -61,6 +63,10 @@ export class SelectProblemComponent implements OnInit {
             component.isDarkTheme = (params['dark-mode'] == 'true');
         });
         component.titleService.setTitle('Dynamic Programming');
+        component.totalProblems = 0;
+        component.sections.forEach(function (section) {
+            component.totalProblems += section.problems.length;
+        });
     }
 
     openProblem(id: string): void {

@@ -80,6 +80,10 @@ input {
     margin-bottom: 10px !important;
 }
 
+.problem-count-summary {
+    margin-left: 8px;
+}
+
 .section-title {
     font-weight: bolder;
 }
