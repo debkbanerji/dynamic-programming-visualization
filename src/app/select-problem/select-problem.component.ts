@@ -14,6 +14,8 @@ export class SelectProblemComponent implements OnInit {
 
     isDarkTheme = false;
 
+    LOGO_URL = '/assets/images/Logo.png';
+
     customProblemFile: any;
     customProblemErrorText: string;
 
