@@ -27,6 +27,15 @@ input {
     margin-top: 4px;
 }
 
+.mat-expansion-panel {
+    margin: 0 !important;
+}
+
+.expanded-panel {
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+}
+
 .section-title {
     font-weight: bolder;
 }

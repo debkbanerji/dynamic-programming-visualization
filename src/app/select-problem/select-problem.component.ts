@@ -1,8 +1,9 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
-import {CustomProblemService} from "../providers/custom-problem.service";
-import {DOCUMENT} from "@angular/common";
-import {Title} from "@angular/platform-browser";
+import {ActivatedRoute, Router} from '@angular/router';
+import {CustomProblemService} from '../providers/custom-problem.service';
+import {DOCUMENT} from '@angular/common';
+import {Title} from '@angular/platform-browser';
+import {environment} from '../../environments/environment';
 
 @Component({
     selector: 'app-select-problem',
@@ -11,10 +12,12 @@ import {Title} from "@angular/platform-browser";
 })
 export class SelectProblemComponent implements OnInit {
 
-    isDarkTheme: boolean = false;
+    isDarkTheme = false;
 
     customProblemFile: any;
     customProblemErrorText: string;
+
+    version = environment.VERSION;
 
     // Register any new problems within the appropriate section
     sections = [
@@ -51,6 +54,7 @@ export class SelectProblemComponent implements OnInit {
     ngOnInit() {
         const component = this;
         this.route.queryParams.subscribe(params => {
+            // noinspection TsLint
             component.isDarkTheme = (params['dark-mode'] == 'true');
         });
         component.titleService.setTitle('Dynamic Programming');

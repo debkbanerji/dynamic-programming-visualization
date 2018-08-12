@@ -1,9 +1,9 @@
 <div [ngClass]="{'dark-theme': isDarkTheme}" class="main-content-container">
     <mat-card>
         <div id="main-title-div">
-            <h3 id="main-title">
-                Dynamic Programming Problems
-            </h3>
+            <h2 id="main-title">
+                Dynamic Programming Visualization + Implementation
+            </h2>
             <mat-slide-toggle
                 [(ngModel)]="isDarkTheme"
                 (change)="onDarkModeChange()"
@@ -11,19 +11,28 @@
                 Dark Mode
             </mat-slide-toggle>
         </div>
-        <mat-expansion-panel [expanded]="false">
-            <mat-expansion-panel-header>
-                <h4 class="section-title">Custom Problem</h4>
-            </mat-expansion-panel-header>
-            <p>Here you can solve a problem from a file on your computer</p>
-            <p class="text-red">Be careful when choosing a file, as depending on where it came from, it may contain
-                mistakes or try to do sketchy things to your computer</p>
-            <input id="custom-problem-file-select" [(ngModel)]="customProblemFile" type="file"
-                   (change)="solveCustomProblem()">
-            <span id="custom-problem-error-text">{{customProblemErrorText}}</span>
-        </mat-expansion-panel>
-        <div>
-            <mat-expansion-panel *ngFor="let section of sections" [expanded]="false">
+        <mat-accordion>
+            <mat-expansion-panel (opened)="customPanelOpenState = true"
+                                 (closed)="customPanelOpenState = false"
+                                 [ngClass]="{
+                                                'expanded-panel':customPanelOpenState
+                                            }">
+                <mat-expansion-panel-header>
+                    <h4 class="section-title">Custom Problem</h4>
+                </mat-expansion-panel-header>
+                <p>Here you can solve a problem from a file on your computer</p>
+                <p class="text-red">Be careful when choosing a file, as depending on where it came from, it may contain
+                    mistakes or try to do sketchy things to your computer</p>
+                <input id="custom-problem-file-select" [(ngModel)]="customProblemFile" type="file"
+                       (change)="solveCustomProblem()">
+                <span id="custom-problem-error-text">{{customProblemErrorText}}</span>
+            </mat-expansion-panel>
+            <mat-expansion-panel *ngFor="let section of sections"
+                                 (opened)="section.panelOpenState = true"
+                                 (closed)="section.panelOpenState = false"
+                                 [ngClass]="{
+                                                'expanded-panel':section.panelOpenState
+                                            }">
                 <mat-expansion-panel-header>
                     <h4 class="section-title" [innerHTML]="section.name"></h4>
                 </mat-expansion-panel-header>
@@ -39,6 +48,6 @@
                     </div>
                 </div>
             </mat-expansion-panel>
-        </div>
+        </mat-accordion>
     </mat-card>
 </div>

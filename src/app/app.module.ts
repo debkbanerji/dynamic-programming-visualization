@@ -5,9 +5,9 @@ import 'hammerjs';
 
 import {AppComponent} from './app.component';
 import {SolveProblemComponent} from './solve-problem/solve-problem.component';
-import {RouterModule, Routes} from "@angular/router";
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {FormsModule} from "@angular/forms";
+import {RouterModule, Routes} from '@angular/router';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {FormsModule} from '@angular/forms';
 import {
     MatButtonModule,
     MatCardModule,
@@ -22,11 +22,11 @@ import {
     MatSlideToggleModule,
     MatProgressSpinnerModule,
     MatTooltipModule
-} from "@angular/material";
-import {HttpClientModule} from "@angular/common/http";
+} from '@angular/material';
+import {HttpClientModule} from '@angular/common/http';
 import {ConfirmationDialogComponent} from './dialogs/confirmation-dialog/confirmation-dialog.component';
 import {SelectProblemComponent} from './select-problem/select-problem.component';
-import {AnimationDialogComponent} from "./dialogs/animation-dialog/animation-dialog.component";
+import {AnimationDialogComponent} from './dialogs/animation-dialog/animation-dialog.component';
 
 const routes: Routes = [
     {path: 'problem/:problem-name', component: SolveProblemComponent},
