@@ -29,13 +29,13 @@
 .main-header {
     font-weight: bold;
     font-size: x-large;
+    margin: 0;
 }
 
 .dark-mode-toggle {
     display: inline-block;
     float: right;
-    margin: 0;
-    padding: 6px;
+    padding-right: 6px;
 }
 
 .section-header {

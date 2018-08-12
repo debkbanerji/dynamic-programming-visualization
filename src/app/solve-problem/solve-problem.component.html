@@ -10,13 +10,15 @@
                     class="glyphicon glyphicon-circle-arrow-left home-button">
                 </span>
                 {{problem['name']}}
-                <mat-slide-toggle
-                    [(ngModel)]="isDarkTheme"
-                    (change)="onDarkModeChange()"
-                    class="dark-mode-toggle">
-                    Dark Mode
-                </mat-slide-toggle>
+                <span class="dark-mode-toggle">
+                    <mat-slide-toggle
+                        [(ngModel)]="isDarkTheme"
+                        (change)="onDarkModeChange()">
+                        Dark Mode
+                    </mat-slide-toggle>
+                </span>
             </p>
+            <div style="clear: both"></div>
         </mat-card>
     </div>
     <div id="editor-container" class="col-xs-12 col-md-6">
