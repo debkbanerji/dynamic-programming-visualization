@@ -274,7 +274,7 @@
                 <div *ngIf="!testsCurrentlyRunning && numRunTestCases > 0">
                     <br>
                     <p class="section-header">Test Results</p>
-                    <b>Ran {{numRunTestCases}} test case{{numRunTestCases === 1? '' : 's'}}</b>
+                    <span><b>Ran {{numRunTestCases}} test case{{numRunTestCases === 1? '' : 's'}}</b> (Did not run custom input)</span>
                     <br>
                     <b [ngClass]="{
                         'text-green': numCorrectFinalAnswerTestCases === numRunTestCases,
@@ -429,8 +429,8 @@
         <mat-card class="test-cases-card">
             <mat-card-content>
                 <p class="section-header">Test Cases</p>
-                <mat-tab-group id="test-case-group">
-                    <mat-tab label="Custom Test Case">
+                <mat-tab-group id="test-case-group" [(selectedIndex)]="testCaseSelectedTab">
+                    <mat-tab label="Custom Input">
                         <mat-card>
                             <b class="slightly-bold-label">Custom Input Values</b>
                             <br>
@@ -725,7 +725,7 @@
                                                         *ngIf="!haveEqualDimensions(customInputTestResult['auxiliary-table'], testCase['expected-auxiliary-table'])">
                                                         <span class="text-yellow">
                                                             Mismatched table dimensions: expected
-                                                            {{getTableDimensions(testCase['expected-auxiliary-table'])}}
+                                                            {{getTableDimensions(customInputExpectedTestResult['auxiliary-table'])}}
                                                             but got
                                                             {{getTableDimensions(customInputTestResult['auxiliary-table'])}}
                                                         </span>

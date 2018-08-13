@@ -48,6 +48,7 @@ export class SolveProblemComponent implements OnInit {
     problem: any;
     providedSolution: any;
     testCases: any;
+    testCaseSelectedTab: number = 0;
 
     // If true, we care about how the user got their result
     // If false, only a single return value is expected
@@ -227,6 +228,9 @@ export class SolveProblemComponent implements OnInit {
         component.problem = data;
         component.providedSolution = component.problem['provided-solution'];
         component.testCases = component.problem['test-cases'];
+        if (component.testCases.length > 0) {
+            component.testCaseSelectedTab = 1;
+        }
         component.titleService.setTitle(component.problem.name);
         component.testsCurrentlyRunning = true;
         component.testsCurrentlyRunningForProvided = true;
@@ -295,6 +299,7 @@ export class SolveProblemComponent implements OnInit {
 
     runCustomInput() {
         const component: SolveProblemComponent = this;
+        component.getCodeFromEditors();
         component.processedCustomInput = {};
         const rawInput = component.customInput;
         component.customInputJSONParseError = null;
@@ -362,9 +367,7 @@ export class SolveProblemComponent implements OnInit {
 
                     component.customInputTestResult['has-expected-auxiliary-table'] = component.isExpectedTable(component.customInputExpectedTestResult['auxiliary-table'], component.customInputTestResult['auxiliary-table'], component.approach === component.approaches[1], component);
                 }
-                
-                
-                
+
                 component.isCustomInputTestRunning = false;
             });
         });
@@ -812,7 +815,7 @@ export class SolveProblemComponent implements OnInit {
             && this.isRectangular2dArray(this.customInputExpectedTestResult['table'])) {
             this.customInputExpectedTestResult['table']
                 = this.getTransposedArray(this.customInputExpectedTestResult['table']);
-            
+
             this.customInputTestResult['has-expected-table'] = this.isExpectedTable(this.customInputExpectedTestResult['table'], this.customInputTestResult['table'], this.approach === this.approaches[1], this);
 
             if (this.expectDetailedSolution && this.providedSolution.useAuxiliaryTableWithDetailedSolution) {
