@@ -342,6 +342,12 @@ export class SolveProblemComponent implements OnInit {
         component.runTest(component.processedCustomInput, providedCode, component, false, expectDetailedSolution, useAuxiliaryTableWithDetailedSolution, function (expectedTestResult) {
             component.customInputExpectedTestResult = expectedTestResult;
 
+            if (component.transpose2dTable
+                && expectedTestResult['table']
+                && component.isRectangular2dArray(expectedTestResult['table'])) {
+                expectedTestResult['table'] = component.getTransposedArray(expectedTestResult['table']);
+            }
+
             const userCode = SolveProblemComponent.getPlainRunnableCode(component.solution, component.problem, component.approach === component.approaches[1], component.expectDetailedSolution, component.expectDetailedSolution && component.providedSolution.useAuxiliaryTableWithDetailedSolution);
             const topDown = component.approach === component.approaches[1];
             const useDetailedSolution = component.expectDetailedSolution;
@@ -790,6 +796,12 @@ export class SolveProblemComponent implements OnInit {
         this.numMatchingTableDimensions = 0;
         this.numExpectedAuxiliaryTables = 0;
         this.transpose2dTable = !this.transpose2dTable;
+        if (this.customInputExpectedTestResult
+            && this.customInputExpectedTestResult['table']
+            && this.isRectangular2dArray(this.customInputExpectedTestResult['table'])) {
+            this.customInputExpectedTestResult['table']
+                = this.getTransposedArray(this.customInputExpectedTestResult['table']);
+        }
         for (let testCaseIndex = 0; testCaseIndex < this.testCases.length; testCaseIndex++) {
             const testCase = this.testCases[testCaseIndex];
             if (this.isRectangular2dArray(testCase['expected-table'])) {

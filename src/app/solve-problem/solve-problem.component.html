@@ -475,165 +475,165 @@
                                                   *ngIf="isCustomInputTestRunning"></mat-progress-bar>
                             </mat-card-content>
                         </mat-card>
-                        <!--<mat-card-->
-                            <!--*ngIf="customInputExpectedTestResult && (customInputExpectedTestResult['timed-out'] || customInputExpectedTestResult['error'])">-->
-                            <!--<div>-->
-                                <!--<b class="slightly-bold-label">Could Not Calculate Expected Results-->
-                                <!--</b>-->
-                                <!--<br>-->
-                                <!--<br>-->
-                            <!--</div>-->
-                            <!--<mat-card-content>-->
-                                <!--<p>It looks like the provided code could not successfully calculate the output for the-->
-                                    <!--defined custom input values. Please check to see that the input values are valid.-->
-                                    <!--(and not too large)</p>-->
-                                <!--<div *ngIf="customInputExpectedTestResult['timed-out']">-->
-                                    <!--<b class="text-red" style="vertical-align: middle">-->
-                                        <!--<span class="glyphicon glyphicon-time"></span>-->
-                                        <!--<span class="test-result-label"> Provided code timed out (took longer than-->
-                                            <!--{{testTimeLimit}} milliseconds)-->
-                                        <!--</span>-->
-                                    <!--</b>-->
-                                <!--</div>-->
-                                <!--<div *ngIf="customInputExpectedTestResult['error']">-->
-                                    <!--<span class="text-red">-->
-                                        <!--<b class="test-result-label"-->
-                                           <!--[innerHTML]="customInputExpectedTestResult['error']">-->
-                                        <!--</b>-->
-                                    <!--</span>-->
-                                <!--</div>-->
-                            <!--</mat-card-content>-->
-                        <!--</mat-card>-->
-                        <!--<mat-card-->
-                            <!--*ngIf="customInputExpectedTestResult && customInputExpectedTestResult['table'] && customInputExpectedTestResult['result'] !== null && customInputExpectedTestResult['result'] !== undefined">-->
-                            <!--<div>-->
-                                <!--<b class="slightly-bold-label">Expected Results-->
-                                <!--</b>-->
-                                <!--<button mat-raised-button class="view-animation-button"-->
-                                        <!--(click)="viewUserCodeAnimation('Expected Result for Custom Input', processedCustomInput, customInputExpectedTestResult)">-->
-                                    <!--<span class="glyphicon glyphicon-play play-animation-glyphicon"></span>-->
-                                    <!--View Animation-->
-                                <!--</button>-->
-                                <!--<br *ngIf="approach === approaches[1]">-->
-                                <!--<small *ngIf="approach === approaches[1]">(for bottom up algorithm)</small>-->
-                            <!--</div>-->
-                            <!--<br>-->
-                            <!--<mat-card-content>-->
-                                <!--<span class="slightly-bold-label">Table</span>-->
-                                <!--<button mat-button class="transpose-button"-->
-                                        <!--*ngIf="providedSolution['tableShape'] === '2d'"-->
-                                        <!--(click)="transposeTable()">-->
-                                    <!--Transpose-->
-                                <!--</button>-->
-                                <!--<div>-->
-                                    <!--<div *ngIf="shouldDisplayArray(customInputExpectedTestResult['table'])">-->
-                                        <!--<table class="dp-table"-->
-                                               <!--*ngIf="isRectangular2dArray(customInputExpectedTestResult['table'])">-->
-                                            <!--<tr class="dp-tr"-->
-                                                <!--*ngFor="let i of range(customInputExpectedTestResult['table'].length);">-->
-                                                <!--<td class="dp-td" matTooltip="{{i}}, {{j}}"-->
-                                                    <!--*ngFor="let j of range(customInputExpectedTestResult['table'][0].length);">-->
-                                                    <!--<span class="dp-table-cell"-->
-                                                          <!--[innerHTML]="getDisplayedValue(customInputExpectedTestResult['table'][i][j])">-->
-                                                    <!--</span>-->
-                                                <!--</td>-->
-                                            <!--</tr>-->
-                                        <!--</table>-->
-                                        <!--<table class="dp-table"-->
-                                               <!--*ngIf="!isRectangular2dArray(customInputExpectedTestResult['table'])">-->
-                                            <!--<tr class="dp-tr">-->
-                                                <!--<td class="dp-td" matTooltip="{{i}}"-->
-                                                    <!--*ngFor="let i of range(customInputExpectedTestResult['table'].length);">-->
-                                                    <!--<span class="dp-table-cell"-->
-                                                          <!--[innerHTML]="getDisplayedValue(customInputExpectedTestResult['table'][i])">-->
-                                                    <!--</span>-->
-                                                <!--</td>-->
-                                            <!--</tr>-->
-                                        <!--</table>-->
-                                    <!--</div>-->
-                                    <!--<div *ngIf="!shouldDisplayArray(customInputExpectedTestResult['table'])">-->
-                                        <!--Empty Table-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                                <!--<br>-->
-                                <!--<div-->
-                                    <!--*ngIf="expectDetailedSolution && providedSolution.useAuxiliaryTableWithDetailedSolution">-->
-                                    <!--<span class="slightly-bold-label">Auxiliary Table</span>-->
-                                    <!--<br>-->
-                                    <!--<div *ngIf="shouldDisplayArray(customInputExpectedTestResult['auxiliary-table'])">-->
-                                        <!--<table class="dp-table"-->
-                                               <!--*ngIf="isRectangular2dArray(customInputExpectedTestResult['auxiliary-table'])">-->
-                                            <!--<tr class="dp-tr"-->
-                                                <!--*ngFor="let i of range(customInputExpectedTestResult['auxiliary-table'].length);">-->
-                                                <!--<td class="dp-td" matTooltip="{{i}}, {{j}}"-->
-                                                    <!--*ngFor="let j of range(customInputExpectedTestResult['auxiliary-table'][0].length);">-->
-                                                    <!--<span class="dp-table-cell"-->
-                                                          <!--[innerHTML]="getDisplayedValue(customInputExpectedTestResult['auxiliary-table'][i][j])">-->
-                                                    <!--</span>-->
-                                                <!--</td>-->
-                                            <!--</tr>-->
-                                        <!--</table>-->
-                                        <!--<table class="dp-table"-->
-                                               <!--*ngIf="!isRectangular2dArray(customInputExpectedTestResult['auxiliary-table'])">-->
-                                            <!--<tr class="dp-tr">-->
-                                                <!--<td class="dp-td" matTooltip="{{i}}"-->
-                                                    <!--*ngFor="let i of range(customInputExpectedTestResult['auxiliary-table'].length);">-->
-                                                    <!--<span class="dp-table-cell"-->
-                                                          <!--[innerHTML]="getDisplayedValue(customInputExpectedTestResult['auxiliary-table'][i])">-->
-                                                    <!--</span>-->
-                                                <!--</td>-->
-                                            <!--</tr>-->
-                                        <!--</table>-->
-                                    <!--</div>-->
-                                    <!--<div *ngIf="!shouldDisplayArray(customInputExpectedTestResult['auxiliary-table'])">-->
-                                        <!--Empty Table-->
-                                    <!--</div>-->
-                                    <!--<br>-->
-                                <!--</div>-->
-                                <!--<span class="slightly-bold-label">Final Result</span>-->
-                                <!--<span-->
-                                    <!--[innerHTML]="' ' + getDisplayedValue(customInputExpectedTestResult['result'])">-->
-                                <!--</span>-->
-                                <!--<div *ngIf="expectDetailedSolution">-->
-                                    <!--<br>-->
-                                    <!--<span class="slightly-bold-label">Detailed Solution</span>-->
-                                    <!--<div *ngIf="!isArray(customInputExpectedTestResult['solution'])">-->
-                                        <!--<span-->
-                                            <!--[innerHTML]="getDisplayedValue(customInputExpectedTestResult['solution'])">-->
-                                        <!--</span></div>-->
-                                    <!--<div *ngIf="isArray(customInputExpectedTestResult['solution'])">-->
-                                        <!--<div *ngIf="shouldDisplayArray(customInputExpectedTestResult['solution'])">-->
-                                            <!--<table class="dp-table"-->
-                                                   <!--*ngIf="isRectangular2dArray(customInputExpectedTestResult['solution'])">-->
-                                                <!--<tr class="dp-tr"-->
-                                                    <!--*ngFor="let i of range(customInputExpectedTestResult['solution'].length);">-->
-                                                    <!--<td class="dp-td" matTooltip="{{i}}, {{j}}"-->
-                                                        <!--*ngFor="let j of range(customInputExpectedTestResult['solution'][0].length);">-->
-                                                        <!--<span class="dp-table-cell"-->
-                                                              <!--[innerHTML]="getDisplayedValue(customInputExpectedTestResult['solution'][i][j])">-->
-                                                        <!--</span>-->
-                                                    <!--</td>-->
-                                                <!--</tr>-->
-                                            <!--</table>-->
-                                            <!--<table class="dp-table"-->
-                                                   <!--*ngIf="!isRectangular2dArray(customInputExpectedTestResult['solution'])">-->
-                                                <!--<tr class="dp-tr">-->
-                                                    <!--<td class="dp-td" matTooltip="{{i}}"-->
-                                                        <!--*ngFor="let i of range(customInputExpectedTestResult['solution'].length);">-->
-                                                        <!--<span class="dp-table-cell"-->
-                                                              <!--[innerHTML]="getDisplayedValue(customInputExpectedTestResult['solution'][i])">-->
-                                                        <!--</span>-->
-                                                    <!--</td>-->
-                                                <!--</tr>-->
-                                            <!--</table>-->
-                                        <!--</div>-->
-                                        <!--<div *ngIf="!shouldDisplayArray(customInputExpectedTestResult['solution'])">-->
-                                            <!--Empty Array-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                            <!--</mat-card-content>-->
-                        <!--</mat-card>-->
+                        <mat-card
+                            *ngIf="customInputExpectedTestResult && (customInputExpectedTestResult['timed-out'] || customInputExpectedTestResult['error'])">
+                            <div>
+                                <b class="slightly-bold-label">Could Not Calculate Expected Results
+                                </b>
+                                <br>
+                                <br>
+                            </div>
+                            <mat-card-content>
+                                <p>It looks like the provided code could not successfully calculate the output for the
+                                    defined custom input values. Please check to see that the input values are valid.
+                                    (and not too large)</p>
+                                <div *ngIf="customInputExpectedTestResult['timed-out']">
+                                    <b class="text-red" style="vertical-align: middle">
+                                        <span class="glyphicon glyphicon-time"></span>
+                                        <span class="test-result-label"> Provided code timed out (took longer than
+                                            {{testTimeLimit}} milliseconds)
+                                        </span>
+                                    </b>
+                                </div>
+                                <div *ngIf="customInputExpectedTestResult['error']">
+                                    <span class="text-red">
+                                        <b class="test-result-label"
+                                           [innerHTML]="customInputExpectedTestResult['error']">
+                                        </b>
+                                    </span>
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
+                        <mat-card
+                            *ngIf="customInputExpectedTestResult && customInputExpectedTestResult['table'] && customInputExpectedTestResult['result'] !== null && customInputExpectedTestResult['result'] !== undefined">
+                            <div>
+                                <b class="slightly-bold-label">Expected Results
+                                </b>
+                                <button mat-raised-button class="view-animation-button"
+                                        (click)="viewUserCodeAnimation('Expected Result for Custom Input', processedCustomInput, customInputExpectedTestResult)">
+                                    <span class="glyphicon glyphicon-play play-animation-glyphicon"></span>
+                                    View Animation
+                                </button>
+                                <br *ngIf="approach === approaches[1]">
+                                <small *ngIf="approach === approaches[1]">(for bottom up algorithm)</small>
+                            </div>
+                            <br>
+                            <mat-card-content>
+                                <span class="slightly-bold-label">Table</span>
+                                <button mat-button class="transpose-button"
+                                        *ngIf="providedSolution['tableShape'] === '2d'"
+                                        (click)="transposeTable()">
+                                    Transpose
+                                </button>
+                                <div>
+                                    <div *ngIf="shouldDisplayArray(customInputExpectedTestResult['table'])">
+                                        <table class="dp-table"
+                                               *ngIf="isRectangular2dArray(customInputExpectedTestResult['table'])">
+                                            <tr class="dp-tr"
+                                                *ngFor="let i of range(customInputExpectedTestResult['table'].length);">
+                                                <td class="dp-td" matTooltip="{{i}}, {{j}}"
+                                                    *ngFor="let j of range(customInputExpectedTestResult['table'][0].length);">
+                                                    <span class="dp-table-cell"
+                                                          [innerHTML]="getDisplayedValue(customInputExpectedTestResult['table'][i][j])">
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <table class="dp-table"
+                                               *ngIf="!isRectangular2dArray(customInputExpectedTestResult['table'])">
+                                            <tr class="dp-tr">
+                                                <td class="dp-td" matTooltip="{{i}}"
+                                                    *ngFor="let i of range(customInputExpectedTestResult['table'].length);">
+                                                    <span class="dp-table-cell"
+                                                          [innerHTML]="getDisplayedValue(customInputExpectedTestResult['table'][i])">
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div *ngIf="!shouldDisplayArray(customInputExpectedTestResult['table'])">
+                                        Empty Table
+                                    </div>
+                                </div>
+                                <br>
+                                <div
+                                    *ngIf="expectDetailedSolution && providedSolution.useAuxiliaryTableWithDetailedSolution">
+                                    <span class="slightly-bold-label">Auxiliary Table</span>
+                                    <br>
+                                    <div *ngIf="shouldDisplayArray(customInputExpectedTestResult['auxiliary-table'])">
+                                        <table class="dp-table"
+                                               *ngIf="isRectangular2dArray(customInputExpectedTestResult['auxiliary-table'])">
+                                            <tr class="dp-tr"
+                                                *ngFor="let i of range(customInputExpectedTestResult['auxiliary-table'].length);">
+                                                <td class="dp-td" matTooltip="{{i}}, {{j}}"
+                                                    *ngFor="let j of range(customInputExpectedTestResult['auxiliary-table'][0].length);">
+                                                    <span class="dp-table-cell"
+                                                          [innerHTML]="getDisplayedValue(customInputExpectedTestResult['auxiliary-table'][i][j])">
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <table class="dp-table"
+                                               *ngIf="!isRectangular2dArray(customInputExpectedTestResult['auxiliary-table'])">
+                                            <tr class="dp-tr">
+                                                <td class="dp-td" matTooltip="{{i}}"
+                                                    *ngFor="let i of range(customInputExpectedTestResult['auxiliary-table'].length);">
+                                                    <span class="dp-table-cell"
+                                                          [innerHTML]="getDisplayedValue(customInputExpectedTestResult['auxiliary-table'][i])">
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div *ngIf="!shouldDisplayArray(customInputExpectedTestResult['auxiliary-table'])">
+                                        Empty Table
+                                    </div>
+                                    <br>
+                                </div>
+                                <span class="slightly-bold-label">Final Result</span>
+                                <span
+                                    [innerHTML]="' ' + getDisplayedValue(customInputExpectedTestResult['result'])">
+                                </span>
+                                <div *ngIf="expectDetailedSolution">
+                                    <br>
+                                    <span class="slightly-bold-label">Detailed Solution</span>
+                                    <div *ngIf="!isArray(customInputExpectedTestResult['solution'])">
+                                        <span
+                                            [innerHTML]="getDisplayedValue(customInputExpectedTestResult['solution'])">
+                                        </span></div>
+                                    <div *ngIf="isArray(customInputExpectedTestResult['solution'])">
+                                        <div *ngIf="shouldDisplayArray(customInputExpectedTestResult['solution'])">
+                                            <table class="dp-table"
+                                                   *ngIf="isRectangular2dArray(customInputExpectedTestResult['solution'])">
+                                                <tr class="dp-tr"
+                                                    *ngFor="let i of range(customInputExpectedTestResult['solution'].length);">
+                                                    <td class="dp-td" matTooltip="{{i}}, {{j}}"
+                                                        *ngFor="let j of range(customInputExpectedTestResult['solution'][0].length);">
+                                                        <span class="dp-table-cell"
+                                                              [innerHTML]="getDisplayedValue(customInputExpectedTestResult['solution'][i][j])">
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <table class="dp-table"
+                                                   *ngIf="!isRectangular2dArray(customInputExpectedTestResult['solution'])">
+                                                <tr class="dp-tr">
+                                                    <td class="dp-td" matTooltip="{{i}}"
+                                                        *ngFor="let i of range(customInputExpectedTestResult['solution'].length);">
+                                                        <span class="dp-table-cell"
+                                                              [innerHTML]="getDisplayedValue(customInputExpectedTestResult['solution'][i])">
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div *ngIf="!shouldDisplayArray(customInputExpectedTestResult['solution'])">
+                                            Empty Array
+                                        </div>
+                                    </div>
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
                     </mat-tab>
                     <mat-tab *ngFor="let testCase of testCases; let testCaseIndex = index" label="{{testCase['name']}}">
                         <mat-card>
