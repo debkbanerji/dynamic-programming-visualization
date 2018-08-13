@@ -421,13 +421,18 @@
                         <mat-card>
                             <b class="slightly-bold-label">Custom Input Values</b>
                             <br>
-                            <small class="custom-input-helper-text">Each input value must be a number, a string, a JSON object, or null. If it is a
-                                string, you must wrap it with quotes.
-                            </small>
-                            <br>
-                            <small class="custom-input-helper-text">Make sure your input is valid for the given problem.
-                            </small>
-                            <br>
+                            <p class="custom-input-helper-text">
+                                <small>
+                                    Each input value must be a number, a string, a JSON
+                                    object (including arrays), or null. If it is a
+                                    string, you must wrap it with quotes.
+                                </small>
+                            </p>
+                            <p class="custom-input-helper-text">
+                                <small>
+                                    Make sure your input is valid for the given problem.
+                                </small>
+                            </p>
                             <mat-card-content>
                                 <div *ngFor="let input of objectKeys(problem['input'])">
                                     <div>

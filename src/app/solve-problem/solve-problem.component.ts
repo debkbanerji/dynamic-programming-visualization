@@ -259,7 +259,7 @@ export class SolveProblemComponent implements OnInit {
             // if (!testCase['expected-result'] && !testCase['expected-table']) {
             const detailedSolution = component.providedSolution.detailedSetNextEntryCode && component.providedSolution.detailedReturnValueCode;
             const auxiliaryTable = detailedSolution && component.providedSolution.useAuxiliaryTableWithDetailedSolution;
-            component.runTest(testCaseIndex, code, component, false, detailedSolution, auxiliaryTable, function (testResult) {
+            component.runTest(component.testCases[testCaseIndex]['input'], code, component, false, detailedSolution, auxiliaryTable, function (testResult) {
                 if (testResult['error']) {
                     console.log('Test error', testResult['error']);
                     component.raiseProvidedSolutionError(testResult['error'].message);
@@ -319,22 +319,34 @@ export class SolveProblemComponent implements OnInit {
             } else {
                 parsedInputValue = Number(rawInputValue);
                 if (isNaN(parsedInputValue)) {
-                    component.customInputJSONParseError = 'Unrecognized value for ' + inputName;
+                    component.customInputJSONParseError = 'Unrecognized type for ' + inputName;
                 }
             }
             input[inputName] = parsedInputValue;
         });
-        console.log(input);
         if (component.customInputJSONParseError) {
             component.isCustomInputTestRunning = false;
             return;
         }
 
+        // First run these inputs using the provided code
+        const expectDetailedSolution = component.providedSolution.detailedSetNextEntryCode && component.providedSolution.detailedReturnValueCode;
+        const useAuxiliaryTable = expectDetailedSolution && component.providedSolution.useAuxiliaryTableWithDetailedSolution;
+        const code = SolveProblemComponent.getPlainRunnableCode(
+            component.providedSolution,
+            component.problem,
+            false,
+            component.providedSolution.detailedSetNextEntryCode,
+            component.providedSolution.detailedSetNextEntryCode && component.providedSolution.useAuxiliaryTableWithDetailedSolution);
+        component.runTest(input, code, component, false, expectDetailedSolution, useAuxiliaryTable, function (testResult) {
+            console.log(testResult);
+        });
+
         component.isCustomInputTestRunning = false;
     }
 
     // Returns result of running the test case, as well as the table
-    runTest(testCaseIndex: number,
+    runTest(inputVals: any,
             plainFunctionCode: string,
             component: SolveProblemComponent,
             isTopDown: boolean,
@@ -345,7 +357,7 @@ export class SolveProblemComponent implements OnInit {
 
         const inputMap = component.problem.input;
         const inputs = Object.keys(inputMap).sort();
-        const inputVals = component.testCases[testCaseIndex]['input'];
+        // const inputVals = component.testCases[testCaseIndex]['input'];
 
         for (let i = 0; i < inputs.length; i++) {
             code.push('const ', inputs[i], ' = ');
@@ -466,7 +478,7 @@ export class SolveProblemComponent implements OnInit {
             let topDown = component.approach === component.approaches[1];
             let useDetailedSolution = component.expectDetailedSolution;
             let useAuxiliaryTable = useDetailedSolution && component.providedSolution.useAuxiliaryTableWithDetailedSolution;
-            component.runTest(testCaseIndex, code, component, topDown, useDetailedSolution, useAuxiliaryTable, function (testResult) {
+            component.runTest(component.testCases[testCaseIndex]['input'], code, component, topDown, useDetailedSolution, useAuxiliaryTable, function (testResult) {
                 let testCase = component.testCases[testCaseIndex];
                 const expectedTable = testCase['expected-table'];
                 testResult['has-expected-table'] = !testResult['error'] && !testResult['timed-out'] && component.isExpectedTable(expectedTable, testResult['table'], component.approach === component.approaches[1], component);
