@@ -113,6 +113,14 @@
     margin-top: 0;
 }
 
+.custom-input-helper-text {
+    margin-top: 2px;
+}
+
+.custom-input-field {
+    width: 100%;
+}
+
 /*DP Table*/
 
 .dp-table {
