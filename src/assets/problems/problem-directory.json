@@ -1,0 +1,26 @@
+{
+    "sections": [
+        {
+            "name": "Subsequences",
+            "problems": [
+                {
+                    "name": "Longest Increasing Subsequence",
+                    "id": "longest-increasing-subsequence"
+                }
+            ]
+        },
+        {
+            "name": "Knapsack Variations",
+            "problems": [
+                {
+                    "name": "Knapsack With Repetition",
+                    "id": "knapsack-with-repetition"
+                },
+                {
+                    "name": "Knapsack Without Repetition",
+                    "id": "knapsack-without-repetition"
+                }
+            ]
+        }
+    ]
+}

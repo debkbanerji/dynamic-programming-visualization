@@ -4,6 +4,7 @@ import {CustomProblemService} from '../providers/custom-problem.service';
 import {DOCUMENT} from '@angular/common';
 import {Title} from '@angular/platform-browser';
 import {environment} from '../../environments/environment';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
     selector: 'app-select-problem',
@@ -24,32 +25,7 @@ export class SelectProblemComponent implements OnInit {
 
     version = environment.VERSION;
 
-    // Register any new problems within the appropriate section
-    sections = [
-        {
-            name: 'Subsequences',
-            problems: [
-                {
-                    name: 'Longest Increasing Subsequence',
-                    id: 'longest-increasing-subsequence'
-                }
-            ]
-        },
-        {
-            name: 'Knapsack Variations',
-            problems: [
-                {
-                    name: 'Knapsack With Repetition',
-                    id: 'knapsack-with-repetition'
-                },
-                {
-                    name: 'Knapsack Without Repetition',
-                    id: 'knapsack-without-repetition'
-                }
-            ]
-        }
-    ];
-
+    sections = [];
 
     constructor(
         private router: Router,
@@ -57,6 +33,7 @@ export class SelectProblemComponent implements OnInit {
         @Inject(DOCUMENT) document,
         private route: ActivatedRoute,
         private titleService: Title,
+        private http: HttpClient
     ) {
     }
 
@@ -67,9 +44,12 @@ export class SelectProblemComponent implements OnInit {
             component.isDarkTheme = (params['dark-mode'] == 'true');
         });
         component.titleService.setTitle('Dynamic Programming');
-        component.totalProblems = 0;
-        component.sections.forEach(function (section) {
-            component.totalProblems += section.problems.length;
+        component.http.get('../assets/problems/problem-directory.json').subscribe((data: any) => {
+            component.sections = data.sections;
+            component.totalProblems = 0;
+            component.sections.forEach(function (section) {
+                component.totalProblems += section.problems.length;
+            });
         });
     }
 
