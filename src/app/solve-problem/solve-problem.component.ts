@@ -89,6 +89,7 @@ export class SolveProblemComponent implements OnInit {
     testTimeLimit = 500; // Time limit per test in milliseconds
 
     customInput: any = {};
+    processedCustomInput: any;
     customInputJSONParseError;
     customInputExpectedTestResult: any = null;
     customInputTestResult: any = null;
@@ -294,7 +295,7 @@ export class SolveProblemComponent implements OnInit {
 
     runCustomInput() {
         const component: SolveProblemComponent = this;
-        const input = {};
+        component.processedCustomInput = {};
         const rawInput = component.customInput;
         component.customInputJSONParseError = null;
         component.customInputExpectedTestResult = null;
@@ -322,7 +323,7 @@ export class SolveProblemComponent implements OnInit {
                     component.customInputJSONParseError = 'Unrecognized type for ' + inputName;
                 }
             }
-            input[inputName] = parsedInputValue;
+            component.processedCustomInput[inputName] = parsedInputValue;
         });
         if (component.customInputJSONParseError) {
             component.isCustomInputTestRunning = false;
@@ -338,14 +339,14 @@ export class SolveProblemComponent implements OnInit {
             false,
             component.providedSolution.detailedSetNextEntryCode,
             component.providedSolution.detailedSetNextEntryCode && component.providedSolution.useAuxiliaryTableWithDetailedSolution);
-        component.runTest(input, providedCode, component, false, expectDetailedSolution, useAuxiliaryTableWithDetailedSolution, function (expectedTestResult) {
+        component.runTest(component.processedCustomInput, providedCode, component, false, expectDetailedSolution, useAuxiliaryTableWithDetailedSolution, function (expectedTestResult) {
             component.customInputExpectedTestResult = expectedTestResult;
 
             const userCode = SolveProblemComponent.getPlainRunnableCode(component.solution, component.problem, component.approach === component.approaches[1], component.expectDetailedSolution, component.expectDetailedSolution && component.providedSolution.useAuxiliaryTableWithDetailedSolution);
             const topDown = component.approach === component.approaches[1];
             const useDetailedSolution = component.expectDetailedSolution;
             const useAuxiliaryTable = useDetailedSolution && component.providedSolution.useAuxiliaryTableWithDetailedSolution;
-            component.runTest(input, userCode, component, topDown, useDetailedSolution, useAuxiliaryTable, function (testResult) {
+            component.runTest(component.processedCustomInput, userCode, component, topDown, useDetailedSolution, useAuxiliaryTable, function (testResult) {
                 component.customInputTestResult = testResult;
                 component.isCustomInputTestRunning = false;
             });
