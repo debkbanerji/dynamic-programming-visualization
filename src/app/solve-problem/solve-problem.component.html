@@ -443,11 +443,16 @@
                                         </mat-form-field>
                                     </div>
                                 </div>
-                                <button mat-fab (click)="runCustomInput()"
-                                        [disabled]="testsCurrentlyRunning || isCustomInputTestRunning">
-                                    <span class="glyphicon glyphicon-play run-tests-button"></span>
-                                </button>
-                                <b class="text-red">&nbsp;&nbsp;{{customInputJSONParseError}}</b>
+                                <div>
+                                    <button mat-fab (click)="runCustomInput()"
+                                            [disabled]="testsCurrentlyRunning || testsCurrentlyRunningForProvided || isCustomInputTestRunning">
+                                        <span class="glyphicon glyphicon-play run-tests-button"></span>
+                                    </button>
+                                    <b class="text-red">&nbsp;&nbsp;{{customInputJSONParseError}}</b>
+                                </div>
+                                <br>
+                                <mat-progress-bar mode="indeterminate"
+                                                  *ngIf="isCustomInputTestRunning"></mat-progress-bar>
                             </mat-card-content>
                         </mat-card>
                         <!--<mat-card *ngIf="testResults[testCaseIndex] && !testsCurrentlyRunning">-->

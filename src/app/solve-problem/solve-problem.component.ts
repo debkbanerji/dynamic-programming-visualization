@@ -331,18 +331,25 @@ export class SolveProblemComponent implements OnInit {
 
         // First run these inputs using the provided code
         const expectDetailedSolution = component.providedSolution.detailedSetNextEntryCode && component.providedSolution.detailedReturnValueCode;
-        const useAuxiliaryTable = expectDetailedSolution && component.providedSolution.useAuxiliaryTableWithDetailedSolution;
-        const code = SolveProblemComponent.getPlainRunnableCode(
+        const useAuxiliaryTableWithDetailedSolution = expectDetailedSolution && component.providedSolution.useAuxiliaryTableWithDetailedSolution;
+        const providedCode = SolveProblemComponent.getPlainRunnableCode(
             component.providedSolution,
             component.problem,
             false,
             component.providedSolution.detailedSetNextEntryCode,
             component.providedSolution.detailedSetNextEntryCode && component.providedSolution.useAuxiliaryTableWithDetailedSolution);
-        component.runTest(input, code, component, false, expectDetailedSolution, useAuxiliaryTable, function (testResult) {
-            console.log(testResult);
-        });
+        component.runTest(input, providedCode, component, false, expectDetailedSolution, useAuxiliaryTableWithDetailedSolution, function (expectedTestResult) {
+            component.customInputExpectedTestResult = expectedTestResult;
 
-        component.isCustomInputTestRunning = false;
+            const userCode = SolveProblemComponent.getPlainRunnableCode(component.solution, component.problem, component.approach === component.approaches[1], component.expectDetailedSolution, component.expectDetailedSolution && component.providedSolution.useAuxiliaryTableWithDetailedSolution);
+            const topDown = component.approach === component.approaches[1];
+            const useDetailedSolution = component.expectDetailedSolution;
+            const useAuxiliaryTable = useDetailedSolution && component.providedSolution.useAuxiliaryTableWithDetailedSolution;
+            component.runTest(input, userCode, component, topDown, useDetailedSolution, useAuxiliaryTable, function (testResult) {
+                component.customInputTestResult = testResult;
+                component.isCustomInputTestRunning = false;
+            });
+        });
     }
 
     // Returns result of running the test case, as well as the table
