@@ -24,8 +24,8 @@ $app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
 }
 
 .main-content-container {
-    width: 100vw;
-    height: 100vh;
+    min-width: 100vw;
+    min-height: 100vh;
 }
 
 input {
