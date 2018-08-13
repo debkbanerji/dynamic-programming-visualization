@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {MatDialog} from "@angular/material";
-import {ConfirmationDialogComponent} from "../dialogs/confirmation-dialog/confirmation-dialog.component";
-import {ActivatedRoute, Router} from "@angular/router";
-import {Title} from "@angular/platform-browser";
-import {CustomProblemService} from "../providers/custom-problem.service";
-import {AnimationDataService} from "../providers/animation-data.service";
-import {AnimationDialogComponent} from "../dialogs/animation-dialog/animation-dialog.component";
+import {HttpClient} from '@angular/common/http';
+import {MatDialog} from '@angular/material';
+import {ConfirmationDialogComponent} from '../dialogs/confirmation-dialog/confirmation-dialog.component';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Title} from '@angular/platform-browser';
+import {CustomProblemService} from '../providers/custom-problem.service';
+import {AnimationDataService} from '../providers/animation-data.service';
+import {AnimationDialogComponent} from '../dialogs/animation-dialog/animation-dialog.component';
 
 const encodedTableName = '___TABLE___';
 const auxiliaryTableName = '___AUX_TABLE___';
@@ -48,6 +48,7 @@ export class SolveProblemComponent implements OnInit {
     problem: any;
     providedSolution: any;
     testCases: any;
+    testCaseSelectedTab: number = 0;
 
     // If true, we care about how the user got their result
     // If false, only a single return value is expected
@@ -87,6 +88,13 @@ export class SolveProblemComponent implements OnInit {
     testResults: any = {};
 
     testTimeLimit = 500; // Time limit per test in milliseconds
+
+    customInput: any = {};
+    processedCustomInput: any;
+    customInputJSONParseError;
+    customInputExpectedTestResult: any = null;
+    customInputTestResult: any = null;
+    isCustomInputTestRunning: boolean = false;
 
     transpose2dTable: boolean = false;
 
@@ -220,6 +228,9 @@ export class SolveProblemComponent implements OnInit {
         component.problem = data;
         component.providedSolution = component.problem['provided-solution'];
         component.testCases = component.problem['test-cases'];
+        if (component.testCases.length > 0) {
+            component.testCaseSelectedTab = 1;
+        }
         component.titleService.setTitle(component.problem.name);
         component.testsCurrentlyRunning = true;
         component.testsCurrentlyRunningForProvided = true;
@@ -253,7 +264,7 @@ export class SolveProblemComponent implements OnInit {
             // if (!testCase['expected-result'] && !testCase['expected-table']) {
             const detailedSolution = component.providedSolution.detailedSetNextEntryCode && component.providedSolution.detailedReturnValueCode;
             const auxiliaryTable = detailedSolution && component.providedSolution.useAuxiliaryTableWithDetailedSolution;
-            component.runTest(testCaseIndex, code, component, false, detailedSolution, auxiliaryTable, function (testResult) {
+            component.runTest(component.testCases[testCaseIndex]['input'], code, component, false, detailedSolution, auxiliaryTable, function (testResult) {
                 if (testResult['error']) {
                     console.log('Test error', testResult['error']);
                     component.raiseProvidedSolutionError(testResult['error'].message);
@@ -286,8 +297,84 @@ export class SolveProblemComponent implements OnInit {
         }
     }
 
+    runCustomInput() {
+        const component: SolveProblemComponent = this;
+        component.getCodeFromEditors();
+        component.processedCustomInput = {};
+        const rawInput = component.customInput;
+        component.customInputJSONParseError = null;
+        component.customInputExpectedTestResult = null;
+        component.customInputTestResult = null;
+        component.isCustomInputTestRunning = true;
+        const inputNames = Object.keys(component.problem['input']);
+        inputNames.reverse();
+        inputNames.forEach(inputName => {
+            const rawInputValue = rawInput[inputName];
+            let parsedInputValue;
+            if (/^(('.*')|(".*"))$/.test(rawInputValue)) {
+                // the input is a string
+                parsedInputValue = rawInputValue.substr(1, rawInputValue.lengtn - 1);
+            } else if (rawInputValue === 'null') {
+                parsedInputValue = null;
+            } else if (/^((\[.*])|({.*}))$/.test(rawInputValue)) {
+                try {
+                    parsedInputValue = JSON.parse(rawInputValue);
+                } catch (e) {
+                    component.customInputJSONParseError = 'Could not parse ' + inputName + ' - ' + e;
+                }
+            } else {
+                parsedInputValue = Number(rawInputValue);
+                if (isNaN(parsedInputValue)) {
+                    component.customInputJSONParseError = 'Unrecognized type for ' + inputName;
+                }
+            }
+            component.processedCustomInput[inputName] = parsedInputValue;
+        });
+        if (component.customInputJSONParseError) {
+            component.isCustomInputTestRunning = false;
+            return;
+        }
+
+        // First run these inputs using the provided code
+        const expectDetailedSolution = component.providedSolution.detailedSetNextEntryCode && component.providedSolution.detailedReturnValueCode;
+        const useAuxiliaryTableWithDetailedSolution = expectDetailedSolution && component.providedSolution.useAuxiliaryTableWithDetailedSolution;
+        const providedCode = SolveProblemComponent.getPlainRunnableCode(
+            component.providedSolution,
+            component.problem,
+            false,
+            component.providedSolution.detailedSetNextEntryCode,
+            component.providedSolution.detailedSetNextEntryCode && component.providedSolution.useAuxiliaryTableWithDetailedSolution);
+        component.runTest(component.processedCustomInput, providedCode, component, false, expectDetailedSolution, useAuxiliaryTableWithDetailedSolution, function (expectedTestResult) {
+            component.customInputExpectedTestResult = expectedTestResult;
+
+            if (component.transpose2dTable
+                && expectedTestResult['table']
+                && component.isRectangular2dArray(expectedTestResult['table'])) {
+                expectedTestResult['table'] = component.getTransposedArray(expectedTestResult['table']);
+            }
+
+            const userCode = SolveProblemComponent.getPlainRunnableCode(component.solution, component.problem, component.approach === component.approaches[1], component.expectDetailedSolution, component.expectDetailedSolution && component.providedSolution.useAuxiliaryTableWithDetailedSolution);
+            const topDown = component.approach === component.approaches[1];
+            const useDetailedSolution = component.expectDetailedSolution;
+            const useAuxiliaryTable = useDetailedSolution && component.providedSolution.useAuxiliaryTableWithDetailedSolution;
+            component.runTest(component.processedCustomInput, userCode, component, topDown, useDetailedSolution, useAuxiliaryTable, function (testResult) {
+                component.customInputTestResult = testResult;
+
+
+                component.customInputTestResult['has-expected-table'] = component.isExpectedTable(component.customInputExpectedTestResult['table'], component.customInputTestResult['table'], component.approach === component.approaches[1], component);
+
+                if (component.expectDetailedSolution && component.providedSolution.useAuxiliaryTableWithDetailedSolution) {
+
+                    component.customInputTestResult['has-expected-auxiliary-table'] = component.isExpectedTable(component.customInputExpectedTestResult['auxiliary-table'], component.customInputTestResult['auxiliary-table'], component.approach === component.approaches[1], component);
+                }
+
+                component.isCustomInputTestRunning = false;
+            });
+        });
+    }
+
     // Returns result of running the test case, as well as the table
-    runTest(testCaseIndex: number,
+    runTest(inputVals: any,
             plainFunctionCode: string,
             component: SolveProblemComponent,
             isTopDown: boolean,
@@ -298,13 +385,13 @@ export class SolveProblemComponent implements OnInit {
 
         const inputMap = component.problem.input;
         const inputs = Object.keys(inputMap).sort();
-        const inputVals = component.testCases[testCaseIndex]['input'];
+        // const inputVals = component.testCases[testCaseIndex]['input'];
 
         for (let i = 0; i < inputs.length; i++) {
             code.push('const ', inputs[i], ' = ');
             const inputVal = inputVals[inputs[i]];
             code.push(JSON.stringify(inputVal));
-            code.push(';\n')
+            code.push(';\n');
         }
 
         code.push('\ntry {\n');
@@ -419,7 +506,7 @@ export class SolveProblemComponent implements OnInit {
             let topDown = component.approach === component.approaches[1];
             let useDetailedSolution = component.expectDetailedSolution;
             let useAuxiliaryTable = useDetailedSolution && component.providedSolution.useAuxiliaryTableWithDetailedSolution;
-            component.runTest(testCaseIndex, code, component, topDown, useDetailedSolution, useAuxiliaryTable, function (testResult) {
+            component.runTest(component.testCases[testCaseIndex]['input'], code, component, topDown, useDetailedSolution, useAuxiliaryTable, function (testResult) {
                 let testCase = component.testCases[testCaseIndex];
                 const expectedTable = testCase['expected-table'];
                 testResult['has-expected-table'] = !testResult['error'] && !testResult['timed-out'] && component.isExpectedTable(expectedTable, testResult['table'], component.approach === component.approaches[1], component);
@@ -485,7 +572,7 @@ export class SolveProblemComponent implements OnInit {
                 encodedTableName,
                 ' = Array(',
                 solution.tableDimension1,
-                ');')
+                ');');
         }
         if (auxiliaryTable) {
             if (is2d) {
@@ -498,7 +585,7 @@ export class SolveProblemComponent implements OnInit {
                     auxiliaryTableName,
                     ' = Array(',
                     solution.tableDimension1,
-                    ');')
+                    ');');
             }
         }
         initializationCode.push('\n// TABLE INITIALIZATION CODE END\n');
@@ -628,7 +715,7 @@ export class SolveProblemComponent implements OnInit {
         outerCode.push(innerCode.join('').replace(/(?:\r\n|\r|\n)/g, '\n\t'));
         outerCode.push('\n\n};');
 
-        return outerCode.join('')
+        return outerCode.join('');
     }
 
     // Returns a function that gets from the table without altering UI
@@ -658,7 +745,7 @@ export class SolveProblemComponent implements OnInit {
         }
         code.push('\n\treturn ', encodedTableName, '[i]');
         if (is2d) {
-            code.push('[j]')
+            code.push('[j]');
         }
         code.push(';\n};');
         return code.join('');
@@ -675,7 +762,7 @@ export class SolveProblemComponent implements OnInit {
         }
         code.push(') {\n\treturn get', encodedTableName, '(i, ');
         if (is2d) {
-            code.push('j, ')
+            code.push('j, ');
         }
         code.push(auxiliary ? auxiliaryTableName : encodedTableName, ', ', logName, ', \'', userFriendlyName, '\');\n};'
         );
@@ -698,7 +785,7 @@ export class SolveProblemComponent implements OnInit {
             code.push('\n\t}\n');
             code.push('\n\tif(i === null || i === undefined || ', encodedTableName, '[0].length <= j || j < 0) {');
             code.push('\n\t\tthrow new Error(\'Could not set entry: \' + j + \' is not a valid table dimension 2 index\');');
-            code.push('\n\t}\n')
+            code.push('\n\t}\n');
         } else {
             code.push('\n\tif(i === null || i === undefined || ', encodedTableName, '.length <= i || i < 0) {');
             code.push('\n\t\tthrow new Error(\'Could not set entry: \' + i + \' is not a valid table index\');');
@@ -706,7 +793,7 @@ export class SolveProblemComponent implements OnInit {
         }
         code.push('\n\t', encodedTableName, '[i]');
         if (is2d) {
-            code.push('[j]')
+            code.push('[j]');
         }
         code.push(' = val;\n');
         if (is2d) {
@@ -723,6 +810,21 @@ export class SolveProblemComponent implements OnInit {
         this.numMatchingTableDimensions = 0;
         this.numExpectedAuxiliaryTables = 0;
         this.transpose2dTable = !this.transpose2dTable;
+        if (this.customInputExpectedTestResult
+            && this.customInputExpectedTestResult['table']
+            && this.isRectangular2dArray(this.customInputExpectedTestResult['table'])) {
+            this.customInputExpectedTestResult['table']
+                = this.getTransposedArray(this.customInputExpectedTestResult['table']);
+
+            this.customInputTestResult['has-expected-table'] = this.isExpectedTable(this.customInputExpectedTestResult['table'], this.customInputTestResult['table'], this.approach === this.approaches[1], this);
+
+            if (this.expectDetailedSolution && this.providedSolution.useAuxiliaryTableWithDetailedSolution) {
+                this.customInputExpectedTestResult['auxiliary-table'] = this.getTransposedArray(this.customInputExpectedTestResult['auxiliary-table']);
+
+                this.customInputTestResult['has-expected-auxiliary-table'] = this.isExpectedTable(this.customInputExpectedTestResult['auxiliary-table'], this.customInputTestResult['auxiliary-table'], this.approach === this.approaches[1], this);
+            }
+        }
+
         for (let testCaseIndex = 0; testCaseIndex < this.testCases.length; testCaseIndex++) {
             const testCase = this.testCases[testCaseIndex];
             if (this.isRectangular2dArray(testCase['expected-table'])) {
@@ -843,9 +945,9 @@ export class SolveProblemComponent implements OnInit {
             } else if (errorLine <= loopCodeStart) {
                 errorZoneMessage = 'Error in line ' + (errorLine - initCodeStart - 2) + ' of initialization code';
             } else if (errorLine <= defaultValueCodeStart) {
-                errorZoneMessage = 'Error in for loop definition'
+                errorZoneMessage = 'Error in for loop definition';
             } else if (errorLine <= nextEntryCodeStart) {
-                errorZoneMessage = 'Error in setting default value for entry'
+                errorZoneMessage = 'Error in setting default value for entry';
             } else if (errorLine <= nextEntryCodeEnd) {
                 errorZoneMessage = 'Error in line ' + (errorLine - nextEntryCodeStart - 2) + ' of set next entry code';
             } else if (errorLine < returnValueCodeStart) {
@@ -853,7 +955,7 @@ export class SolveProblemComponent implements OnInit {
             } else if (errorLine <= returnValueCodeEnd) {
                 errorZoneMessage = 'Error in line ' + (errorLine - returnValueCodeStart - 2) + ' of return value code';
             } else {
-                errorZoneMessage = 'Error while trying to return result'
+                errorZoneMessage = 'Error while trying to return result';
             }
         } else {
             if (errorLine <= tableInitEnd) {
@@ -861,7 +963,7 @@ export class SolveProblemComponent implements OnInit {
             } else if (errorLine <= defaultValueCodeStart) {
                 errorZoneMessage = 'Error in line ' + (errorLine - initCodeStart - 2) + ' of initialization code';
             } else if (errorLine <= nextEntryCodeStart) {
-                errorZoneMessage = 'Error in setting default value for entry'
+                errorZoneMessage = 'Error in setting default value for entry';
             } else if (errorLine <= nextEntryCodeEnd) {
                 errorZoneMessage = 'Error in line ' + (errorLine - nextEntryCodeStart - 2) + ' of set next entry code';
             } else if (errorLine < returnValueCodeStart) {
@@ -869,7 +971,7 @@ export class SolveProblemComponent implements OnInit {
             } else if (errorLine <= returnValueCodeEnd) {
                 errorZoneMessage = 'Error in line ' + (errorLine - returnValueCodeStart - 2) + ' of return value code';
             } else {
-                errorZoneMessage = 'Error while trying to return result'
+                errorZoneMessage = 'Error while trying to return result';
             }
         }
 
@@ -1023,7 +1125,7 @@ export class SolveProblemComponent implements OnInit {
 
     camelCase(str: string) {
         return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function (match, index) {
-            if (+match === 0) return ""; // or if (/\s+/.test(match)) for white spaces
+            if (+match === 0) return ''; // or if (/\s+/.test(match)) for white spaces
             return index == 0 ? match.toLowerCase() : match.toUpperCase();
         });
     }
@@ -1033,7 +1135,7 @@ export class SolveProblemComponent implements OnInit {
         let int = Number(factor) || 7.7;
 
         function resize() {
-            el.style.width = ((Math.max(el.value.length, 1) + 1) * int) + 'px'
+            el.style.width = ((Math.max(el.value.length, 1) + 1) * int) + 'px';
         }
 
         let e = 'keyup,keypress,focus,blur,change'.split(',');
@@ -1071,7 +1173,7 @@ export class SolveProblemComponent implements OnInit {
         let tableDimension1 = testCase['expected-table'].length;
         let tableDimension2 = -1;
         if (this.isRectangular2dArray(testCase['expected-table'])) {
-            tableDimension2 = testCase['expected-table'][0].length
+            tableDimension2 = testCase['expected-table'][0].length;
         }
 
         let useAuxiliaryTable = component.providedSolution.detailedSetNextEntryCode
@@ -1096,7 +1198,7 @@ export class SolveProblemComponent implements OnInit {
         let tableDimension1 = testResult['table'].length;
         let tableDimension2 = -1;
         if (this.isRectangular2dArray(testResult['table'])) {
-            tableDimension2 = testResult['table'][0].length
+            tableDimension2 = testResult['table'][0].length;
         }
 
         let useAuxiliaryTable = !!testResult['auxiliary-table'];
@@ -1128,7 +1230,7 @@ export class SolveProblemComponent implements OnInit {
         for (let i = 0; i < log.length; i++) {
             const logEntry = log[i];
             if (logEntry.table === 'T' || useAuxiliaryTable) {
-                filteredLog.push(logEntry)
+                filteredLog.push(logEntry);
             }
         }
         const component: SolveProblemComponent = this;
