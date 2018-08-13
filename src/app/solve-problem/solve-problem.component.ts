@@ -354,6 +354,17 @@ export class SolveProblemComponent implements OnInit {
             const useAuxiliaryTable = useDetailedSolution && component.providedSolution.useAuxiliaryTableWithDetailedSolution;
             component.runTest(component.processedCustomInput, userCode, component, topDown, useDetailedSolution, useAuxiliaryTable, function (testResult) {
                 component.customInputTestResult = testResult;
+
+
+                component.customInputTestResult['has-expected-table'] = component.isExpectedTable(component.customInputExpectedTestResult['table'], component.customInputTestResult['table'], component.approach === component.approaches[1], component);
+
+                if (component.expectDetailedSolution && component.providedSolution.useAuxiliaryTableWithDetailedSolution) {
+
+                    component.customInputTestResult['has-expected-auxiliary-table'] = component.isExpectedTable(component.customInputExpectedTestResult['auxiliary-table'], component.customInputTestResult['auxiliary-table'], component.approach === component.approaches[1], component);
+                }
+                
+                
+                
                 component.isCustomInputTestRunning = false;
             });
         });
@@ -801,7 +812,16 @@ export class SolveProblemComponent implements OnInit {
             && this.isRectangular2dArray(this.customInputExpectedTestResult['table'])) {
             this.customInputExpectedTestResult['table']
                 = this.getTransposedArray(this.customInputExpectedTestResult['table']);
+            
+            this.customInputTestResult['has-expected-table'] = this.isExpectedTable(this.customInputExpectedTestResult['table'], this.customInputTestResult['table'], this.approach === this.approaches[1], this);
+
+            if (this.expectDetailedSolution && this.providedSolution.useAuxiliaryTableWithDetailedSolution) {
+                this.customInputExpectedTestResult['auxiliary-table'] = this.getTransposedArray(this.customInputExpectedTestResult['auxiliary-table']);
+
+                this.customInputTestResult['has-expected-auxiliary-table'] = this.isExpectedTable(this.customInputExpectedTestResult['auxiliary-table'], this.customInputTestResult['auxiliary-table'], this.approach === this.approaches[1], this);
+            }
         }
+
         for (let testCaseIndex = 0; testCaseIndex < this.testCases.length; testCaseIndex++) {
             const testCase = this.testCases[testCaseIndex];
             if (this.isRectangular2dArray(testCase['expected-table'])) {

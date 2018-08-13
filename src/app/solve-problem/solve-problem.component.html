@@ -449,7 +449,8 @@
                             <p class="custom-input-helper-text text-red">
                                 <b>
                                     <small>
-                                        Warning: Be very careful as large input values may cause unpredictable browser behaviour.
+                                        Warning: Be very careful as large input values may cause unpredictable browser
+                                        behaviour.
                                     </small>
                                 </b>
                             </p>
@@ -501,6 +502,299 @@
                                            [innerHTML]="customInputExpectedTestResult['error']">
                                         </b>
                                     </span>
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
+                        <mat-card
+                            *ngIf="customInputExpectedTestResult && customInputExpectedTestResult['table'] && customInputExpectedTestResult['result'] !== null && customInputExpectedTestResult['result'] !== undefined
+&& customInputTestResult && !testsCurrentlyRunning">
+                            <mat-card-content>
+                                <div>
+                                    <b class="slightly-bold-label">Custom Input Results</b>
+                                    <button mat-raised-button class="view-animation-button"
+                                            [disabled]="!(customInputTestResult['log'] && customInputTestResult['table'])"
+                                            (click)="viewUserCodeAnimation('Expected Result for Custom Input', processedCustomInput, customInputTestResult)">
+                                        <span class="glyphicon glyphicon-play play-animation-glyphicon"></span>
+                                        View Animation
+                                    </button>
+                                </div>
+                                <br>
+                                <br>
+                                <div *ngIf="customInputTestResult['timed-out']">
+                                    <b class="text-orange" style="vertical-align: middle">
+                                        <span class="glyphicon glyphicon-time"></span>
+                                        <span class="test-result-label"> Test timed out (took longer than
+                                            {{testTimeLimit}} milliseconds)
+                                        </span>
+                                    </b>
+                                </div>
+                                <div *ngIf="customInputTestResult['error']">
+                                    <span class="text-red">
+                                        <!--<mat-icon class="test-result-label">error_outline</mat-icon>-->
+                                        <!--<b class="test-result-label"> Test crashed:-->
+                                        <!--</b>-->
+                                        <b class="test-result-label" [innerHTML]="customInputTestResult['error']">
+                                        </b>
+                                    </span>
+                                </div>
+                                <div
+                                    *ngIf="!customInputTestResult['timed-out'] && !customInputTestResult['error']">
+                                    <div>
+                                        <b class="text-green"
+                                           *ngIf="customInputTestResult['result'] === customInputExpectedTestResult['result']">
+                                            &#x2714; Correct Final Result
+                                        </b>
+                                        <b class="text-red"
+                                           *ngIf="!(customInputTestResult['result'] === customInputExpectedTestResult['result'])">
+                                            &#x2718; Incorrect Final Result - Expected
+                                            {{getDisplayedValue(customInputExpectedTestResult['result'])}}
+                                            but got
+                                            {{getDisplayedValue(customInputTestResult['result'])}}
+                                            {{((customInputTestResult['result'] === null ||
+                                            customInputTestResult['result'] === undefined)
+                                            && approach === approaches[1]) ? ' - Make sure you\'re using getTableEntry'
+                                            + ' when accessing table entries': ''}}
+                                        </b>
+                                    </div>
+                                    <div *ngIf="expectDetailedSolution">
+                                        <!--Note: we only need to check deep equals for detailed solutions-->
+                                        <b class="text-green"
+                                           *ngIf="deepEquals(customInputTestResult['solution'],customInputExpectedTestResult['solution'])">
+                                            &#x2714; Correct Solution
+                                        </b>
+                                        <div
+                                            *ngIf="!(deepEquals(customInputTestResult['solution'], customInputExpectedTestResult['solution']))">
+                                            <b *ngIf="!isArray(customInputTestResult['solution'])"
+                                               class="text-yellow">
+                                                Non Matching Solution - Expected
+                                                {{getDisplayedValue(customInputExpectedTestResult['solution'])}}
+                                                but got
+                                                {{getDisplayedValue(customInputTestResult['solution'])}}
+                                            </b>
+                                            <div *ngIf="isArray(customInputTestResult['solution'])">
+                                                <b class="text-yellow">Non Matching Solution</b>
+                                                <div *ngIf="shouldDisplayArray(customInputTestResult['solution'])">
+                                                    <table class="dp-table"
+                                                           *ngIf="!isRectangular2dArray(customInputTestResult['solution'])">
+                                                        <tr class="dp-tr">
+                                                            <td class="dp-td" matTooltip="{{i}}"
+                                                                *ngFor="let i of range(customInputTestResult['solution'].length);">
+                                                                <span class="dp-table-cell"
+                                                                      [ngClass]="{'text-green': (haveEqualDimensions(customInputTestResult['solution'], customInputExpectedTestResult['solution']) &&
+                                                                        customInputTestResult['solution'][i] === customInputExpectedTestResult['solution'][i]
+                                                                      ),
+                                                                       'text-yellow': !(haveEqualDimensions(customInputTestResult['solution'], customInputExpectedTestResult['solution']) &&
+                                                                        (approach === approaches[1] ?
+                                                                        customInputTestResult['solution'][i] === customInputExpectedTestResult['solution'][i] || customInputTestResult['solution'][i] === null || customInputTestResult['solution'][i] === undefined
+                                                                         : customInputTestResult['solution'][i] === customInputExpectedTestResult['solution'][i])
+                                                                      )}"
+                                                                      [innerHTML]="getDisplayedValue(customInputTestResult['solution'][i])">
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <table class="dp-table"
+                                                           *ngIf="isRectangular2dArray(customInputTestResult['solution'])">
+                                                        <tr class="dp-tr"
+                                                            *ngFor="let i of range(customInputTestResult['solution'].length);">
+                                                            <td class="dp-td" matTooltip="{{i}}, {{j}}"
+                                                                *ngFor="let j of range(customInputTestResult['solution'][0].length);">
+                                                                <span class="dp-table-cell"
+                                                                      [ngClass]="{'text-green': (haveEqualDimensions(customInputTestResult['solution'], customInputExpectedTestResult['solution']) &&
+                                                                        customInputTestResult['solution'][i][j] === customInputExpectedTestResult['solution'][i][j]
+                                                                      ),
+                                                                       'text-yellow': !(haveEqualDimensions(customInputTestResult['solution'], customInputExpectedTestResult['solution']) &&
+                                                                        (approach === approaches[1] ?
+                                                                        customInputTestResult['solution'][i][j] === customInputExpectedTestResult['solution'][i][j] || customInputTestResult['solution'][i][j] === null || customInputTestResult['solution'][i][j] === undefined
+                                                                         : customInputTestResult['solution'][i][j] === customInputExpectedTestResult['solution'][i][j])
+                                                                      )}"
+                                                                      [innerHTML]="getDisplayedValue(customInputTestResult['solution'][i][j])">
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                                <div
+                                                    *ngIf="!shouldDisplayArray(customInputTestResult['solution'])">
+                                                    Empty Array
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <b class="text-green"
+                                           *ngIf="customInputTestResult['has-expected-table']">
+                                            &#x2714; Created expected table
+                                        </b>
+                                        <br *ngIf="customInputTestResult['has-expected-table']">
+                                        <span *ngIf="customInputTestResult['has-expected-table']">
+                                            <small>Note: If a top down approach was used, only non null entries of the
+                                                table were checked
+                                            </small>
+                                        </span>
+                                        <div
+                                            *ngIf="!customInputTestResult['has-expected-table']">
+                                            <span class="text-yellow">Did not create expected table</span>
+                                            <br *ngIf="!haveEqualDimensions(customInputTestResult['table'], customInputExpectedTestResult['table'])">
+                                            <span class="text-yellow"
+                                                  *ngIf="!haveEqualDimensions(customInputTestResult['table'], customInputExpectedTestResult['table'])">
+                                                Mismatched table dimensions: expected
+                                                {{getTableDimensions(customInputExpectedTestResult['table'])}} but got
+                                                {{getTableDimensions(customInputTestResult['table'])}}
+                                            </span>
+                                            <span
+                                                *ngIf="customInputTestResult['result'] === customInputExpectedTestResult['result']">
+                                                <br>
+                                                Your final result is correct, but your table did not match the table
+                                                generated by the provided answer.
+                                                <span *ngIf="numCorrectFinalAnswerTestCases === numRunTestCases">This is
+                                                    likely not an issue since your solution returns the correct final
+                                                    result for every test case.<br></span>
+                                                <span>If the expected table is just a transposed version of yours, you
+                                                    can <a class="transpose-text" (click)="transposeTable()">transpose
+                                                        the expected table</a> to compare them.</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <!--<div *ngIf="!customInputTestResult['has-expected-table']">-->
+                                    <div>
+                                        <div *ngIf="shouldDisplayArray(customInputTestResult['table'])">
+                                            <table class="dp-table"
+                                                   *ngIf="!isRectangular2dArray(customInputTestResult['table'])">
+                                                <tr class="dp-tr">
+                                                    <td class="dp-td" matTooltip="{{i}}"
+                                                        *ngFor="let i of range(customInputTestResult['table'].length);">
+                                                        <span class="dp-table-cell"
+                                                              [ngClass]="{'text-green': (haveEqualDimensions(customInputTestResult['table'], customInputExpectedTestResult['table']) &&
+                                                            customInputTestResult['table'][i] === customInputExpectedTestResult['table'][i]
+                                                          ),
+                                                           'text-yellow': !(haveEqualDimensions(customInputTestResult['table'], customInputExpectedTestResult['table']) &&
+                                                            (approach === approaches[1] ?
+                                                            customInputTestResult['table'][i] === customInputExpectedTestResult['table'][i] || customInputTestResult['table'][i] === null || customInputTestResult['table'][i] === undefined
+                                                             : customInputTestResult['table'][i] === customInputExpectedTestResult['table'][i])
+                                                          )}"
+                                                              [innerHTML]="getDisplayedValue(customInputTestResult['table'][i])">
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <table class="dp-table"
+                                                   *ngIf="isRectangular2dArray(customInputTestResult['table'])">
+                                                <tr class="dp-tr"
+                                                    *ngFor="let i of range(customInputTestResult['table'].length);">
+                                                    <td class="dp-td" matTooltip="{{i}}, {{j}}"
+                                                        *ngFor="let j of range(customInputTestResult['table'][0].length);">
+                                                        <span class="dp-table-cell"
+                                                              [ngClass]="{'text-green': (haveEqualDimensions(customInputTestResult['table'], customInputExpectedTestResult['table']) &&
+                                                            customInputTestResult['table'][i][j] === customInputExpectedTestResult['table'][i][j]
+                                                          ),
+                                                           'text-yellow': !(haveEqualDimensions(customInputTestResult['table'], customInputExpectedTestResult['table']) &&
+                                                            (approach === approaches[1] ?
+                                                            customInputTestResult['table'][i][j] === customInputExpectedTestResult['table'][i][j] || customInputTestResult['table'][i][j] === null || customInputTestResult['table'][i][j] === undefined
+                                                             : customInputTestResult['table'][i][j] === customInputExpectedTestResult['table'][i][j])
+                                                          )}"
+                                                              [innerHTML]="getDisplayedValue(customInputTestResult['table'][i][j])">
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div *ngIf="!shouldDisplayArray(customInputTestResult['table'])">
+                                            Empty Table
+                                        </div>
+                                        <div
+                                            *ngIf="expectDetailedSolution && providedSolution.useAuxiliaryTableWithDetailedSolution">
+                                            <div>
+                                                <b class="text-green"
+                                                   *ngIf="customInputTestResult['has-expected-auxiliary-table']">
+                                                    &#x2714; Created expected second table
+                                                </b>
+                                                <br *ngIf="customInputTestResult['has-expected-auxiliary-table']">
+                                                <span
+                                                    *ngIf="customInputTestResult['has-expected-auxiliary-table']">
+                                                    <small>Note: If a top down approach was used, only non null entries
+                                                        of the table were checked
+                                                    </small>
+                                                </span>
+                                                <div
+                                                    *ngIf="!customInputTestResult['has-expected-auxiliary-table']">
+                                                    <span
+                                                        class="text-yellow">Did not create expected second table</span>
+                                                    <br *ngIf="!haveEqualDimensions(customInputTestResult['auxiliary-table'], testCase['expected-auxiliary-table'])">
+                                                    <span
+                                                        *ngIf="!haveEqualDimensions(customInputTestResult['auxiliary-table'], testCase['expected-auxiliary-table'])">
+                                                        <span class="text-yellow">
+                                                            Mismatched table dimensions: expected
+                                                            {{getTableDimensions(testCase['expected-auxiliary-table'])}}
+                                                            but got
+                                                            {{getTableDimensions(customInputTestResult['auxiliary-table'])}}
+                                                        </span>
+                                                        <br>
+                                                        Note that the second table has the same dimensions as the main
+                                                        table
+                                                    </span>
+                                                    <span
+                                                        *ngIf="deepEquals(customInputTestResult['solution'], customInputExpectedTestResult['solution'])">
+                                                        <br>
+                                                        Your final solution is correct, but your second table did not
+                                                        match the second table generated by the provided answer.
+                                                        <span *ngIf="numCorrectSolutions === numRunTestCases">This is
+                                                            likely not an issue since you are successfully
+                                                            reconstructing the correct solution for every test case.<br></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <!--<div *ngIf="!customInputTestResult['has-expected-table']">-->
+                                            <div>
+                                                <div
+                                                    *ngIf="shouldDisplayArray(customInputTestResult['auxiliary-table'])">
+                                                    <table class="dp-table"
+                                                           *ngIf="!isRectangular2dArray(customInputTestResult['auxiliary-table'])">
+                                                        <tr class="dp-tr">
+                                                            <td class="dp-td" matTooltip="{{i}}"
+                                                                *ngFor="let i of range(customInputTestResult['auxiliary-table'].length);">
+                                                                <span class="dp-table-cell"
+                                                                      [ngClass]="{'text-green': (haveEqualDimensions(customInputTestResult['auxiliary-table'], testCase['expected-auxiliary-table']) &&
+                                                                        customInputTestResult['auxiliary-table'][i] === testCase['expected-auxiliary-table'][i]
+                                                                      ),
+                                                                       'text-yellow': !(haveEqualDimensions(customInputTestResult['auxiliary-table'], testCase['expected-auxiliary-table']) &&
+                                                                        (approach === approaches[1] ?
+                                                                        customInputTestResult['auxiliary-table'][i] === testCase['expected-auxiliary-table'][i] || customInputTestResult['auxiliary-table'][i] === null || customInputTestResult['auxiliary-table'][i] === undefined
+                                                                         : customInputTestResult['auxiliary-table'][i] === testCase['expected-auxiliary-table'][i])
+                                                                      )}"
+                                                                      [innerHTML]="getDisplayedValue(customInputTestResult['auxiliary-table'][i])">
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <table class="dp-table"
+                                                           *ngIf="isRectangular2dArray(customInputTestResult['auxiliary-table'])">
+                                                        <tr class="dp-tr"
+                                                            *ngFor="let i of range(customInputTestResult['auxiliary-table'].length);">
+                                                            <td class="dp-td" matTooltip="{{i}}, {{j}}"
+                                                                *ngFor="let j of range(customInputTestResult['auxiliary-table'][0].length);">
+                                                                <span class="dp-table-cell"
+                                                                      [ngClass]="{'text-green': (haveEqualDimensions(customInputTestResult['auxiliary-table'], testCase['expected-auxiliary-table']) &&
+                                                                        customInputTestResult['auxiliary-table'][i][j] === testCase['expected-auxiliary-table'][i][j]
+                                                                      ),
+                                                                       'text-yellow': !(haveEqualDimensions(customInputTestResult['auxiliary-table'], testCase['expected-auxiliary-table']) &&
+                                                                        (approach === approaches[1] ?
+                                                                        customInputTestResult['auxiliary-table'][i][j] === testCase['expected-auxiliary-table'][i][j] || customInputTestResult['auxiliary-table'][i][j] === null || customInputTestResult['auxiliary-table'][i][j] === undefined
+                                                                         : customInputTestResult['auxiliary-table'][i][j] === testCase['expected-auxiliary-table'][i][j])
+                                                                      )}"
+                                                                      [innerHTML]="getDisplayedValue(customInputTestResult['auxiliary-table'][i][j])">
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                                <div
+                                                    *ngIf="!shouldDisplayArray(customInputTestResult['auxiliary-table'])">
+                                                    Empty Table
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </mat-card-content>
                         </mat-card>
