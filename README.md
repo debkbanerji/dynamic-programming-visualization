@@ -16,7 +16,7 @@ You can test the problem you've created by using the custom problem section of t
 
 ## Contributing a Problem
 
-If you want to contribute a problem you've created to the application, add the problem's `.dp.json` file to `src/assets/problems` and modify the `sections` field within `src\app\select-problem\select-problem.component.ts`. Then, make a pull request on the GitHub Page. Make sure to test the problem before submitting it.
+If you want to contribute a problem you've created to the application, add the problem's `.dp.json` file to `src/assets/problems` and modify the `sections` field within `src\assets/problems/problem-directory.json`. Then, make a pull request on the GitHub Page. Make sure to test the problem before submitting it.
 
 ## Starting a Development Server
 
