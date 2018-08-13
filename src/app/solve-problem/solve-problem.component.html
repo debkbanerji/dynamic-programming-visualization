@@ -734,13 +734,15 @@
                         <mat-card
                             *ngIf="testCase['expected-table'] && testCase['expected-result'] !== null && testCase['expected-result'] !== undefined">
                             <div>
-                                <b class="slightly-bold-label">Expected {{testCase['name']}} Results<span
-                                    *ngIf="approach === approaches[1]"> (for bottom up algorithm)</span></b>
+                                <b class="slightly-bold-label">Expected Results
+                                </b>
                                 <button mat-raised-button class="view-animation-button"
                                         (click)="viewTestCaseAnimation(testCase)">
                                     <span class="glyphicon glyphicon-play play-animation-glyphicon"></span>
                                     View Animation
                                 </button>
+                                <br *ngIf="approach === approaches[1]">
+                                <small *ngIf="approach === approaches[1]">(for bottom up algorithm)</small>
                             </div>
                             <br>
                             <mat-card-content>

@@ -150,6 +150,7 @@
 .view-animation-button {
     float: right;
     display: inline-block;
+    vertical-align: top;
 }
 
 .play-animation-glyphicon {
