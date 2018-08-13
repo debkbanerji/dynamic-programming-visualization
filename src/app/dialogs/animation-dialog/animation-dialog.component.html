@@ -198,8 +198,8 @@
                         [value]="100* currentFrame / totalFrames">
                     </mat-progress-bar>
                 </div>
-                <div class="controls-container row ">
-                    <div class="controls-left-container col-">
+                <div class="controls-container">
+                    <div class="controls-left-container col-sm-2">
                         <div class="operation-count-container">
                             <span>{{log.length}} table {{log.length === 1 ? 'operation' : 'operations'}}</span>
                             <br>
@@ -209,7 +209,7 @@
                             <span class="set-entry operation-count">{{totalSets}} {{totalSets === 1 ? 'write' : 'writes'}}</span>
                         </div>
                     </div>
-                    <div class="controls-center-container">
+                    <div class="controls-center-container col-sm-7">
                         <button mat-icon-button
                                 [disabled]="!canStepBackward() || isCurrentlyPlayingAnimation || currentlySwitchingPlayState"
                                 disabled
@@ -265,7 +265,7 @@
                             <span class="glyphicon glyphicon-fast-forward control-glyphicon"></span>
                         </button>
                     </div>
-                    <div class="controls-right-container">
+                    <div class="controls-right-container col-sm-3">
                         <mat-form-field class="animation-speed-selector">
                             <mat-select placeholder="Animation Speed"
                                         [disabled]="isCurrentlyPlayingAnimation || currentlySwitchingPlayState"
