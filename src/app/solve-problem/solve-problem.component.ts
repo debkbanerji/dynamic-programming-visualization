@@ -74,7 +74,7 @@ export class SolveProblemComponent implements OnInit {
         defaultTableEntry: '',
         useDefaultTableEntry: false,
 
-        returnValueCode: 'return 0; // TODO: return correct value',
+        returnValueCode: '// TODO: Set result = (whatever the result should be)',
 
         nextEntryIndex1: 'i',
         nextEntryIndex2: 'j',
