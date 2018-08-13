@@ -422,15 +422,22 @@
                     <!--</mat-tab>-->
                     <mat-tab *ngFor="let testCase of testCases; let testCaseIndex = index" label="{{testCase['name']}}">
                         <mat-card>
-                            <b class="slightly-bold-label">Input Values</b>
-                            <br>
+                            <div>
+                                <b class="slightly-bold-label">Input Values</b>
+                                <mat-slide-toggle class="view-input-json-toggle"
+                                                  [(ngModel)]="testCase['viewInputAsJSON']">
+                                    View as JSON
+                                </mat-slide-toggle>
+                            </div>
                             <br>
                             <mat-card-content>
-                                <div *ngFor="let input of objectKeys(problem['input'])">
+                                <pre [hidden]="!testCase['viewInputAsJSON']">{{testCase['input'] | json}}</pre>
+                                <div [hidden]="testCase['viewInputAsJSON']"
+                                     *ngFor="let input of objectKeys(problem['input'])">
                                     <span class="slightly-bold-label">{{input}}:</span>
                                     <span *ngIf="!isArray(testCase['input'][input])"
                                           [innerHTML]="' ' + getDisplayedValue(testCase['input'][input])">
-                                </span>
+                                    </span>
                                     <div
                                         *ngIf="isArray(testCase['input'][input]) && shouldDisplayArray(testCase['input'][input])">
                                         <!--TODO: Deal with displaying empty arrays everywhere (write a function for this)-->
