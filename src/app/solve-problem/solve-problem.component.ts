@@ -310,11 +310,11 @@ export class SolveProblemComponent implements OnInit {
                 parsedInputValue = rawInputValue.substr(1, rawInputValue.lengtn - 1);
             } else if (rawInputValue === 'null') {
                 parsedInputValue = null;
-            } else if (/^(\[.*])$/.test(rawInputValue)) {
+            } else if (/^((\[.*])|({.*}))$/.test(rawInputValue)) {
                 try {
                     parsedInputValue = JSON.parse(rawInputValue);
                 } catch (e) {
-                    component.customInputJSONParseError = 'Could not parse ' + inputName + ' as JSON: ' + e;
+                    component.customInputJSONParseError = 'Could not parse ' + inputName + ' - ' + e;
                 }
             } else {
                 parsedInputValue = Number(rawInputValue);
