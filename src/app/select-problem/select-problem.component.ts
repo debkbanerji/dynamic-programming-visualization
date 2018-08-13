@@ -39,6 +39,10 @@ export class SelectProblemComponent implements OnInit {
             name: 'Knapsack Variations',
             problems: [
                 {
+                    name: 'Knapsack With Repetition',
+                    id: 'knapsack-with-repetition'
+                },
+                {
                     name: 'Knapsack Without Repetition',
                     id: 'knapsack-without-repetition'
                 }

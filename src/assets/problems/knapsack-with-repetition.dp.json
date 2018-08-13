@@ -1,0 +1,139 @@
+{
+    "name": "Knapsack With Repetition",
+    "problem-statement": "You are a roguish thief who has broken into a comically well decorated house. You have with you a knapsack of weight capacity <b>W</b>, where <b>W</b> is an integer. There are <b>n</b> types of items in the house, each of integer weight and some value. It is your goal to maximize the combined value of the items that you can fit in your knapsack.<br><br>For this version of the problem, there exist unlimited copies of each type of item (somehow) so you can take the same item type more than once.",
+    "input": {
+        "W": "Maximum Capacity",
+        "n": "Number of Item Types",
+        "weights": "array of item weights, where entry i represents the weight of item i",
+        "values": "array of item values, where entry i represents the value of item i"
+    },
+    "output": {
+        "result": "The maximum value that can be attained with a knapsack of capacity W",
+        "solution": "An array of the item indices that lead to this maximum value"
+    },
+    "provided-solution": {
+        "tableShape": "1d",
+        "tableDimension1": "W + 1",
+        "initializationCode": "// No other initialization necessary",
+        "for1Variable": "i",
+        "for1Init": "0",
+        "for1Condition": "i < W + 1",
+        "for1Update": "i = i + 1",
+        "setNextEntryCode": "for (let j = 0 ; j < n; j = j + 1) { // for each item\n    const itemWeight = weights[j];\n    const itemValue = values[j];\n    if (itemWeight <= i) {\n        const valueWithItem = (T(i - itemWeight)) + itemValue;\n        if (valueWithItem > entry) {\n            entry = valueWithItem;\n        }\n    }\n}",
+        "defaultTableEntry": "0",
+        "useDefaultTableEntry": true,
+        "returnValueCode": "result = T(W);",
+        "nextEntryIndex1": "i",
+        "setNextEntryTopDownCode": "for (let j = 0 ; j < n; j = j + 1) { // for each item\n    const itemWeight = weights[j];\n    const itemValue = values[j];\n    if (itemWeight <= i) {\n        const valueWithItem = (getTableEntry(i - itemWeight)) + itemValue;\n        if (valueWithItem > entry) {\n            entry = valueWithItem;\n        }\n    }\n}",
+        "returnValueTopDownCode": "result = getTableEntry(W);",
+        "useAuxiliaryTableWithDetailedSolution": true,
+        "detailedSetNextEntryCode": "let secondaryEntry = null;\n\nfor (let j = 0 ; j < n; j = j + 1) { // for each item\n    const itemWeight = weights[j];\n    const itemValue = values[j];\n    if (itemWeight <= i) {\n        const valueWithItem = (T(i - itemWeight)) + itemValue;\n        if (valueWithItem > entry) {\n            entry = valueWithItem;\n            secondaryEntry = j;\n        }\n    }\n}",
+        "detailedReturnValueCode": "result = T(W);\n\nsolution = [];\nlet weightIndex = W;\nlet item = T2(weightIndex);\nwhile (item !== null) {\n    solution.push(item);\n    weightIndex = weightIndex - weights[item];\n    item = T2(weightIndex);\n}",
+        "detailedSetNextEntryTopDownCode": "let secondaryEntry = null;\n\nfor (let j = 0 ; j < n; j = j + 1) { // for each item\n    const itemWeight = weights[j];\n    const itemValue = values[j];\n    if (itemWeight <= i) {\n        const valueWithItem = (getTableEntry(i - itemWeight)) + itemValue;\n        if (valueWithItem > entry) {\n            entry = valueWithItem;\n            secondaryEntry = j;\n        }\n    }\n}",
+        "detailedReturnValueTopDownCode": "result = getTableEntry(W);\n\nsolution = [];\nlet weightIndex = W;\nlet item = T2(weightIndex);\nwhile (item !== null) {\n    solution.push(item);\n    weightIndex = weightIndex - weights[item];\n    item = T2(weightIndex);\n}",
+        "tableEntryDefinition": "<b>T[ i ]</b> Is the maximum value obtainable with a knapsack of capacity <b>i</b>",
+        "auxiliaryTableEntryDefinition": "<b>T2[ i ]</b> is the index of the last item added to the hypothetical knapsack of capacity <b>i</b>",
+        "solutionNotes": "This solution runs in <b>O(nW)</b> time. When populating <b>T[ i ]</b>, we check every single item to see the largest value that can be obtained if we have to take the item, so we pretend to remove the item and add its value back in, checking the maximum value obtainable with the weight of the item subtracted.Therefore, <b>T[ W ]</b> contains our final answer"
+    },
+    "test-cases": [
+        {
+            "name": "Test Case 1",
+            "input": {
+                "W": 6,
+                "n": 4,
+                "weights": [
+                    1,
+                    2,
+                    3,
+                    4
+                ],
+                "values": [
+                    12,
+                    17,
+                    18,
+                    25
+                ]
+            }
+        },
+        {
+            "name": "Test Case 2",
+            "input": {
+                "W": 7,
+                "n": 5,
+                "weights": [
+                    1,
+                    2,
+                    3,
+                    4,
+                    6
+                ],
+                "values": [
+                    12,
+                    17,
+                    18,
+                    25,
+                    30
+                ]
+            }
+        },
+        {
+            "name": "Test Case 3",
+            "input": {
+                "W": 16,
+                "n": 8,
+                "weights": [
+                    1,
+                    2,
+                    3,
+                    4,
+                    6,
+                    5,
+                    9,
+                    5
+                ],
+                "values": [
+                    12,
+                    17,
+                    18,
+                    25,
+                    30,
+                    23,
+                    54,
+                    75
+                ]
+            }
+        },
+        {
+            "name": "Edge Case 1",
+            "input": {
+                "W": 0,
+                "n": 5,
+                "weights": [
+                    1,
+                    2,
+                    3,
+                    4,
+                    6
+                ],
+                "values": [
+                    12,
+                    17,
+                    18,
+                    25,
+                    30
+                ]
+            }
+        },
+        {
+            "name": "Edge Case 2",
+            "input": {
+                "W": 4,
+                "n": 0,
+                "weights": [
+                ],
+                "values": [
+                ]
+            }
+        }
+    ]
+}
