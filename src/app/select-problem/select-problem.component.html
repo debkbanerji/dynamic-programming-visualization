@@ -12,18 +12,28 @@
                 <!--<small>In browser code editor and visualization tool for dynamic programming algorithms</small>-->
             </div>
         </div>
-        <div class="subtitle-div">
-            <span class="version-number subtitle-item">v{{version}}</span>
-            <mat-slide-toggle
-                [(ngModel)]="isDarkTheme"
-                (change)="onDarkModeChange()"
-                class="dark-mode-toggle subtitle-item">
-                Dark Mode
-            </mat-slide-toggle>
-            <a class="external-link source-code-link subtitle-item"
-               href="https://github.com/debkbanerji/dynamic-programming-visualization" target="_blank">
-                <span class="glyphicon glyphicon-link"></span> Source Code
-            </a>
+        <div class="subtitle-div-container">
+            <div class="subtitle-div">
+                <div class="subtitle-div-section">
+                    <span class="version-number subtitle-item">v{{version}}</span>
+                    <mat-slide-toggle
+                        [(ngModel)]="isDarkTheme"
+                        (change)="onDarkModeChange()"
+                        class="dark-mode-toggle subtitle-item">
+                        Dark Mode
+                    </mat-slide-toggle>
+                </div>
+                <div class="subtitle-div-section">
+                    <a class="external-link source-code-link subtitle-item"
+                       href="https://github.com/debkbanerji/dynamic-programming-visualization" target="_blank">
+                        <span class="glyphicon glyphicon-link"></span> Source Code
+                    </a>
+                    <a class="external-link source-code-link subtitle-item"
+                       href="https://github.com/debkbanerji/dynamic-programming-visualization/issues" target="_blank">
+                        <span class="glyphicon glyphicon-exclamation-sign"></span> Report an Issue
+                    </a>
+                </div>
+            </div>
         </div>
     </mat-card>
     <mat-card>
@@ -69,7 +79,9 @@
     </mat-card>
     <div class="page-footer">
         <small>
-            Made with &#10084; by <a href="https://debkbanerji.com" target="_blank" class="external-link">Deb</a>
+            Created by <a href="https://debkbanerji.com" target="_blank" class="external-link">Deb Banerji</a>
+            &#8901;
+            Made with &#10084;
         </small>
     </div>
 </div>

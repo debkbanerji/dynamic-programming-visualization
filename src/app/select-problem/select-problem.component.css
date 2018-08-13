@@ -35,10 +35,18 @@
     margin-right: 8px;
 }
 
-.subtitle-div {
+.subtitle-div-container {
     text-align: center;
+}
+
+.subtitle-div {
+    display: inline-block;
+}
+
+.subtitle-div-section {
     margin-top: 8px;
     margin-bottom: 8px;
+    display: inline-block;
 }
 
 .external-link {
@@ -91,6 +99,7 @@ input {
 .problem-link {
     cursor: pointer;
     font-weight: 600;
+    padding: 10px;
 }
 
 .problem-link:hover {

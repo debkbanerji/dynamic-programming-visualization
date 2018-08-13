@@ -25,3 +25,7 @@ You'll first need to install `node.js` and `npm`. Then, run `npm install` in the
 ## Building the app
 
 Run `npm run build` to build the app. The built app can be found within `dist`
+
+## Distribution
+
+You may want to build and distribute a version of this software for educational purposes, likely with a modified problem set. If you choose to do this, it is highly recommended that you build the app using the instructions outlined above and deploy the static files to your server. If you choose to do this, please do not modify the section of the page crediting the original author(s). Also, note that any problems distributed with the master version of this application are publicly available alongside the source code on its GitHub page. Finally, be aware that this software is designed as a learning tool and so should not be used to evaluate students.
