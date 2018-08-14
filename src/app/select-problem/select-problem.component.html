@@ -38,9 +38,11 @@
     </mat-card>
     <mat-card>
         <p>
-            <span class="problem-count-summary">{{totalProblems}} total problems across {{sections.length}}
-                sections</span>
-            <small class="problem-file-version">Problem file version: {{problemFileVersion}}</small>
+            <span class="problem-count-summary">
+                {{totalProblems}} total problems across {{sections.length}} sections</span>
+            <small class="problem-file-version" *ngIf="problemFileVersion">
+                Problem file version: {{problemFileVersion}}
+            </small>
         </p>
         <mat-accordion>
             <mat-expansion-panel (opened)="customPanelOpenState = true"
