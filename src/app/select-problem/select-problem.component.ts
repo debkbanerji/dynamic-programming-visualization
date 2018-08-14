@@ -26,6 +26,7 @@ export class SelectProblemComponent implements OnInit {
     version = environment.VERSION;
 
     sections = [];
+    problemFileVersion = null;
 
     constructor(
         private router: Router,
@@ -46,6 +47,7 @@ export class SelectProblemComponent implements OnInit {
         component.titleService.setTitle('Dynamic Programming');
         component.http.get('../assets/problems/problem-directory.json').subscribe((data: any) => {
             component.sections = data.sections;
+            component.problemFileVersion = data.version;
             component.totalProblems = 0;
             component.sections.forEach(function (section) {
                 component.totalProblems += section.problems.length;

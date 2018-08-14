@@ -37,7 +37,11 @@
         </div>
     </mat-card>
     <mat-card>
-        <p class="problem-count-summary">{{totalProblems}} total problems across {{sections.length}} sections</p>
+        <p>
+            <span class="problem-count-summary">{{totalProblems}} total problems across {{sections.length}}
+                sections</span>
+            <small class="problem-file-version">Problem file version: {{problemFileVersion}}</small>
+        </p>
         <mat-accordion>
             <mat-expansion-panel (opened)="customPanelOpenState = true"
                                  (closed)="customPanelOpenState = false"
@@ -67,10 +71,10 @@
                     <div *ngFor="let problem of section.problems" class="col-xs-12 col-sm-6 col-md-4">
                         <mat-card class="problem-link"
                                   (click)="openProblem(problem.id)">
-                        <span>
-                            <span [innerHTML]="problem.name">
+                            <span>
+                                <span [innerHTML]="problem.name">
+                                </span>
                             </span>
-                        </span>
                         </mat-card>
                     </div>
                 </div>

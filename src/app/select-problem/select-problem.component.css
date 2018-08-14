@@ -92,6 +92,10 @@ input {
     margin-left: 8px;
 }
 
+.problem-file-version {
+    float: right;
+}
+
 .section-title {
     font-weight: bolder;
 }
