@@ -4,7 +4,7 @@ In browser visualization for dynamic programming algorithms
 
 ## Deployed Version
 
-A deployed version of the master branch can be found at [dp.debkbanerji.com](https://dp.debkbanerji.com). Note that this is the master version and is therefore subject to change whenever there are changes to the source code or problems and so it is good to be aware of its volatile nature. If you need a more stable, reliable version of the application, please see the distribution section of this document.
+A deployed version of the master branch can be found at [dp.debkbanerji.com](https://dp.debkbanerji.com). Note that this is the master version and is therefore subject to change whenever there are changes to the source code or problems and so it is good to be aware of its volatile nature. Also, it may not have 100% uptime. If you need a more stable, reliable version of the application, please see the distribution section of this document.
 
 ## Creating a Problem
 
