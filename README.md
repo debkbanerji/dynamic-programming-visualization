@@ -28,7 +28,7 @@ You'll first need to install `node.js` and `npm`. Then, run `npm install` in the
 
 ## Building the app
 
-Run `npm run build` to build the app. The built app can be found within `dist`
+Run `npm run build` to build the app. The built app can be found within `dist`. The main app itself consists entirely of static frontend files. If you only want those (without the basic server stuff) you can just grab the files within `dist/dynamic-programming-visualization`
 
 ## Distribution
 
