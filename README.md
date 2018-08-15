@@ -2,6 +2,10 @@
 
 In browser visualization for dynamic programming algorithms
 
+## Deployed Version
+
+A deployed version of the master branch can be found at [dp.debkbanerji.com](https://dp.debkbanerji.com). Note that this is the master version and is therefore subject to change whenever there are changes to the source code or problems and so it is good to be aware of its volatile nature. Also, it may not have 100% uptime. If you need a more stable, reliable version of the application, please see the distribution section of this document.
+
 ## Creating a Problem
 
 If you'd like to create your own problem, it is recommended that you modify one of the `.dp.json` problem files in `src/assets/problems`. The field names should be pretty self explanatory. Note that every problem must have bottom up code defined, but a top down solution is optional - if top down code is not included, this option will not be shown to the user.
@@ -24,8 +28,8 @@ You'll first need to install `node.js` and `npm`. Then, run `npm install` in the
 
 ## Building the app
 
-Run `npm run build` to build the app. The built app can be found within `dist`
+Run `npm run build` to build the app. The built app can be found within `dist`. The main app itself consists entirely of static frontend files. If you only want those (without the basic server stuff) you can just grab the files within `dist/dynamic-programming-visualization`
 
 ## Distribution
 
-You may want to build and distribute a version of this software for educational purposes, likely with a modified problem set (you can do this while leaving the rest of the code untouched by modifying the problems and problem directory within `assets/problems`). If you choose to do this, it is highly recommended that you build the app using the instructions outlined above and deploy the static files to your server, with a different version defined in  `assets/problems/problem-directory.json`, removing `-master` from the version string, so users are aware that this is not the master version of the problem file. If you choose to do this, please do not modify the section of the page crediting the original author(s). Also, note that any problems distributed with the master version of this application are publicly available alongside the source code on its GitHub page. Finally, be aware that this software is designed as a learning tool and so should not be used to evaluate students.
+You may want to build and distribute a version of this software for educational purposes, likely with a modified problem set (you can do this while leaving the rest of the code untouched by modifying the problems and problem directory within `assets/problems`). If you choose to do this, it is highly recommended that you build the app using the instructions outlined above and deploy the static files to your server, with a different version defined in  `assets/problems/problem-directory.json`, removing `-master` from the version string, so users are aware that this is not the master version of the problem file. If you choose to do this, please do not modify the section of the page crediting the original author(s). Also, note that any problems distributed with the master version of this application are publicly available alongside the source code on its GitHub page. Finally, be aware that this software is designed purely as a learning tool and so should not be used to evaluate students.
