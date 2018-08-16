@@ -885,8 +885,9 @@
                                     <br>
                                 </div>
                                 <span class="slightly-bold-label">Final Result</span>
+                                <br>
                                 <span
-                                    [innerHTML]="' ' + getDisplayedValue(customInputExpectedTestResult['result'])">
+                                    [innerHTML]="getDisplayedValue(customInputExpectedTestResult['result'])">
                                 </span>
                                 <div *ngIf="expectDetailedSolution">
                                     <br>
@@ -1356,8 +1357,9 @@
                                     <br>
                                 </div>
                                 <span class="slightly-bold-label">Final Result</span>
+                                <br>
                                 <span
-                                    [innerHTML]="' ' + getDisplayedValue(testCase['expected-result'])">
+                                    [innerHTML]="getDisplayedValue(testCase['expected-result'])">
                                 </span>
                                 <div *ngIf="expectDetailedSolution">
                                     <br>
