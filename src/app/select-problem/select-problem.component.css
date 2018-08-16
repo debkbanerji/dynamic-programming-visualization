@@ -93,7 +93,8 @@ input {
 }
 
 .problem-file-version {
-    float: right;
+    margin-left: 2px;
+    opacity: 0.5;
 }
 
 .section-title {

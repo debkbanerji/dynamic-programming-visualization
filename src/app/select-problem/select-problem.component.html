@@ -37,9 +37,11 @@
         </div>
     </mat-card>
     <mat-card>
-        <p>
-            <span class="problem-count-summary">
-                {{totalProblems}} total problems across {{sections.length}} sections</span>
+        <p class="problem-count-summary">
+            <span>
+                {{totalProblems}} total problems across {{sections.length}} sections
+            </span>
+            <br *ngIf="problemFileVersion">
             <small class="problem-file-version" *ngIf="problemFileVersion">
                 Problem file version: {{problemFileVersion}}
             </small>
