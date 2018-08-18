@@ -122,6 +122,11 @@
     width: 100%;
 }
 
+pre {
+    background-color: unset;
+    color: unset;
+}
+
 /*DP Table*/
 
 .dp-table {
