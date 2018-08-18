@@ -1,6 +1,6 @@
 {
     "name": "dynamic-programming-visualization",
-    "version": "2018.8.14",
+    "version": "2018.8.18",
     "scripts": {
         "ng": "ng",
         "develop": "ng serve",
