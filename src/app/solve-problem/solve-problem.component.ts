@@ -1054,7 +1054,7 @@ export class SolveProblemComponent implements OnInit {
             this.problemFileName
             + ':\n\n'
             + message
-            + '\n\nPlease close or refresh this page. If this issue persists, please contact the problem author');
+            + '\n\nThis is likely a transient issue. Please close or refresh this page. If this issue persists, please contact the problem author');
     }
 
     // Assumes input is 2d table
