@@ -31,7 +31,7 @@
         "detailedReturnValueTopDownCode": "let result = 0;\nlet lastItemIndex = null;\n\n// We need to return the max of the table entries\nfor (let i = 0; i < n; i++) {\n    const possibleMax = getTableEntry(i);\n    if (possibleMax > result) {\n        result = possibleMax;\n        lastItemIndex = i;\n    }\n}\n\nlet solution = [];\n// backtrack from the end\nwhile (lastItemIndex !== null) {\n    solution.unshift(lastItemIndex); // append to front\n    lastItemIndex = T2(lastItemIndex);\n}",
         "tableEntryDefinition": "<b>T[ i ]</b> is the length of the longest increasing subsequence whose last element is at index <b>i</b>",
         "auxiliaryTableEntryDefinition": "<b>T2[ i ]</b> is the index of the second last element of the longest increasing subsequence whose last element is at index <b>i</b>",
-        "solutionNotes": "Note that it is not enough to store the length of the longest increasing subsequence within the first <b>i</b> elements - we must use a stricter condition so that we know which sequences can be extended when checking previous table entries. This also means that we need to return the largest value of the table entries as our final result, since the longest subsequence may end at any index of the table."
+        "solutionNotes": "This solution runs in <b>O(n<sup>2</sup>)</b> time. Note that it is not enough to store the length of the longest increasing subsequence within the first <b>i</b> elements - we must use a stricter condition so that we know which sequences can be extended when checking previous table entries. This also means that we need to return the largest value of the table entries as our final result, since the longest subsequence may end at any index of the table."
     },
     "test-cases": [
         {
