@@ -187,10 +187,12 @@ pre {
 .run-tests-button {
     font-size: large;
     padding-bottom: 4px;
+    padding-right: 6px;
 }
 
 #reveal-solution-button {
     margin-left: 10px;
+    float: right;
 }
 
 .correct-result-but-different-table-text {

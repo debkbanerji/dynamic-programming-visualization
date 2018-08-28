@@ -25,7 +25,7 @@
         <mat-card>
             <mat-card-header>
             </mat-card-header>
-            <b class="section-header">Table Shape</b>
+            <b class="section-header">Solution Table Shape</b>
             <mat-card-content>
                 <mat-form-field>
                     <!--<label for="table-shape-select">Table Shape</label>-->
@@ -248,10 +248,10 @@
                     <!--(click)="runAllTestsWithUserSolution()">-->
                     <!--Generate Code and Run Tests-->
                     <!--</button>-->
-                    <button mat-fab (click)="runAllTestsWithUserSolution()">
-                        <span class="glyphicon glyphicon-play run-tests-button"></span>
+                    <button mat-raised-button color="accent" (click)="runAllTestsWithUserSolution()">
+                        <span class="glyphicon glyphicon-play run-tests-button"></span> Run Tests
                     </button>
-                    <button mat-button id="reveal-solution-button"
+                    <button mat-raised-button color="accent" id="reveal-solution-button"
                             (click)="openPopulateGivenSolutionDialog()">
                         Show Solution
                     </button>
@@ -274,7 +274,8 @@
                 <div *ngIf="!testsCurrentlyRunning && numRunTestCases > 0">
                     <br>
                     <p class="section-header">Test Results</p>
-                    <span><b>Ran {{numRunTestCases}} test case{{numRunTestCases === 1? '' : 's'}}</b> (Did not run custom input)</span>
+                    <span><b>Ran {{numRunTestCases}} test case{{numRunTestCases === 1? '' : 's'}}</b> (Did not run
+                        custom input)</span>
                     <br>
                     <b [ngClass]="{
                         'text-green': numCorrectFinalAnswerTestCases === numRunTestCases,
@@ -465,9 +466,9 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <button mat-fab (click)="runCustomInput()"
+                                    <button mat-raised-button color="accent" (click)="runCustomInput()"
                                             [disabled]="testsCurrentlyRunning || testsCurrentlyRunningForProvided || isCustomInputTestRunning">
-                                        <span class="glyphicon glyphicon-play run-tests-button"></span>
+                                        <span class="glyphicon glyphicon-play run-tests-button"></span> Run Custom Input
                                     </button>
                                     <b class="text-red">&nbsp;&nbsp;{{customInputJSONParseError}}</b>
                                 </div>
@@ -511,7 +512,7 @@
                             <mat-card-content>
                                 <div>
                                     <b class="slightly-bold-label">Custom Input Results</b>
-                                    <button mat-raised-button class="view-animation-button"
+                                    <button mat-raised-button color="accent" class="view-animation-button"
                                             [disabled]="!(customInputTestResult['log'] && customInputTestResult['table'])"
                                             (click)="viewUserCodeAnimation('Expected Result for Custom Input', processedCustomInput, customInputTestResult)">
                                         <span class="glyphicon glyphicon-play play-animation-glyphicon"></span>
@@ -803,7 +804,7 @@
                             <div>
                                 <b class="slightly-bold-label">Expected Results
                                 </b>
-                                <button mat-raised-button class="view-animation-button"
+                                <button mat-raised-button color="accent" class="view-animation-button"
                                         (click)="viewUserCodeAnimation('Expected Result for Custom Input', processedCustomInput, customInputExpectedTestResult)">
                                     <span class="glyphicon glyphicon-play play-animation-glyphicon"></span>
                                     View Animation
@@ -982,7 +983,7 @@
                             <mat-card-content>
                                 <div>
                                     <b class="slightly-bold-label">{{testCase['name']}} Results</b>
-                                    <button mat-raised-button class="view-animation-button"
+                                    <button mat-raised-button color="accent" class="view-animation-button"
                                             [disabled]="!(testResults[testCaseIndex]['log'] && testResults[testCaseIndex]['table'])"
                                             (click)="viewUserCodeAnimation(testCase['name'], testCase['input'], testResults[testCaseIndex])">
                                         <span class="glyphicon glyphicon-play play-animation-glyphicon"></span>
@@ -1275,7 +1276,7 @@
                             <div>
                                 <b class="slightly-bold-label">Expected Results
                                 </b>
-                                <button mat-raised-button class="view-animation-button"
+                                <button mat-raised-button color="accent" class="view-animation-button"
                                         (click)="viewTestCaseAnimation(testCase)">
                                     <span class="glyphicon glyphicon-play play-animation-glyphicon"></span>
                                     View Animation
