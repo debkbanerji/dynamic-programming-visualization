@@ -7,6 +7,10 @@
                 {
                     "name": "Longest Increasing Subsequence",
                     "id": "longest-increasing-subsequence"
+                },
+                {
+                    "name": "Longest Common Subsequence",
+                    "id": "longest-common-subsequence"
                 }
             ]
         },

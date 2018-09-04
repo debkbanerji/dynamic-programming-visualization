@@ -1,0 +1,69 @@
+{
+    "name": "Longest Common Subsequence",
+    "problem-statement": "TODO: Write",
+    "input": {
+        "arr1": "First Input Array",
+        "arr2": "First Input Array"
+    },
+    "output": {
+        "result": "The length of the longest common subsequence",
+        "solution": "The longest common subsequence"
+    },
+    "provided-solution": {
+        "tableShape": "2d",
+        "tableDimension1": "arr1.length + 1",
+        "tableDimension2": "arr2.length + 1",
+        "initializationCode": "// No other initialization necessary",
+        "for1Variable": "i",
+        "for1Init": "0",
+        "for1Condition": "i <= arr1.length",
+        "for1Update": "i = i + 1",
+        "for2Variable": "j",
+        "for2Init": "0",
+        "for2Condition": "j <= arr2.length",
+        "for2Update": "j = j + 1",
+        "setNextEntryCode": "if (i === 0 || j === 0) {\n    entry = 0;\n} else if (arr1[i-1] === arr2[j-1]) {\n    entry = T(i-1, j-1) + 1;\n} else {\n    entry = Math.max(T(i-1, j), T(i, j-1));\n}",
+        "defaultTableEntry": "",
+        "useDefaultTableEntry": false,
+        "returnValueCode": "result = T(arr1.length, arr2.length);",
+        "nextEntryIndex1": "i",
+        "nextEntryIndex2": "j",
+        "useAuxiliaryTableWithDetailedSolution": false,
+        "detailedSetNextEntryCode": "if (i === 0 || j === 0) {\n    entry = 0;\n} else if (arr1[i-1] === arr2[j-1]) {\n    entry = T(i-1, j-1) + 1;\n} else {\n    entry = Math.max(T(i-1, j), T(i, j-1));\n}",
+        "detailedReturnValueCode": "const result = T(arr1.length, arr2.length);\nconst solution = []\nlet i = arr1.length;\nlet j = arr2.length;\nwhile (i > 0 && j > 0) {\n    if (arr1[i - 1] == arr2[j - 1]) {\n        solution.unshift(arr1[i - 1]);\n        i--;\n        j--;        // reduce values of i and j\n    } else if (T(i - 1, j) > T(i, j - 1)) {\n        i--;\n    } else {\n        j--;\n    }\n}",
+        "tableEntryDefinition": "TODO: Write",
+        "auxiliaryTableEntryDefinition": "TODO: Write",
+        "solutionNotes": "TODO: Write"
+    },
+    "test-cases": [
+        {
+            "name": "Test Case 1",
+            "input": {
+                "arr1": [
+                    "m",
+                    "o",
+                    "m",
+                    "j",
+                    "e",
+                    "a",
+                    "n",
+                    "s"
+                ],
+                "arr2": [
+                    "m",
+                    "p",
+                    "o",
+                    "g",
+                    "r",
+                    "e",
+                    "b",
+                    "i",
+                    "n",
+                    "s",
+                    "k",
+                    "y"
+                ]
+            }
+        }
+    ]
+}
