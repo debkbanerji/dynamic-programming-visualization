@@ -88,6 +88,8 @@ export class SolveProblemComponent implements OnInit {
     testResults: any = {};
 
     testTimeLimit = 500; // Time limit per test in milliseconds
+    pageLoadingTestTimeLimit = 2000; // Time limit per test in milliseconds for when page is still loading
+    usePageLoadingTestTimeLimit: boolean = true;
 
     customInput: any = {};
     processedCustomInput: any;
@@ -237,6 +239,7 @@ export class SolveProblemComponent implements OnInit {
         setTimeout(() => {
             component.recalculateExpectedResults(function () {
                 component.problemDefined = true;
+                component.usePageLoadingTestTimeLimit = false;
             });
         }, 1000);
     }
@@ -474,7 +477,9 @@ export class SolveProblemComponent implements OnInit {
                 result['error'] = null;
                 callback(result);
             }
-        }, component.testTimeLimit);
+        }, component.usePageLoadingTestTimeLimit
+            ? component.pageLoadingTestTimeLimit
+            : component.testTimeLimit);
         // start worker
         _worker.postMessage('Heyy');
     }
@@ -1054,7 +1059,10 @@ export class SolveProblemComponent implements OnInit {
             this.problemFileName
             + ':\n\n'
             + message
-            + '\n\nThis is likely a transient issue. Please close or refresh this page. If this issue persists, please contact the problem author');
+            + '\n\nThis is likely a transient issue. Please close or refresh this page. If this issue persists, please contact the problem author'
+            + '\n\n'
+            + 'If a test is repeatedly timing out, it is likely that your device is unable to allocate the resources to run the application smoothly'
+        );
     }
 
     // Assumes input is 2d table
