@@ -47,21 +47,6 @@
             </small>
         </p>
         <mat-accordion>
-            <mat-expansion-panel (opened)="customPanelOpenState = true"
-                                 (closed)="customPanelOpenState = false"
-                                 [ngClass]="{
-                                                'expanded-panel':customPanelOpenState
-                                            }">
-                <mat-expansion-panel-header>
-                    <h4 class="section-title">Custom Problem</h4>
-                </mat-expansion-panel-header>
-                <p>Here you can solve a problem from a file on your computer</p>
-                <p class="text-red">Be careful when choosing a file, as depending on where it came from, it may contain
-                    mistakes or try to do sketchy things</p>
-                <input id="custom-problem-file-select" [(ngModel)]="customProblemFile" type="file"
-                       (change)="solveCustomProblem()">
-                <span id="custom-problem-error-text">{{customProblemErrorText}}</span>
-            </mat-expansion-panel>
             <mat-expansion-panel *ngFor="let section of sections"
                                  (opened)="section.panelOpenState = true"
                                  (closed)="section.panelOpenState = false"
@@ -82,6 +67,21 @@
                         </mat-card>
                     </div>
                 </div>
+            </mat-expansion-panel>
+            <mat-expansion-panel (opened)="customPanelOpenState = true"
+                                 (closed)="customPanelOpenState = false"
+                                 [ngClass]="{
+                                                'expanded-panel':customPanelOpenState
+                                            }">
+                <mat-expansion-panel-header>
+                    <h4 class="section-title">Custom Problem</h4>
+                </mat-expansion-panel-header>
+                <p>Here you can solve a problem from a file on your computer</p>
+                <p class="text-red">Be careful when choosing a file, as depending on where it came from, it may contain
+                    mistakes or try to do sketchy things</p>
+                <input id="custom-problem-file-select" [(ngModel)]="customProblemFile" type="file"
+                       (change)="solveCustomProblem()">
+                <span id="custom-problem-error-text">{{customProblemErrorText}}</span>
             </mat-expansion-panel>
         </mat-accordion>
     </mat-card>
