@@ -1,6 +1,6 @@
 {
     "name": "Longest Common Subsequence",
-    "problem-statement": "For an array of the form <b>arr[0], . . . , arr[n-1]</b>, a subsequence is any subset of <b>arr[0], . . . , arr[n-1]</b> taken in order, of the form <b>arr[i0], arr[i1], ... , arr[ik]</b> where <b>0 <= i0 < i1 < · · · < ik < n</b>. The goal of the problem is to find the longest common subsequence between two input arrays, <b>arr1</b> and <b>arr1</b>.",
+    "problem-statement": "For an array of the form <b>arr[0], . . . , arr[n - 1]</b>, a subsequence is any subset of <b>arr[0], . . . , arr[n - 1]</b> taken in order, of the form <b>arr[i0], arr[i1], ... , arr[ik]</b> where <b>0 <= i0 < i1 < · · · < ik < n</b>. The goal of the problem is to find the longest common subsequence between two input arrays, <b>arr1</b> and <b>arr1</b>.",
     "input": {
         "arr1": "First Input Array",
         "arr2": "First Input Array"
@@ -22,21 +22,21 @@
         "for2Init": "0",
         "for2Condition": "j <= arr2.length",
         "for2Update": "j = j + 1",
-        "setNextEntryCode": "if (i === 0 || j === 0) {\n    entry = 0;\n} else if (arr1[i-1] === arr2[j-1]) {\n    entry = T(i-1, j-1) + 1;\n} else {\n    entry = Math.max(T(i-1, j), T(i, j-1));\n}",
+        "setNextEntryCode": "if (i === 0 || j === 0) {\n    entry = 0;\n} else if (arr1[i - 1] === arr2[j - 1]) {\n    entry = T(i - 1, j - 1) + 1;\n} else {\n    entry = Math.max(T(i - 1, j), T(i, j - 1));\n}",
         "defaultTableEntry": "",
         "useDefaultTableEntry": false,
         "returnValueCode": "result = T(arr1.length, arr2.length);",
         "nextEntryIndex1": "i",
         "nextEntryIndex2": "j",
-        "setNextEntryTopDownCode": "if (i === 0 || j === 0) {\n    entry = 0;\n} else if (arr1[i-1] === arr2[j-1]) {\n    entry = getTableEntry(i-1, j-1) + 1;\n} else {\n    entry = Math.max(getTableEntry(i-1, j), getTableEntry(i, j-1));\n}",
+        "setNextEntryTopDownCode": "if (i === 0 || j === 0) {\n    entry = 0;\n} else if (arr1[i - 1] === arr2[j - 1]) {\n    entry = getTableEntry(i - 1, j - 1) + 1;\n} else {\n    entry = Math.max(getTableEntry(i - 1, j), getTableEntry(i, j - 1));\n}",
         "returnValueTopDownCode": "result = getTableEntry(arr1.length, arr2.length);",
         "useAuxiliaryTableWithDetailedSolution": false,
-        "detailedSetNextEntryCode": "if (i === 0 || j === 0) {\n    entry = 0;\n} else if (arr1[i-1] === arr2[j-1]) {\n    entry = T(i-1, j-1) + 1;\n} else {\n    entry = Math.max(T(i-1, j), T(i, j-1));\n}",
+        "detailedSetNextEntryCode": "if (i === 0 || j === 0) {\n    entry = 0;\n} else if (arr1[i - 1] === arr2[j - 1]) {\n    entry = T(i - 1, j - 1) + 1;\n} else {\n    entry = Math.max(T(i - 1, j), T(i, j - 1));\n}",
         "detailedReturnValueCode": "const result = T(arr1.length, arr2.length);\nconst solution = []\nlet i = arr1.length;\nlet j = arr2.length;\nwhile (i > 0 && j > 0) {\n    if (arr1[i - 1] == arr2[j - 1]) {\n        solution.unshift(arr1[i - 1]);\n        i--;\n        j--;        // reduce values of i and j\n    } else if (T(i - 1, j) > T(i, j - 1)) {\n        i--;\n    } else {\n        j--;\n    }\n}",
-        "detailedSetNextEntryTopDownCode": "if (i === 0 || j === 0) {\n    entry = 0;\n} else if (arr1[i-1] === arr2[j-1]) {\n    entry = getTableEntry(i-1, j-1) + 1;\n} else {\n    entry = Math.max(getTableEntry(i-1, j), getTableEntry(i, j-1));\n}",
+        "detailedSetNextEntryTopDownCode": "if (i === 0 || j === 0) {\n    entry = 0;\n} else if (arr1[i - 1] === arr2[j - 1]) {\n    entry = getTableEntry(i - 1, j - 1) + 1;\n} else {\n    entry = Math.max(getTableEntry(i - 1, j), getTableEntry(i, j - 1));\n}",
         "detailedReturnValueTopDownCode": "const result = getTableEntry(arr1.length, arr2.length);\nconst solution = []\nlet i = arr1.length;\nlet j = arr2.length;\nwhile (i > 0 && j > 0) {\n    if (arr1[i - 1] == arr2[j - 1]) {\n        solution.unshift(arr1[i - 1]);\n        i--;\n        j--;        // reduce values of i and j\n    } else if (getTableEntry(i - 1, j) > getTableEntry(i, j - 1)) {\n        i--;\n    } else {\n        j--;\n    }\n}",
-        "tableEntryDefinition": "TODO: Write",
-        "solutionNotes": "TODO: Write"
+        "tableEntryDefinition": "<b>T[ i ][ j ]</b> Is the longest common subsequence between <b>arr1[0], . . . , arr1[i - 1]</b> and <b>arr2[0], . . . , arr2[j - 1]</b>.",
+        "solutionNotes": "This solution runs in <b>O(arr1.length * arr2.length)</b> time. When populating <b>T[ i ][ j ]</b>, we consider the case where <b>arr1[i - 1]</b> and <b>arr2[j - 1]</b> match, and the case where they do not."
     },
     "test-cases": [
         {
