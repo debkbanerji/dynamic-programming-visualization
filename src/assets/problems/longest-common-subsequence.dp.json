@@ -130,6 +130,71 @@
                     "t"
                 ]
             }
+        },
+        {
+            "name": "Edge Case 1",
+            "input": {
+                "arr1": [
+                ],
+                "arr2": [
+                ]
+            }
+        },
+        {
+            "name": "Edge Case 2",
+            "input": {
+                "arr1": [
+                    "A"
+                ],
+                "arr2": [
+                    "A"
+                ]
+            }
+        },
+        {
+            "name": "Edge Case 3",
+            "input": {
+                "arr1": [
+                    "A"
+                ],
+                "arr2": [
+                    "B"
+                ]
+            }
+        },
+        {
+            "name": "Edge Case 4",
+            "input": {
+                "arr1": [
+                    "A",
+                    "B",
+                    "C",
+                    "D"
+                ],
+                "arr2": [
+                    "A",
+                    "B",
+                    "C",
+                    "D"
+                ]
+            }
+        },
+        {
+            "name": "Edge Case 5",
+            "input": {
+                "arr1": [
+                    "A",
+                    "B",
+                    "C",
+                    "D"
+                ],
+                "arr2": [
+                    "D",
+                    "C",
+                    "B",
+                    "A"
+                ]
+            }
         }
     ]
 }
