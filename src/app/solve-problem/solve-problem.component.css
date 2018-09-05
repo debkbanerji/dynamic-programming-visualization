@@ -127,6 +127,10 @@ pre {
     color: unset;
 }
 
+.input-display {
+    padding-top: 8px;
+}
+
 /*DP Table*/
 
 .dp-table {

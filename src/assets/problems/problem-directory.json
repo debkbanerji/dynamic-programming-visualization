@@ -1,5 +1,5 @@
 {
-    "version":"2018.8.15-master",
+    "version":"2018.9.5-master",
     "sections": [
         {
             "name": "Subsequences",
@@ -7,6 +7,10 @@
                 {
                     "name": "Longest Increasing Subsequence",
                     "id": "longest-increasing-subsequence"
+                },
+                {
+                    "name": "Longest Common Subsequence",
+                    "id": "longest-common-subsequence"
                 }
             ]
         },

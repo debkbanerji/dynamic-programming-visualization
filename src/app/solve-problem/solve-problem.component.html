@@ -600,7 +600,7 @@
                             <mat-card-content>
                                 <pre [hidden]="!testCase['viewInputAsJSON']">{{testCase['input'] | json}}</pre>
                                 <div [hidden]="testCase['viewInputAsJSON']"
-                                     *ngFor="let input of objectKeys(problem['input'])">
+                                     *ngFor="let input of objectKeys(problem['input'])" class="input-display">
                                     <span class="slightly-bold-label">{{input}}:</span>
                                     <span *ngIf="!isArray(testCase['input'][input])"
                                           [innerHTML]="' ' + getDisplayedValue(testCase['input'][input])">
