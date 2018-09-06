@@ -1201,7 +1201,7 @@ export class SolveProblemComponent implements OnInit {
         );
     }
 
-    viewUserCodeAnimation(testName, input, testResult) {
+    viewUserCodeAnimation(testName, input, testResult, displayYourCode) {
 
         let tableDimension1 = testResult['table'].length;
         let tableDimension2 = -1;
@@ -1211,7 +1211,7 @@ export class SolveProblemComponent implements OnInit {
 
         let useAuxiliaryTable = !!testResult['auxiliary-table'];
         this.viewAnimation(
-            testName + ' - Your Code',
+            testName + (displayYourCode ? ' - Your Code' : ''),
             null,
             testResult['result'],
             testResult['solution'],

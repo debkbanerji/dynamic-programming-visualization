@@ -170,7 +170,7 @@
                                     <b class="slightly-bold-label">Custom Input Results</b>
                                     <button mat-raised-button color="accent" class="view-animation-button"
                                             [disabled]="!(customInputTestResult['log'] && customInputTestResult['table'])"
-                                            (click)="viewUserCodeAnimation('Expected Result for Custom Input', processedCustomInput, customInputTestResult)">
+                                            (click)="viewUserCodeAnimation('Result for Custom Input', processedCustomInput, customInputTestResult, true)">
                                         <span class="glyphicon glyphicon-play play-animation-glyphicon"></span>
                                         View Animation
                                     </button>
@@ -377,9 +377,9 @@
                                                     *ngIf="!customInputTestResult['has-expected-auxiliary-table']">
                                                     <span
                                                         class="text-yellow">Did not create expected second table</span>
-                                                    <br *ngIf="!haveEqualDimensions(customInputTestResult['auxiliary-table'], testCase['expected-auxiliary-table'])">
+                                                    <br *ngIf="!haveEqualDimensions(customInputTestResult['auxiliary-table'], customInputExpectedTestResult['auxiliary-table'])">
                                                     <span
-                                                        *ngIf="!haveEqualDimensions(customInputTestResult['auxiliary-table'], testCase['expected-auxiliary-table'])">
+                                                        *ngIf="!haveEqualDimensions(customInputTestResult['auxiliary-table'], customInputExpectedTestResult['auxiliary-table'])">
                                                         <span class="text-yellow">
                                                             Mismatched table dimensions: expected
                                                             {{getTableDimensions(customInputExpectedTestResult['auxiliary-table'])}}
@@ -411,13 +411,13 @@
                                                             <td class="dp-td" matTooltip="{{i}}"
                                                                 *ngFor="let i of range(customInputTestResult['auxiliary-table'].length);">
                                                                 <span class="dp-table-cell"
-                                                                      [ngClass]="{'text-green': (haveEqualDimensions(customInputTestResult['auxiliary-table'], testCase['expected-auxiliary-table']) &&
-                                                                        customInputTestResult['auxiliary-table'][i] === testCase['expected-auxiliary-table'][i]
+                                                                      [ngClass]="{'text-green': (haveEqualDimensions(customInputTestResult['auxiliary-table'], customInputExpectedTestResult['auxiliary-table']) &&
+                                                                        customInputTestResult['auxiliary-table'][i] === customInputExpectedTestResult['auxiliary-table'][i]
                                                                       ),
-                                                                       'text-yellow': !(haveEqualDimensions(customInputTestResult['auxiliary-table'], testCase['expected-auxiliary-table']) &&
+                                                                       'text-yellow': !(haveEqualDimensions(customInputTestResult['auxiliary-table'], customInputExpectedTestResult['auxiliary-table']) &&
                                                                         (approach === approaches[1] ?
-                                                                        customInputTestResult['auxiliary-table'][i] === testCase['expected-auxiliary-table'][i] || customInputTestResult['auxiliary-table'][i] === null || customInputTestResult['auxiliary-table'][i] === undefined
-                                                                         : customInputTestResult['auxiliary-table'][i] === testCase['expected-auxiliary-table'][i])
+                                                                        customInputTestResult['auxiliary-table'][i] === customInputExpectedTestResult['auxiliary-table'][i] || customInputTestResult['auxiliary-table'][i] === null || customInputTestResult['auxiliary-table'][i] === undefined
+                                                                         : customInputTestResult['auxiliary-table'][i] === customInputExpectedTestResult['auxiliary-table'][i])
                                                                       )}"
                                                                       [innerHTML]="getDisplayedValue(customInputTestResult['auxiliary-table'][i])">
                                                                 </span>
@@ -431,13 +431,13 @@
                                                             <td class="dp-td" matTooltip="{{i}}, {{j}}"
                                                                 *ngFor="let j of range(customInputTestResult['auxiliary-table'][0].length);">
                                                                 <span class="dp-table-cell"
-                                                                      [ngClass]="{'text-green': (haveEqualDimensions(customInputTestResult['auxiliary-table'], testCase['expected-auxiliary-table']) &&
-                                                                        customInputTestResult['auxiliary-table'][i][j] === testCase['expected-auxiliary-table'][i][j]
+                                                                      [ngClass]="{'text-green': (haveEqualDimensions(customInputTestResult['auxiliary-table'], customInputExpectedTestResult['auxiliary-table']) &&
+                                                                        customInputTestResult['auxiliary-table'][i][j] === customInputExpectedTestResult['auxiliary-table'][i][j]
                                                                       ),
-                                                                       'text-yellow': !(haveEqualDimensions(customInputTestResult['auxiliary-table'], testCase['expected-auxiliary-table']) &&
+                                                                       'text-yellow': !(haveEqualDimensions(customInputTestResult['auxiliary-table'], customInputExpectedTestResult['auxiliary-table']) &&
                                                                         (approach === approaches[1] ?
-                                                                        customInputTestResult['auxiliary-table'][i][j] === testCase['expected-auxiliary-table'][i][j] || customInputTestResult['auxiliary-table'][i][j] === null || customInputTestResult['auxiliary-table'][i][j] === undefined
-                                                                         : customInputTestResult['auxiliary-table'][i][j] === testCase['expected-auxiliary-table'][i][j])
+                                                                        customInputTestResult['auxiliary-table'][i][j] === customInputExpectedTestResult['auxiliary-table'][i][j] || customInputTestResult['auxiliary-table'][i][j] === null || customInputTestResult['auxiliary-table'][i][j] === undefined
+                                                                         : customInputTestResult['auxiliary-table'][i][j] === customInputExpectedTestResult['auxiliary-table'][i][j])
                                                                       )}"
                                                                       [innerHTML]="getDisplayedValue(customInputTestResult['auxiliary-table'][i][j])">
                                                                 </span>
@@ -461,7 +461,7 @@
                                 <b class="slightly-bold-label">Expected Results
                                 </b>
                                 <button mat-raised-button color="accent" class="view-animation-button"
-                                        (click)="viewUserCodeAnimation('Expected Result for Custom Input', processedCustomInput, customInputExpectedTestResult)">
+                                        (click)="viewUserCodeAnimation('Expected Result for Custom Input', processedCustomInput, customInputExpectedTestResult, false)">
                                     <span class="glyphicon glyphicon-play play-animation-glyphicon"></span>
                                     View Animation
                                 </button>
@@ -641,7 +641,7 @@
                                     <b class="slightly-bold-label">{{testCase['name']}} Results</b>
                                     <button mat-raised-button color="accent" class="view-animation-button"
                                             [disabled]="!(testResults[testCaseIndex]['log'] && testResults[testCaseIndex]['table'])"
-                                            (click)="viewUserCodeAnimation(testCase['name'], testCase['input'], testResults[testCaseIndex])">
+                                            (click)="viewUserCodeAnimation(testCase['name'], testCase['input'], testResults[testCaseIndex], true)">
                                         <span class="glyphicon glyphicon-play play-animation-glyphicon"></span>
                                         View Animation
                                     </button>
