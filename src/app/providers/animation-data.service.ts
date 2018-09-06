@@ -14,6 +14,7 @@ export class AnimationDataService {
     public useAuxiliaryTable: boolean;
     public mainTableDimension1: any;
     public mainTableDimension2: any;
+    public transposeTable: boolean;
 
     constructor() {
     }
@@ -27,17 +28,19 @@ export class AnimationDataService {
         log,
         useAuxiliaryTable: boolean,
         mainTableDimension1,
-        mainTableDimension2
+        mainTableDimension2,
+        transposeTable: boolean
     ) {
         this.title = title;
         this.subtitle = subtitle;
         this.result = result;
         this.solution = solution;
         this.input = input;
-        this.log = log;
+        this.log = JSON.parse(JSON.stringify(log)); // copy log to avoid mutation issues
         this.useAuxiliaryTable = useAuxiliaryTable;
         this.mainTableDimension1 = mainTableDimension1;
         this.mainTableDimension2 = mainTableDimension2;
+        this.transposeTable = transposeTable;
     }
 
     clear() {
@@ -50,5 +53,6 @@ export class AnimationDataService {
         this.useAuxiliaryTable = null;
         this.mainTableDimension1 = null;
         this.mainTableDimension2 = null;
+        this.transposeTable = null;
     }
 }

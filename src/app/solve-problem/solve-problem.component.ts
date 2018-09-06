@@ -1197,11 +1197,12 @@ export class SolveProblemComponent implements OnInit {
             testCase['log'],
             useAuxiliaryTable,
             tableDimension1,
-            tableDimension2
+            tableDimension2,
+            component.transpose2dTable
         );
     }
 
-    viewUserCodeAnimation(testName, input, testResult, displayYourCode) {
+    viewUserCodeAnimation(testName, input, testResult, displayYourCode, transposeTable) {
 
         let tableDimension1 = testResult['table'].length;
         let tableDimension2 = -1;
@@ -1219,7 +1220,8 @@ export class SolveProblemComponent implements OnInit {
             testResult['log'],
             useAuxiliaryTable,
             tableDimension1,
-            tableDimension2
+            tableDimension2,
+            transposeTable
         );
     }
 
@@ -1232,7 +1234,8 @@ export class SolveProblemComponent implements OnInit {
         log,
         useAuxiliaryTable: boolean,
         tableDimension1: number,
-        tableDimension2: number
+        tableDimension2: number,
+        transposeTable: boolean
     ) {
         let filteredLog = [];
         for (let i = 0; i < log.length; i++) {
@@ -1251,7 +1254,8 @@ export class SolveProblemComponent implements OnInit {
             filteredLog,
             useAuxiliaryTable,
             tableDimension1,
-            tableDimension2
+            tableDimension2,
+            transposeTable
         );
         const dialogRef = this.dialog.open(AnimationDialogComponent, {
             data: {

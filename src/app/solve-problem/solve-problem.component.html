@@ -170,7 +170,7 @@
                                     <b class="slightly-bold-label">Custom Input Results</b>
                                     <button mat-raised-button color="accent" class="view-animation-button"
                                             [disabled]="!(customInputTestResult['log'] && customInputTestResult['table'])"
-                                            (click)="viewUserCodeAnimation('Result for Custom Input', processedCustomInput, customInputTestResult, true)">
+                                            (click)="viewUserCodeAnimation('Result for Custom Input', processedCustomInput, customInputTestResult, true, false)">
                                         <span class="glyphicon glyphicon-play play-animation-glyphicon"></span>
                                         View Animation
                                     </button>
@@ -461,7 +461,7 @@
                                 <b class="slightly-bold-label">Expected Results
                                 </b>
                                 <button mat-raised-button color="accent" class="view-animation-button"
-                                        (click)="viewUserCodeAnimation('Expected Result for Custom Input', processedCustomInput, customInputExpectedTestResult, false)">
+                                        (click)="viewUserCodeAnimation('Expected Result for Custom Input', processedCustomInput, customInputExpectedTestResult, false, transpose2dTable)">
                                     <span class="glyphicon glyphicon-play play-animation-glyphicon"></span>
                                     View Animation
                                 </button>
@@ -641,7 +641,7 @@
                                     <b class="slightly-bold-label">{{testCase['name']}} Results</b>
                                     <button mat-raised-button color="accent" class="view-animation-button"
                                             [disabled]="!(testResults[testCaseIndex]['log'] && testResults[testCaseIndex]['table'])"
-                                            (click)="viewUserCodeAnimation(testCase['name'], testCase['input'], testResults[testCaseIndex], true)">
+                                            (click)="viewUserCodeAnimation(testCase['name'], testCase['input'], testResults[testCaseIndex], true, false)">
                                         <span class="glyphicon glyphicon-play play-animation-glyphicon"></span>
                                         View Animation
                                     </button>

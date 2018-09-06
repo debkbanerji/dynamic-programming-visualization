@@ -26,6 +26,7 @@ export class AnimationDialogComponent implements OnInit {
     currentMainTable: any;
     currentAuxiliaryTable: any;
     isTable2d: boolean;
+    transposeTable: boolean;
 
     totalGets: number;
     totalSets: number;
@@ -77,6 +78,7 @@ export class AnimationDialogComponent implements OnInit {
         this.tableDimension1 = this.animationDataService.mainTableDimension1;
         this.tableDimension2 = this.animationDataService.mainTableDimension2;
         this.isTable2d = this.tableDimension2 >= 0;
+        this.transposeTable = this.animationDataService.transposeTable;
         this.resetTables();
         this.currentFrame = 0;
         this.totalFrames = this.log.length + 1;
@@ -91,17 +93,23 @@ export class AnimationDialogComponent implements OnInit {
             if (entry.action === 'set') {
                 this.totalSets++;
                 if (this.getRelevantTable(entry) === this.currentMainTable) {
-                    this.mainTableSets++
+                    this.mainTableSets++;
                 } else {
                     this.auxiliaryTableSets++;
                 }
             } else if (entry.action === 'get') {
                 this.totalGets++;
                 if (this.getRelevantTable(entry) === this.currentMainTable) {
-                    this.mainTableGets++
+                    this.mainTableGets++;
                 } else {
                     this.auxiliaryTableGets++;
                 }
+            }
+            if (this.isTable2d && this.transposeTable) {
+                const index1 = entry.index2;
+                const index2 = entry.index1;
+                this.log[i].index1 = index1;
+                this.log[i].index2 = index2;
             }
         }
 
@@ -142,7 +150,7 @@ export class AnimationDialogComponent implements OnInit {
         }
         setTimeout(function () {
             component.currentlySwitchingPlayState = false;
-        }, component.playIntervalTimeMS + 10)
+        }, component.playIntervalTimeMS + 10);
     }
 
     stepBackward(): void {
@@ -176,7 +184,7 @@ export class AnimationDialogComponent implements OnInit {
             const table = this.getRelevantTable(entry);
             const cell = this.getTableCell(table, entry.index1, entry.index2);
             if (entry.action == 'set') {
-                cell.push(entry.value)
+                cell.push(entry.value);
             }
             this.lastOperation = entry.action;
             this.lastAffectedIndex1 = entry.index1;
