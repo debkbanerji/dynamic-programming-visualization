@@ -44,6 +44,25 @@
         {
             "name": "Test Case 1",
             "input": {
+                "W": 10,
+                "n": 4,
+                "weights": [
+                    6,
+                    3,
+                    4,
+                    2
+                ],
+                "values": [
+                    30,
+                    14,
+                    16,
+                    9
+                ]
+            }
+        },
+        {
+            "name": "Test Case 2",
+            "input": {
                 "W": 6,
                 "n": 4,
                 "weights": [
@@ -61,7 +80,7 @@
             }
         },
         {
-            "name": "Test Case 2",
+            "name": "Test Case 3",
             "input": {
                 "W": 7,
                 "n": 5,
@@ -82,7 +101,7 @@
             }
         },
         {
-            "name": "Test Case 3",
+            "name": "Test Case 4",
             "input": {
                 "W": 16,
                 "n": 8,
