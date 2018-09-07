@@ -15,19 +15,19 @@
 .main-title {
     font-weight: bold;
     margin: 0;
+    display: inline-block;
+}
+
+.main-title-logo-span {
+    word-space: nowrap;
+    display: -moz-inline-stack;
+    display: inline-block;
+    vertical-align: top;
 }
 
 .logo {
     display: inline-block;
     float: left;
-}
-
-.main-title-logo-span {
-    word-space: nowrap;
-    display: inline-block;
-}
-
-.logo {
     width: 0.9em;
     height: 0.9em;
     position: relative;
