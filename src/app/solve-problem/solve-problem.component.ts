@@ -312,7 +312,10 @@ export class SolveProblemComponent implements OnInit {
         const inputNames = Object.keys(component.problem['input']);
         inputNames.reverse();
         inputNames.forEach(inputName => {
-            const rawInputValue = rawInput[inputName];
+            let rawInputValue = rawInput[inputName];
+            if (rawInputValue) {
+                rawInputValue = rawInputValue.trim();
+            }
             let parsedInputValue;
             if (/^(('.*')|(".*"))$/.test(rawInputValue)) {
                 // the input is a string
