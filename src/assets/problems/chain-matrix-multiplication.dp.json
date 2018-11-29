@@ -3,7 +3,7 @@
     "problem-statement": "Chain Matrix Multiplication (DPV section 6.5)",
     "input": {
         "n": "Number of matrices",
-        "arr": "Array of matrix dimensions, with length n + 1"
+        "dimensions": "Array of matrix dimensions, with length n + 1"
     },
     "output": {
         "result": "The minimum number of operations required to multiply all the matrices together"
@@ -21,7 +21,7 @@
         "for2Init": "0",
         "for2Condition": "i < n - L",
         "for2Update": "i = i + 1",
-        "setNextEntryCode": "j = i + L;\nif (L == 0) {\n    entry = 0;\n} else {\n    let optimalCost = Number.MAX_VALUE; // optimal cost of the subproblem defined by i,j\n    for (k = i; k < j; k++) {\n        // kOpt is the optimal cost if we had split at k\n        kOpt = T(i, k) // optimal cost of left subproblem\n            + T(k + 1, j)  // optimal cost of right subproblem\n            + arr[i] * arr[k + 1] * arr[j + 1]; // cost to combine the two subproblems\n        if (kOpt < optimalCost) {\n            optimalCost = kOpt;\n        }\n    }\n    entry = optimalCost; // write the optimal cost into entry i,j\n}",
+        "setNextEntryCode": "j = i + L;\nif (L == 0) {\n    entry = 0;\n} else {\n    let optimalCost = Number.MAX_VALUE; // optimal cost of the subproblem defined by i, j\n    for (k = i; k < j; k++) {\n        // kOpt is the optimal cost if we had split at k\n        kOpt = T(i, k) // optimal cost of left subproblem\n            + T(k + 1, j)  // optimal cost of right subproblem\n            + dimensions[i] * dimensions[k + 1] * dimensions[j + 1]; // cost to combine the two subproblems\n        if (kOpt < optimalCost) {\n            optimalCost = kOpt;\n        }\n    }\n    entry = optimalCost; // write the optimal cost into entry i,j\n}",
         "defaultTableEntry": "",
         "useDefaultTableEntry": false,
         "returnValueCode": "result = T(0, n - 1);",
@@ -35,7 +35,7 @@
             "name": "Test Case 1",
             "input": {
                 "n": 7,
-                "arr": [
+                "dimensions": [
                     5,
                     2,
                     4,
@@ -51,7 +51,7 @@
             "name": "Test Case 2",
             "input": {
                 "n": 7,
-                "arr": [
+                "dimensions": [
                     5,
                     3,
                     4,
@@ -67,7 +67,7 @@
             "name": "Test Case 3",
             "input": {
                 "n": 4,
-                "arr": [
+                "dimensions": [
                     40,
                     30,
                     10,
@@ -80,7 +80,7 @@
             "name": "Edge Case 1",
             "input": {
                 "n": 1,
-                "arr": [
+                "dimensions": [
                     10,
                     20
                 ]
@@ -90,7 +90,7 @@
             "name": "Edge Case 2",
             "input": {
                 "n": 1,
-                "arr": [
+                "dimensions": [
                     10,
                     20,
                     30
