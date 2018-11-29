@@ -34,6 +34,19 @@
         {
             "name": "Test Case 1",
             "input": {
+                "n": 4,
+                "dimensions": [
+                    50,
+                    20,
+                    1,
+                    10,
+                    100
+                ]
+            }
+        },
+        {
+            "name": "Test Case 2",
+            "input": {
                 "n": 7,
                 "dimensions": [
                     5,
@@ -48,7 +61,7 @@
             }
         },
         {
-            "name": "Test Case 2",
+            "name": "Test Case 3",
             "input": {
                 "n": 7,
                 "dimensions": [
@@ -64,7 +77,7 @@
             }
         },
         {
-            "name": "Test Case 3",
+            "name": "Test Case 4",
             "input": {
                 "n": 4,
                 "dimensions": [
