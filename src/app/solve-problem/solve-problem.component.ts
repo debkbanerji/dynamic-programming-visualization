@@ -115,6 +115,8 @@ export class SolveProblemComponent implements OnInit {
     testsCurrentlyRunning: boolean = false;
     testsCurrentlyRunningForProvided: boolean = false;
 
+    initialShowedSolutionFlag = false;
+
     constructor(private route: ActivatedRoute,
                 private router: Router,
                 private http: HttpClient,
@@ -297,6 +299,14 @@ export class SolveProblemComponent implements OnInit {
         } else {
             component.testsCurrentlyRunning = false;
             component.testsCurrentlyRunningForProvided = false;
+            if (!component.initialShowedSolutionFlag) {
+                component.route.queryParams.subscribe(params => {
+                    component.initialShowedSolutionFlag = true;
+                    if (params['show-solution'] && params['show-solution'] !== 'false') {
+                        component.revealSolution();
+                    }
+                });
+            }
         }
     }
 
@@ -877,39 +887,44 @@ export class SolveProblemComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                component.revealedProvidedSolution = true;
-                // component.solution = Object.assign({}, component.providedSolution);
-                // deep copy just in case solution format is changed in the future
-                component.solution = JSON.parse(JSON.stringify(component.providedSolution));
-                component.solution.detailedSetNextEntryTopDownCode = null;
-                component.solution.detailedReturnValueTopDownCode = null;
-                component.solution.setNextEntryTopDownCode = null;
-                component.solution.returnValueTopDownCode = null;
-                component.solution.detailedSetNextEntryCode = null;
-                component.solution.detailedReturnValueCode = null;
-
-                if (component.approach === component.approaches[1]) {
-                    if (component.expectDetailedSolution) {
-                        component.solution.setNextEntryCode = component.providedSolution.detailedSetNextEntryTopDownCode;
-                        component.solution.returnValueCode = component.providedSolution.detailedReturnValueTopDownCode;
-                    } else {
-                        component.solution.setNextEntryCode = component.providedSolution.setNextEntryTopDownCode;
-                        component.solution.returnValueCode = component.providedSolution.returnValueTopDownCode;
-                    }
-                } else {
-                    if (component.expectDetailedSolution) {
-                        component.solution.setNextEntryCode = component.providedSolution.detailedSetNextEntryCode;
-                        component.solution.returnValueCode = component.providedSolution.detailedReturnValueCode;
-                    } else {
-                        component.solution.setNextEntryCode = component.providedSolution.setNextEntryCode;
-                        component.solution.returnValueCode = component.providedSolution.returnValueCode;
-                    }
-                }
-                component.makeInputsResizable(component);
-                component.populateCodeEditors();
-                component.runAllTestsWithUserSolution();
+                component.revealSolution();
             }
         });
+    }
+
+    private revealSolution() {
+        const component = this;
+        component.revealedProvidedSolution = true;
+        // component.solution = Object.assign({}, component.providedSolution);
+        // deep copy just in case solution format is changed in the future
+        component.solution = JSON.parse(JSON.stringify(component.providedSolution));
+        component.solution.detailedSetNextEntryTopDownCode = null;
+        component.solution.detailedReturnValueTopDownCode = null;
+        component.solution.setNextEntryTopDownCode = null;
+        component.solution.returnValueTopDownCode = null;
+        component.solution.detailedSetNextEntryCode = null;
+        component.solution.detailedReturnValueCode = null;
+
+        if (component.approach === component.approaches[1]) {
+            if (component.expectDetailedSolution) {
+                component.solution.setNextEntryCode = component.providedSolution.detailedSetNextEntryTopDownCode;
+                component.solution.returnValueCode = component.providedSolution.detailedReturnValueTopDownCode;
+            } else {
+                component.solution.setNextEntryCode = component.providedSolution.setNextEntryTopDownCode;
+                component.solution.returnValueCode = component.providedSolution.returnValueTopDownCode;
+            }
+        } else {
+            if (component.expectDetailedSolution) {
+                component.solution.setNextEntryCode = component.providedSolution.detailedSetNextEntryCode;
+                component.solution.returnValueCode = component.providedSolution.detailedReturnValueCode;
+            } else {
+                component.solution.setNextEntryCode = component.providedSolution.setNextEntryCode;
+                component.solution.returnValueCode = component.providedSolution.returnValueCode;
+            }
+        }
+        component.makeInputsResizable(component);
+        component.populateCodeEditors();
+        component.runAllTestsWithUserSolution();
     }
 
     getSectionSpecificErrorMessage(e, code: string, isStack: boolean, isTopDown: boolean): string {
