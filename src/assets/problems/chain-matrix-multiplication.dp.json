@@ -1,0 +1,49 @@
+{
+    "name": "Chain Matrix Multiplication",
+    "problem-statement": "//TODO: write",
+    "input": {
+        "n": "Number of matrices",
+        "arr": "array of matrix dimensions, with length n + 1"
+    },
+    "output": {
+        "result": "The minimum number of operations required to multiply all the matrices together"
+    },
+    "provided-solution": {
+        "tableShape": "2d",
+        "tableDimension1": "n",
+        "tableDimension2": "n",
+        "initializationCode": "// No other initialization necessary",
+        "for1Variable": "l",
+        "for1Init": "0",
+        "for1Condition": "l <= n",
+        "for1Update": "l = l + 1",
+        "for2Variable": "i",
+        "for2Init": "0",
+        "for2Condition": "i < n - l",
+        "for2Update": "i = i + 1",
+        "setNextEntryCode": "j = i + l;\nif (l == 0) {\n    entry = 0;\n} else {\n    let optimalCost = Number.MAX_VALUE; // optimal cost of the subproblem defined by i,j\n    for (k = i; k < j; k++) {\n        // kOpt is the optimal cost if we had split at k\n        kOpt = T(i, k) // optimal cost of left subproblem\n            + T(k + 1, j)  // optimal cost of right subproblem\n            + arr[i] * arr[k + 1] * arr[j + 1]; // cost to combine the two subproblems\n        if (kOpt < optimalCost) {\n            optimalCost = kOpt;\n        }\n    }\n    entry = optimalCost; // write the optimal cost into entry i,j\n}",
+        "defaultTableEntry": "",
+        "useDefaultTableEntry": false,
+        "returnValueCode": "result = T(n - 1, n - 1);",
+        "nextEntryIndex1": "i",
+        "nextEntryIndex2": "j",
+        "useAuxiliaryTableWithDetailedSolution": true,
+        "tableEntryDefinition": "<b>T[ i ][ j ]</b> Is the ...",
+        "solutionNotes": "TODO: Write"
+    },
+    "test-cases": [
+        {
+            "name": "Test Case 1",
+            "input": {
+                "n": 4,
+                "arr": [
+                    40,
+                    20,
+                    30,
+                    10,
+                    30
+                ]
+            }
+        }
+    ]
+}
