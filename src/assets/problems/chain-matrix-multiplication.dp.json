@@ -1,9 +1,9 @@
 {
     "name": "Chain Matrix Multiplication",
-    "problem-statement": "//TODO: write",
+    "problem-statement": "Chain Matrix Multiplication (DPV section 6.5)",
     "input": {
         "n": "Number of matrices",
-        "arr": "array of matrix dimensions, with length n + 1"
+        "arr": "Array of matrix dimensions, with length n + 1"
     },
     "output": {
         "result": "The minimum number of operations required to multiply all the matrices together"
@@ -28,14 +28,13 @@
         "nextEntryIndex1": "i",
         "nextEntryIndex2": "j",
         "useAuxiliaryTableWithDetailedSolution": true,
-        "tableEntryDefinition": "<b>T[ i ][ j ]</b> Is the ...",
-        "solutionNotes": "TODO: Write"
+        "tableEntryDefinition": "<b>T[ i ][ j ]</b> Is the minimum cost of multiplying all the matrices from matrix <b>i</b> to matrix <b>j</b> together"
     },
     "test-cases": [
         {
             "name": "Test Case 1",
             "input": {
-                "n": 9,
+                "n": 7,
                 "arr": [
                     5,
                     2,
@@ -44,16 +43,14 @@
                     8,
                     5,
                     5,
-                    2,
-                    4,
-                    10
+                    2
                 ]
             }
         },
         {
             "name": "Test Case 2",
             "input": {
-                "n": 9,
+                "n": 7,
                 "arr": [
                     5,
                     3,
@@ -62,9 +59,7 @@
                     8,
                     3,
                     5,
-                    9,
-                    12,
-                    3
+                    9
                 ]
             }
         },
@@ -82,14 +77,22 @@
             }
         },
         {
-            "name": "Test Case 4",
+            "name": "Edge Case 1",
             "input": {
-                "n": 4,
+                "n": 1,
+                "arr": [
+                    10,
+                    20
+                ]
+            }
+        },
+        {
+            "name": "Edge Case 2",
+            "input": {
+                "n": 1,
                 "arr": [
                     10,
                     20,
-                    30,
-                    40,
                     30
                 ]
             }
