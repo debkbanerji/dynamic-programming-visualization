@@ -37,8 +37,8 @@
         "detailedReturnValueCode": "const result = T(n, W);\n\nconst solution = [];\nlet i = n;\nlet j = W;\n\nwhile (i > 0 && j > 0) {\n   if (T(i - 1, j) !== T(i, j)) {\n        solution.unshift(i - 1); // appending correct item index to front of solution\n        j = j - weights[i - 1];  \n    }\n    i = i - 1;\n}",
         "detailedSetNextEntryTopDownCode": "if (i == 0 || j == 0) {\n\tentry = 0;\n} else {\n\tlet itemWeight = weights[i - 1];\n\tlet valueWithoutLastItem = getTableEntry(i - 1, j);\n\tif (itemWeight > j) {\n\t\tentry = valueWithoutLastItem;\n\t} else {\n\t\tlet valueWithLastItem = getTableEntry(i - 1, j - itemWeight) + values[i - 1];\n\t\tif (valueWithLastItem > valueWithoutLastItem) {\n\t\t\tentry = valueWithLastItem;\n\t\t} else {\n\t\t\tentry = valueWithoutLastItem;\n\t\t}\n\t}\n}",
         "detailedReturnValueTopDownCode": "const result = getTableEntry(n, W);\n\nconst solution = [];\nlet i = n;\nlet j = W;\n\nwhile (i > 0 && j > 0) {\n    if (T(i - 1, j) !== T(i, j)) {\n        solution.unshift(i - 1); // appending correct item index to front of solution\n        j = j - weights[i - 1];  \n    }\n    i = i - 1;\n}",
-        "tableEntryDefinition": "<b>T[ i ][ j ]</b> Is the maximum value obtainable with a knapsack of capacity <b>i</b> using the first <b>j</b> items.",
-        "solutionNotes": "This solution runs in <b>O(nW)</b> time. When populating <b>T[ i ][ j ]</b>, we consider the case where we would take item <b>j</b>, as well as the case where we would not take item <b>j</b>."
+        "tableEntryDefinition": "<b>T[ i ][ j ]</b> Is the maximum value obtainable with a knapsack of capacity <b>j</b> using the first <b>i</b> items.",
+        "solutionNotes": "This solution runs in <b>O(nW)</b> time. When populating <b>T[ i ][ j ]</b>, we consider the case where we would take item <b>i</b>, as well as the case where we would not take item <b>i</b>."
     },
     "test-cases": [
         {
