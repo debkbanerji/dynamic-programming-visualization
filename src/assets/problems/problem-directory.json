@@ -26,6 +26,15 @@
                     "id": "knapsack-without-repetition"
                 }
             ]
+        },
+        {
+            "name": "Intervals",
+            "problems": [
+                {
+                    "name": "Chain Matrix Multiplication",
+                    "id": "chain-matrix-multiplication"
+                }
+            ]
         }
     ]
 }
