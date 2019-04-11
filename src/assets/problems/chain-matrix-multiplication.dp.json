@@ -47,6 +47,21 @@
         {
             "name": "Test Case 2",
             "input": {
+                "n": 6,
+                "dims": [
+                    30,
+                    35,
+                    15,
+                    5,
+                    10,
+                    20,
+                    25
+                ]
+            }
+        },
+        {
+            "name": "Test Case 3",
+            "input": {
                 "n": 7,
                 "dims": [
                     5,
@@ -61,7 +76,7 @@
             }
         },
         {
-            "name": "Test Case 3",
+            "name": "Test Case 4",
             "input": {
                 "n": 7,
                 "dims": [
@@ -77,7 +92,7 @@
             }
         },
         {
-            "name": "Test Case 4",
+            "name": "Test Case 5",
             "input": {
                 "n": 4,
                 "dims": [
