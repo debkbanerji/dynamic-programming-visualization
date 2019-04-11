@@ -4,8 +4,8 @@
     "input": {
         "W": "Maximum Capacity",
         "n": "Number of Item Types",
-        "weights": "array of item weights, where entry i represents the weight of item i",
-        "values": "array of item values, where entry i represents the value of item i"
+        "weights": "Array of item weights, where entry i represents the weight of item i",
+        "values": "Array of item values, where entry i represents the value of item i"
     },
     "output": {
         "result": "The maximum value that can be attained with a knapsack of capacity W",

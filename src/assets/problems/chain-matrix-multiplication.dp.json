@@ -1,0 +1,129 @@
+{
+    "name": "Chain Matrix Multiplication",
+    "problem-statement": "Suppose you are given a sequence (chain) <b>A<sub>1</sub>, A<sub>2</sub>, ... ,A<sub>n</sub></b>of <b>n</b> matrices to be multiplied, and you wish to compute the product <b>A<sub>1</sub>A<sub>2</sub>...A<sub>n</sub></b>. You are given as input an array <b>dims</b>, containing the dimensions of the matrices, such that the dimensions of the matrices are <b>dims<sub>0</sub> x dims<sub>1</sub>, dims<sub>1</sub> x dims<sub>2</sub>, ... ,dims<sub>n-1</sub> x dims<sub>n</sub></b>. Assume that multiplying two matrices of dimensions <b>p x q</b> and <b>q x r</b> requires <b>pqr</b> scalar multiplications. What is the smallest number of scalar multiplications required to multiply the chain of matrices together in order?",
+    "input": {
+        "n": "Number of matrices",
+        "dims": "Array of matrix dimensions, with length n + 1"
+    },
+    "output": {
+        "result": "The minimum number of scalar multiplications required to multiply the chain of matrices together"
+    },
+    "provided-solution": {
+        "tableShape": "2d",
+        "tableDimension1": "n",
+        "tableDimension2": "n",
+        "initializationCode": "// No other initialization necessary",
+        "for1Variable": "L",
+        "for1Init": "0",
+        "for1Condition": "L <= n",
+        "for1Update": "L = L + 1",
+        "for2Variable": "i",
+        "for2Init": "0",
+        "for2Condition": "i < n - L",
+        "for2Update": "i = i + 1",
+        "setNextEntryCode": "j = i + L;\nif (L == 0) {\n    entry = 0;\n} else {\n    let optimalCost = Number.MAX_VALUE; // optimal cost of the subproblem defined by i, j\n    for (k = i; k < j; k++) {\n        // kOpt is the optimal cost if we had split at k\n        kOpt = T(i, k) // optimal cost of left subproblem\n            + T(k + 1, j)  // optimal cost of right subproblem\n            + dims[i] * dims[k + 1] * dims[j + 1]; // cost to combine the two subproblems\n        if (kOpt < optimalCost) {\n            optimalCost = kOpt;\n        }\n    }\n    entry = optimalCost; // write the optimal cost into entry i,j\n}",
+        "defaultTableEntry": "",
+        "useDefaultTableEntry": false,
+        "returnValueCode": "result = T(0, n - 1);",
+        "nextEntryIndex1": "i",
+        "nextEntryIndex2": "j",
+        "useAuxiliaryTableWithDetailedSolution": true,
+        "tableEntryDefinition": "<b>T[ i ][ j ]</b> Is the minimum number of scalar multiplications required to multiply all the matrices from matrix <b>i</b> to matrix <b>j</b> together"
+    },
+    "test-cases": [
+        {
+            "name": "Test Case 1",
+            "input": {
+                "n": 4,
+                "dims": [
+                    50,
+                    20,
+                    1,
+                    10,
+                    100
+                ]
+            }
+        },
+        {
+            "name": "Test Case 2",
+            "input": {
+                "n": 6,
+                "dims": [
+                    30,
+                    35,
+                    15,
+                    5,
+                    10,
+                    20,
+                    25
+                ]
+            }
+        },
+        {
+            "name": "Test Case 3",
+            "input": {
+                "n": 7,
+                "dims": [
+                    5,
+                    2,
+                    4,
+                    10,
+                    8,
+                    5,
+                    5,
+                    2
+                ]
+            }
+        },
+        {
+            "name": "Test Case 4",
+            "input": {
+                "n": 7,
+                "dims": [
+                    5,
+                    3,
+                    4,
+                    7,
+                    8,
+                    3,
+                    5,
+                    9
+                ]
+            }
+        },
+        {
+            "name": "Test Case 5",
+            "input": {
+                "n": 4,
+                "dims": [
+                    40,
+                    30,
+                    10,
+                    15,
+                    30
+                ]
+            }
+        },
+        {
+            "name": "Edge Case 1",
+            "input": {
+                "n": 1,
+                "dims": [
+                    10,
+                    20
+                ]
+            }
+        },
+        {
+            "name": "Edge Case 2",
+            "input": {
+                "n": 1,
+                "dims": [
+                    10,
+                    20,
+                    30
+                ]
+            }
+        }
+    ]
+}

@@ -1,5 +1,5 @@
 {
-    "version":"2018.9.7-master",
+    "version":"2019.4.11-master",
     "sections": [
         {
             "name": "Subsequences",
@@ -24,6 +24,15 @@
                 {
                     "name": "Knapsack Without Repetition",
                     "id": "knapsack-without-repetition"
+                }
+            ]
+        },
+        {
+            "name": "Intervals",
+            "problems": [
+                {
+                    "name": "Chain Matrix Multiplication",
+                    "id": "chain-matrix-multiplication"
                 }
             ]
         }
