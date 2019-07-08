@@ -5,6 +5,7 @@ import {DOCUMENT} from '@angular/common';
 import {Title} from '@angular/platform-browser';
 import {environment} from '../../environments/environment';
 import {HttpClient} from '@angular/common/http';
+import {ProgressService} from '../providers/progress.service';
 
 @Component({
     selector: 'app-select-problem',
@@ -34,7 +35,8 @@ export class SelectProblemComponent implements OnInit {
         @Inject(DOCUMENT) document,
         private route: ActivatedRoute,
         private titleService: Title,
-        private http: HttpClient
+        private http: HttpClient,
+        private progressService: ProgressService
     ) {
     }
 
