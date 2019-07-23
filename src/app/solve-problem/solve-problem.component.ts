@@ -249,7 +249,7 @@ export class SolveProblemComponent implements OnInit {
             }
         }
         const hasSolvedSolutionTypes = {};
-        data['solutionTypes'].forEach((type) => {
+        solutionTypes.forEach((type) => {
             hasSolvedSolutionTypes[type] = false;
         });
         component.defaultProgressObject = {
@@ -924,6 +924,9 @@ export class SolveProblemComponent implements OnInit {
 
     private revealSolution() {
         const component = this;
+        if (component.recordProgress) {
+            component.progressService.markProblemAsSolutionRevealedSetIfNotExists(component.problemFileName, component.defaultProgressObject)
+        }
         component.revealedProvidedSolution = true;
         // component.solution = Object.assign({}, component.providedSolution);
         // deep copy just in case solution format is changed in the future

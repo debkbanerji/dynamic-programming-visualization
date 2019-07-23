@@ -25,7 +25,11 @@ export class ProgressService {
     }
 
     markProblemAsSolutionRevealedSetIfNotExists(problemId: string, defaultValue) {
-        // TODO: Implement
+        const component = this;
+        const key = PROBLEM_PREFIX + problemId;
+        const currentProgress = component.getItemSetIfNotExists(problemId, defaultValue);
+        currentProgress.hasRevealedSolution = true;
+        component.setItem(key, currentProgress);
     }
 
     public getHasLocalStorage(): boolean {
