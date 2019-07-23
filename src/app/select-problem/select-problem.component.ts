@@ -94,10 +94,10 @@ export class SelectProblemComponent implements OnInit {
 
             Promise.all(objectDefaultProgressTypePromises).then(problems => {
                 problems.forEach((problem => {
-                        const hasSolvedSolutionTypes = {};
-                        problem['solutionTypes'].forEach((type) => {
-                            hasSolvedSolutionTypes[type] = false;
-                        });
+                        // const hasSolvedSolutionTypes = {};
+                        // problem['solutionTypes'].forEach((type) => {
+                        //     hasSolvedSolutionTypes[type] = false;
+                        // });
                         // const defaultProgressObject = {
                         //     hasRevealedSolution: false,
                         //     hasSolvedSolutionTypes
@@ -107,17 +107,20 @@ export class SelectProblemComponent implements OnInit {
                         // );
                         const progressData = component.progressService.getProblemProgressObjectNullIfNotExists(problem['id']);
                         if (progressData) {
-                            const progressMap = hasSolvedSolutionTypes;
+                            const progressMap = progressData.hasSolvedSolutionTypes;
                             const progressArray = [];
                             Object.keys(progressMap).forEach((type) => {
                                 progressArray.push({
-                                    type,
+                                    type: type.replace(/([A-Z])/g, ' $1')
+                                        .replace(/^./, function (str) {
+                                            return str.toUpperCase();
+                                        }),
                                     completed: progressMap[type]
                                 });
                             });
                             progressArray.sort((o1, o2) => {
                                 if (/detailed/i.test(o1.type) === /detailed/i.test(o2.type)) {
-                                    return /topDown/i.test(o1.type) ? 1 : -1;
+                                    return /top *Down/i.test(o1.type) ? 1 : -1;
                                 } else {
                                     return /detailed/i.test(o1.type) ? 1 : -1;
                                 }
