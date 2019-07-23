@@ -550,9 +550,9 @@ export class SolveProblemComponent implements OnInit {
     }
 
     runTestsWithUserSolution(component: SolveProblemComponent, testCaseIndex: number, code: string) {
+        const useDetailedSolution = component.expectDetailedSolution;
         if (testCaseIndex < component.testCases.length) {
             let topDown = component.approach === component.approaches[1];
-            let useDetailedSolution = component.expectDetailedSolution;
             let useAuxiliaryTable = useDetailedSolution && component.providedSolution.useAuxiliaryTableWithDetailedSolution;
             component.runTest(component.testCases[testCaseIndex]['input'], code, component, topDown, useDetailedSolution, useAuxiliaryTable, function (testResult) {
                 let testCase = component.testCases[testCaseIndex];
@@ -595,8 +595,30 @@ export class SolveProblemComponent implements OnInit {
                 }
                 component.runTestsWithUserSolution(component, testCaseIndex + 1, code);
             });
-        }
-        else {
+        } else {
+            if (component.recordProgress
+                && component.numCorrectFinalAnswerTestCases === component.numRunTestCases
+                && (!useDetailedSolution || component.numCorrectSolutions === component.numRunTestCases)) {
+                let solutionType: string;
+                if (!useDetailedSolution) {
+                    if (component.approach === component.approaches[0]) {
+                        solutionType = 'bottomUp';
+                    } else {
+                        solutionType = 'topDown';
+                    }
+                } else {
+                    if (component.approach === component.approaches[0]) {
+                        solutionType = 'detailedBottomUp';
+                    } else {
+                        solutionType = 'detailedTopDown';
+                    }
+                }
+                component.progressService.setProblemProgressObjectAsCompletedSetIfNotExists(
+                    component.problemFileName,
+                    solutionType,
+                    component.defaultProgressObject
+                );
+            }
             setTimeout(() => {
                 component.testsCurrentlyRunning = false;
             }, 250);
@@ -925,7 +947,7 @@ export class SolveProblemComponent implements OnInit {
     private revealSolution() {
         const component = this;
         if (component.recordProgress) {
-            component.progressService.markProblemAsSolutionRevealedSetIfNotExists(component.problemFileName, component.defaultProgressObject)
+            component.progressService.markProblemAsSolutionRevealedSetIfNotExists(component.problemFileName, component.defaultProgressObject);
         }
         component.revealedProvidedSolution = true;
         // component.solution = Object.assign({}, component.providedSolution);

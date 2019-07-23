@@ -12,7 +12,6 @@ export class ProgressService {
     constructor() {
         const component = this;
         component.hasLocalStorage = typeof (Storage) !== 'undefined';
-
     }
 
     getProblemProgressObjectSetIfNotExists(problemId: string, defaultValue) {
@@ -21,7 +20,11 @@ export class ProgressService {
     }
 
     setProblemProgressObjectAsCompletedSetIfNotExists(problemId: string, solutionType: string, defaultValue) {
-        // TODO: Implement
+        const component = this;
+        const key = PROBLEM_PREFIX + problemId;
+        const currentProgress = component.getItemSetIfNotExists(key, defaultValue);
+        currentProgress.hasSolvedSolutionTypes[solutionType] = true;
+        component.setItem(key, currentProgress);
     }
 
     markProblemAsSolutionRevealedSetIfNotExists(problemId: string, defaultValue) {
