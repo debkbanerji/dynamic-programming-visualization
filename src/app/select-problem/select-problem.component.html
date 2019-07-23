@@ -62,11 +62,21 @@
                     <div *ngFor="let problem of section.problems" class="col-xs-12 col-sm-6 col-md-4">
                         <mat-card class="problem-link"
                                   (click)="openProblem(problem.id)">
-                                <div [innerHTML]="problem.name">
-                                </div>
+                            <div [innerHTML]="problem.name">
+                            </div>
+                            <div *ngIf="progressService.getHasLocalStorage()" class="progress-container">
                                 <div *ngIf="progressData[problem.id]">
                                     <pre>{{progressData[problem.id] | json}}</pre>
+                                    <div>
+                                        <div *ngFor="let type of progressData[problem.id].hasSolvedSolutionTypes ">
+                                            {{type}}}
+                                        </div>
+                                    </div>
                                 </div>
+                                <div *ngIf="!progressData[problem.id]">
+                                    <small class="text-yellow">Not yet attempted</small>
+                                </div>
+                            </div>
                         </mat-card>
                     </div>
                 </div>

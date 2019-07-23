@@ -105,7 +105,25 @@ export class SelectProblemComponent implements OnInit {
                         // component.progressData[problem['id']] = component.progressService.getProblemProgressObjectSetIfNotExists(
                         //     problem['id'], defaultProgressObject
                         // );
-                        component.progressData[problem['id']] = component.progressService.getProblemProgressObjectNullIfNotExists(problem['id']);
+                        const progressData = component.progressService.getProblemProgressObjectNullIfNotExists(problem['id']);
+                        if (progressData) {
+                            const progressMap = hasSolvedSolutionTypes;
+                            const progressArray = [];
+                            Object.keys(progressMap).forEach((type) => {
+                                progressArray.push({
+                                    type,
+                                    completed: progressMap[type]
+                                });
+                            });
+                            progressArray.sort((o1, o2) => {
+                                if (/detailed/i.test(o1.type) === /detailed/i.test(o2.type)) {
+                                    return /topDown/i.test(o1.type) ? 1 : -1;
+                                } else {
+                                    return /detailed/i.test(o1.type) ? 1 : -1;
+                                }
+                            });
+                            component.progressData[problem['id']] = progressArray;
+                        }
                     })
                 );
             });

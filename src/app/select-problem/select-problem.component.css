@@ -111,6 +111,10 @@ input {
     background-color: rgba(0.7, 0.7, 0.7, 0.1);
 }
 
+.progress-container {
+    font-weight: normal;
+}
+
 .page-footer {
     display: flex;
     justify-content: center;
