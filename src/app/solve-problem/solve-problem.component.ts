@@ -7,6 +7,7 @@ import {Title} from '@angular/platform-browser';
 import {CustomProblemService} from '../providers/custom-problem.service';
 import {AnimationDataService} from '../providers/animation-data.service';
 import {AnimationDialogComponent} from '../dialogs/animation-dialog/animation-dialog.component';
+import {ProgressService} from '../providers/progress.service';
 
 const encodedTableName = '___TABLE___';
 const auxiliaryTableName = '___AUX_TABLE___';
@@ -117,13 +118,17 @@ export class SolveProblemComponent implements OnInit {
 
     initialShowedSolutionFlag = false;
 
+    recordProgress: boolean = false;
+    defaultProgressObject: any = {};
+
     constructor(private route: ActivatedRoute,
                 private router: Router,
                 private http: HttpClient,
                 private titleService: Title,
                 public dialog: MatDialog,
                 private customProblemService: CustomProblemService,
-                private animationDataService: AnimationDataService
+                private animationDataService: AnimationDataService,
+                private progressService: ProgressService
     ) {
     }
 
@@ -222,10 +227,35 @@ export class SolveProblemComponent implements OnInit {
 
     loadProblem(problemFileName: string, component: SolveProblemComponent): void {
         component.http.get('../assets/problems/' + problemFileName + '.dp.json').subscribe(data => {
-            this.setProblem(component, data);
+            component.recordProgress = component.progressService.getHasLocalStorage();
+            component.setProblem(component, data);
+            component.calculateDefaultProgressObject();
         }, _ => {
             component.router.navigate(['select-problem'], {queryParams: {'dark-mode': this.isDarkTheme}});
         });
+    }
+
+    private calculateDefaultProgressObject() {
+        const component = this;
+        const data = component.problem;
+        const solutionTypes = ['bottomUp']; // Bottom up solution should always exist
+        if (data['provided-solution'].returnValueTopDownCode) {
+            solutionTypes.push('topDown');
+        }
+        if (data['output'].solution) {
+            solutionTypes.push('detailedBottomUp');
+            if (data['provided-solution'].returnValueTopDownCode) {
+                solutionTypes.push('detailedTopDown');
+            }
+        }
+        const hasSolvedSolutionTypes = {};
+        data['solutionTypes'].forEach((type) => {
+            hasSolvedSolutionTypes[type] = false;
+        });
+        component.defaultProgressObject = {
+            hasRevealedSolution: false,
+            hasSolvedSolutionTypes
+        };
     }
 
     private setProblem(component: SolveProblemComponent, data) {
