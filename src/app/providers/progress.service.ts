@@ -1,5 +1,7 @@
 import {Injectable} from '@angular/core';
 
+const PROBLEM_PREFIX = '__PROBLEM_PROGRESS_DATA__';
+
 @Injectable({
     providedIn: 'root'
 })
@@ -13,19 +15,32 @@ export class ProgressService {
 
     }
 
+    getProblemProgressObjectSetIfNotExists(problemId: string, defaultValue) {
+        const component = this;
+        return component.getItemSetIfNotExists(PROBLEM_PREFIX + problemId, defaultValue);
+    }
+
+    setProblemProgressObjectAsCompletedSetIfNotExists(problemId: string, solutionType: string, defaultValue) {
+        // TODO: Implement
+    }
+
+    markProblemAsSolutionRevealedSetIfNotExists(problemId: string, defaultValue) {
+        // TODO: Implement
+    }
+
     public getHasLocalStorage(): boolean {
         return this.hasLocalStorage;
     }
 
     // Local storage wrapper functions
     private deleteItem(key: string): void {
-       this.assertHasLocalStorage();
+        this.assertHasLocalStorage();
         localStorage.removeItem(key);
     }
 
     private setItem(key: string, value: any): void {
         this.assertHasLocalStorage();
-        localStorage.setItem(key, value);
+        localStorage.setItem(key, JSON.stringify(value));
     }
 
     private hasItem(key: string): boolean {
@@ -47,10 +62,10 @@ export class ProgressService {
 
     private getItem(key: string): any {
         this.assertHasLocalStorage();
-        return localStorage.getItem(key);
+        return JSON.parse(localStorage.getItem(key));
     }
 
-    private clearAll(): void {
+    clearAll(): void {
         this.assertHasLocalStorage();
         localStorage.clear();
     }

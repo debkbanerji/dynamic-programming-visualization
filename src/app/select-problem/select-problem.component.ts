@@ -29,6 +29,8 @@ export class SelectProblemComponent implements OnInit {
     sections = [];
     problemFileVersion = null;
 
+    progressData = {};
+
     constructor(
         private router: Router,
         private customProblemService: CustomProblemService,
@@ -54,7 +56,57 @@ export class SelectProblemComponent implements OnInit {
             component.sections.forEach(function (section) {
                 component.totalProblems += section.problems.length;
             });
+            component.setUpProgressData();
         });
+    }
+
+    setUpProgressData(): void {
+        const component = this;
+        component.progressData = {};
+        if (component.progressService.getHasLocalStorage()) {
+            const objectDefaultProgressTypePromises = [];
+            component.sections.forEach(function (section) {
+                component.totalProblems += section.problems.length;
+                section.problems.forEach(function (problem) {
+                    objectDefaultProgressTypePromises.push(new Promise((resolve, reject) => {
+                        component.http.get('../assets/problems/' + problem['id'] + '.dp.json').subscribe(data => {
+                            // resolve(data);
+                            const solutionTypes = ['bottomUp']; // Bottom up solution should always exist
+                            if (data['provided-solution'].returnValueTopDownCode) {
+                                solutionTypes.push('topDown');
+                            }
+                            if (data['output'].solution) {
+                                solutionTypes.push('detailedBottomUp');
+                                if (data['provided-solution'].returnValueTopDownCode) {
+                                    solutionTypes.push('detailedTopDown');
+                                }
+                            }
+                            resolve({
+                                id: problem.id,
+                                solutionTypes
+                            });
+                        }, err => {
+                            reject(err);
+                        });
+                    }));
+                });
+            });
+
+            Promise.all(objectDefaultProgressTypePromises).then(problems => {
+                problems.forEach((problem => {
+                    const hasSolvedSolutionTypes = {};
+                    problem['solutionTypes'].forEach((type) => {
+                        hasSolvedSolutionTypes[type] = false;
+                    });
+                    const defaultProgressObject = {
+                        hasRevealedSolution: false,
+                        hasSolvedSolutionTypes
+                    };
+                    component.progressData[problem['id']] = component.progressService.getProblemProgressObjectSetIfNotExists(
+                        problem['id'], defaultProgressObject);
+                }));
+            });
+        }
     }
 
     openProblem(id: string): void {

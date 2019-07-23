@@ -62,10 +62,11 @@
                     <div *ngFor="let problem of section.problems" class="col-xs-12 col-sm-6 col-md-4">
                         <mat-card class="problem-link"
                                   (click)="openProblem(problem.id)">
-                            <span>
-                                <span [innerHTML]="problem.name">
-                                </span>
-                            </span>
+                                <div [innerHTML]="problem.name">
+                                </div>
+                                <div *ngIf="progressData[problem.id]">
+                                    <pre>{{progressData[problem.id] | json}}</pre>
+                                </div>
                         </mat-card>
                     </div>
                 </div>
