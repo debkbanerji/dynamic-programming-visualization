@@ -19,6 +19,12 @@ export class ProgressService {
         return component.getItemSetIfNotExists(PROBLEM_PREFIX + problemId, defaultValue);
     }
 
+    getProblemProgressObjectNullIfNotExists(problemId: string) {
+        const component = this;
+        const key = PROBLEM_PREFIX + problemId;
+        return component.hasItem(key) ? component.getItem(key) : null;
+    }
+
     setProblemProgressObjectAsCompletedSetIfNotExists(problemId: string, solutionType: string, defaultValue) {
         const component = this;
         const key = PROBLEM_PREFIX + problemId;

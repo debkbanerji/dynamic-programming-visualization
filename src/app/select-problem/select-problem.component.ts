@@ -94,17 +94,20 @@ export class SelectProblemComponent implements OnInit {
 
             Promise.all(objectDefaultProgressTypePromises).then(problems => {
                 problems.forEach((problem => {
-                    const hasSolvedSolutionTypes = {};
-                    problem['solutionTypes'].forEach((type) => {
-                        hasSolvedSolutionTypes[type] = false;
-                    });
-                    const defaultProgressObject = {
-                        hasRevealedSolution: false,
-                        hasSolvedSolutionTypes
-                    };
-                    component.progressData[problem['id']] = component.progressService.getProblemProgressObjectSetIfNotExists(
-                        problem['id'], defaultProgressObject);
-                }));
+                        const hasSolvedSolutionTypes = {};
+                        problem['solutionTypes'].forEach((type) => {
+                            hasSolvedSolutionTypes[type] = false;
+                        });
+                        // const defaultProgressObject = {
+                        //     hasRevealedSolution: false,
+                        //     hasSolvedSolutionTypes
+                        // };
+                        // component.progressData[problem['id']] = component.progressService.getProblemProgressObjectSetIfNotExists(
+                        //     problem['id'], defaultProgressObject
+                        // );
+                        component.progressData[problem['id']] = component.progressService.getProblemProgressObjectNullIfNotExists(problem['id']);
+                    })
+                );
             });
         }
     }
