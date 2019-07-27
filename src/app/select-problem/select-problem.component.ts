@@ -44,10 +44,9 @@ export class SelectProblemComponent implements OnInit {
 
     ngOnInit() {
         const component = this;
-        this.route.queryParams.subscribe(params => {
-            // noinspection TsLint
-            component.isDarkTheme = (params['dark-mode'] == 'true');
-        });
+        if (component.progressService.getHasLocalStorage()) {
+            component.isDarkTheme = component.progressService.getDarkModeStatus();
+        }
         component.titleService.setTitle('Dynamic Programming');
         component.http.get('../assets/problems/problem-directory.json').subscribe((data: any) => {
             component.sections = data.sections;
@@ -127,7 +126,7 @@ export class SelectProblemComponent implements OnInit {
     }
 
     openProblem(id: string): void {
-        this.router.navigate(['problem/' + id], {queryParams: {'dark-mode': this.isDarkTheme}});
+        this.router.navigate(['problem/' + id]);
     }
 
     solveCustomProblem(): void {
@@ -141,7 +140,7 @@ export class SelectProblemComponent implements OnInit {
                 const fileText = target.result;
                 const problem = JSON.parse(fileText);
                 component.customProblemService.setCustomProblem(problem);
-                component.router.navigate(['problem/custom'], {queryParams: {'dark-mode': component.isDarkTheme}});
+                component.router.navigate(['problem/custom']);
             } catch (err) {
                 component.customProblemErrorText = err.message;
             }
@@ -150,6 +149,9 @@ export class SelectProblemComponent implements OnInit {
     }
 
     onDarkModeChange() {
-        this.router.navigate(['select-problem'], {queryParams: {'dark-mode': this.isDarkTheme}});
+        const component = this;
+        if (component.progressService.getHasLocalStorage()) {
+            component.progressService.setDarkModeStatus(component.isDarkTheme);
+        }
     }
 }

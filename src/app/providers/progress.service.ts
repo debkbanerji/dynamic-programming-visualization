@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 
 const PROBLEM_PREFIX = '__PROBLEM_PROGRESS_DATA__';
+const DARK_MODE_MARKER = '__DARK_MODE__';
 
 @Injectable({
     providedIn: 'root'
@@ -39,6 +40,16 @@ export class ProgressService {
         const currentProgress = component.getItemSetIfNotExists(problemId, defaultValue);
         currentProgress.hasRevealedSolution = true;
         component.setItem(key, currentProgress);
+    }
+
+    getDarkModeStatus() {
+        const component = this;
+        return component.getItemSetIfNotExists(DARK_MODE_MARKER, false);
+    }
+
+    setDarkModeStatus(isDarkTheme: boolean) {
+        const component = this;
+        return component.setItem(DARK_MODE_MARKER, isDarkTheme);
     }
 
     public getHasLocalStorage(): boolean {

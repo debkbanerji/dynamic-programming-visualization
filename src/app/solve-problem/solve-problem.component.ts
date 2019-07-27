@@ -141,7 +141,7 @@ export class SolveProblemComponent implements OnInit {
                     component.setProblem(component, component.customProblemService.popCustomProblem());
                     component.makeInputsResizable(component);
                 } else {
-                    component.router.navigate(['select-problem'], {queryParams: {'dark-mode': this.isDarkTheme}});
+                    component.router.navigate(['select-problem']);
                 }
             } else {
                 component.problemFileName = problemFileName;
@@ -149,9 +149,9 @@ export class SolveProblemComponent implements OnInit {
                 component.makeInputsResizable(component);
             }
         });
-        component.route.queryParams.subscribe(params => {
-            component.isDarkTheme = (params['dark-mode'] == 'true');
-        });
+        if (component.progressService.getHasLocalStorage()) {
+            component.isDarkTheme = component.progressService.getDarkModeStatus();
+        }
         component.initializeEditors();
     }
 
@@ -174,7 +174,10 @@ export class SolveProblemComponent implements OnInit {
     }
 
     onDarkModeChange() {
-        this.router.navigate(['problem/' + this.problemFileName], {queryParams: {'dark-mode': this.isDarkTheme}});
+        const component = this;
+        if (component.progressService.getHasLocalStorage()) {
+            component.progressService.setDarkModeStatus(component.isDarkTheme);
+        }
     }
 
     populateCodeEditors(): void {
@@ -231,7 +234,7 @@ export class SolveProblemComponent implements OnInit {
             component.setProblem(component, data);
             component.calculateDefaultProgressObject();
         }, _ => {
-            component.router.navigate(['select-problem'], {queryParams: {'dark-mode': this.isDarkTheme}});
+            component.router.navigate(['select-problem']);
         });
     }
 
@@ -1243,7 +1246,7 @@ export class SolveProblemComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                component.router.navigate(['select-problem'], {queryParams: {'dark-mode': this.isDarkTheme}});
+                component.router.navigate(['select-problem']);
             }
         });
     }
