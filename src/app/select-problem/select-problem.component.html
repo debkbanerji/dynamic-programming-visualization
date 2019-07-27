@@ -48,17 +48,8 @@
                 Problem file version: {{problemFileVersion}}
             </small>
         </p>
-        <!--        <mat-accordion>-->
-        <!--            <mat-expansion-panel *ngFor="let section of sections"-->
-        <!--                                 (opened)="section.panelOpenState = true"-->
-        <!--                                 (closed)="section.panelOpenState = false"-->
-        <!--                                 [ngClass]="{-->
-        <!--                                                'expanded-panel':section.panelOpenState-->
-        <!--                                            }">-->
-        <!--                <mat-expansion-panel-header>-->
         <mat-card *ngFor="let section of sections">
             <h4 class="section-title" [innerHTML]="section.name"></h4>
-            <!--                </mat-expansion-panel-header>-->
             <div class="row">
                 <div *ngFor="let problem of section.problems" class="col-xs-12 col-sm-6 col-md-4">
                     <mat-card class="problem-link"
@@ -67,18 +58,17 @@
                         </div>
                         <div *ngIf="progressService.getHasLocalStorage()" class="progress-container">
                             <div *ngIf="progressData[problem.id]">
-                                <div *ngFor="let item of progressData[problem.id]">
+                                <div *ngFor="let item of progressData[problem.id]['progressArray']">
                                     <small
                                         [ngClass]="{
                                             'text-green' : item.completed,
                                             'text-yellow' : !item.completed
-                                        }" matTooltip="{{item.completed ? 'Completed' : 'Not Yet Completed'}}"
-                                        matTooltipPosition="right">
-                                        <span class="glyphicon" [ngClass]="{
+                                        }">
+                                    <span class="glyphicon" [ngClass]="{
                                             'glyphicon-ok' : item.completed,
                                             'glyphicon-option-horizontal' : !item.completed
                                         }"></span>
-                                        <span>&nbsp;&nbsp;{{item.type}}</span>
+                                    <span>&nbsp;&nbsp;{{item.type}}</span>
                                     </small>
                                 </div>
                             </div>
@@ -90,26 +80,14 @@
                 </div>
             </div>
         </mat-card>
-        <!--                    </mat-expansion-panel>-->
-        <!--        <mat-expansion-panel (opened)="customPanelOpenState = true"-->
-        <!--                             (closed)="customPanelOpenState = false"-->
-        <!--                             [ngClass]="{-->
-        <!--                                                        'expanded-panel':customPanelOpenState-->
-        <!--                                                    }"-->
-        <!--                             class="custom-problem-card"-->
-        <!--        >-->
-        <!--            <mat-expansion-panel-header>-->
         <mat-card>
             <h4 class="section-title">Custom Problem</h4>
-            <!--            </mat-expansion-panel-header>-->
             <p>Here you can solve a problem from a file on your computer</p>
             <p>Be careful when choosing a file, as depending on where it came from, it may contain
                 mistakes or try to do sketchy things</p>
             <input id="custom-problem-file-select" [(ngModel)]="customProblemFile" type="file"
                    (change)="solveCustomProblem()">
             <span id="custom-problem-error-text">{{customProblemErrorText}}</span>
-            <!--        </mat-expansion-panel>-->
-            <!--        </mat-accordion>-->
         </mat-card>
     </mat-card>
     <div class="page-footer">

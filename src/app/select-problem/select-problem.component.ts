@@ -94,38 +94,31 @@ export class SelectProblemComponent implements OnInit {
 
             Promise.all(objectDefaultProgressTypePromises).then(problems => {
                 problems.forEach((problem => {
-                        // const hasSolvedSolutionTypes = {};
-                        // problem['solutionTypes'].forEach((type) => {
-                        //     hasSolvedSolutionTypes[type] = false;
-                        // });
-                        // const defaultProgressObject = {
-                        //     hasRevealedSolution: false,
-                        //     hasSolvedSolutionTypes
-                        // };
-                        // component.progressData[problem['id']] = component.progressService.getProblemProgressObjectSetIfNotExists(
-                        //     problem['id'], defaultProgressObject
-                        // );
                         const progressData = component.progressService.getProblemProgressObjectNullIfNotExists(problem['id']);
                         if (progressData) {
                             const progressMap = progressData.hasSolvedSolutionTypes;
                             const progressArray = [];
-                            Object.keys(progressMap).forEach((type) => {
-                                progressArray.push({
-                                    type: type.replace(/([A-Z])/g, ' $1')
-                                        .replace(/^./, function (str) {
-                                            return str.toUpperCase();
-                                        }),
-                                    completed: progressMap[type]
-                                });
-                            });
-                            progressArray.sort((o1, o2) => {
-                                if (/detailed/i.test(o1.type) === /detailed/i.test(o2.type)) {
-                                    return /top *Down/i.test(o1.type) ? 1 : -1;
-                                } else {
-                                    return /detailed/i.test(o1.type) ? 1 : -1;
-                                }
-                            });
-                            component.progressData[problem['id']] = progressArray;
+                            let basicSolved = progressMap['bottomUp'] || progressMap['topDown'];
+                            if (progressMap.hasOwnProperty('detailedBottomUp') || progressMap.hasOwnProperty('detailedTopDown')) {
+                                const detailedSolved = progressMap['detailedBottomUp'] || progressMap['detailedTopDown'];
+                                const detailedProgressObject = {
+                                    'type': detailedSolved ? 'Full Solution Found' : 'Full Solution Not Yet Found',
+                                    'completed': detailedSolved
+                                };
+                                basicSolved = basicSolved || detailedSolved;
+                                progressArray.push(detailedProgressObject);
+                            }
+                            const basicProgressObject = {
+                                'type': basicSolved ? 'Solution Found' : 'Solution Not Yet Found',
+                                'completed': basicSolved
+                            };
+                            progressArray.unshift(basicProgressObject);
+                            console.log(progressData);
+                            component.progressData[problem['id']] =
+                                {
+                                    hasRevealedSolution: progressData.hasRevealedSolution,
+                                    progressArray
+                                };
                         }
                     })
                 );
