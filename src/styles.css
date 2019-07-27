@@ -1,5 +1,6 @@
 body {
     background-color: #EEEEEE;
+    overflow: visible;
 }
 
 mat-card {

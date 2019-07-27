@@ -98,17 +98,21 @@ input {
 }
 
 .section-title {
-    font-weight: bolder;
+    font-weight: bold;
 }
 
 .problem-link {
     cursor: pointer;
-    font-weight: 600;
+    font-weight: 500;
     padding: 10px;
 }
 
 .problem-link:hover {
     background-color: rgba(0.7, 0.7, 0.7, 0.1);
+}
+
+.custom-problem-card {
+    margin: 10px;
 }
 
 .progress-container {
