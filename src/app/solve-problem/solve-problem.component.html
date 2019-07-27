@@ -1,7 +1,7 @@
 <div class="row no-gutter loading-spinner-container" [ngClass]="{'dark-theme': isDarkTheme}" [hidden]="problemDefined">
     <mat-spinner class="page-loading-spinner"></mat-spinner>
 </div>
-<div class="row no-gutter" [ngClass]="{'dark-theme': isDarkTheme}" [hidden]="!problemDefined">
+<div class="row no-gutter page-container" [ngClass]="{'dark-theme': isDarkTheme}" [hidden]="!problemDefined">
     <div class="col-xs-12" *ngIf="problemDefined">
         <mat-card class="main-header-card">
             <p class="main-header">
