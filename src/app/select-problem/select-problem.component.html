@@ -66,15 +66,19 @@
                             </div>
                             <div *ngIf="progressService.getHasLocalStorage()" class="progress-container">
                                 <small *ngIf="progressData[problem.id]">
-                                    <div *ngFor="let item of progressData[problem.id]"[ngClass]="{
+                                    <div *ngFor="let item of progressData[problem.id]">
+                                        <span
+                                            [ngClass]="{
                                             'text-green' : item.completed,
                                             'text-yellow' : !item.completed
-                                        }">
-                                        <span class="glyphicon" [ngClass]="{
+                                        }" matTooltip="{{item.completed ? 'Completed' : 'Not Yet Completed'}}"
+                                            matTooltipPosition="right">
+                                            <span class="glyphicon" [ngClass]="{
                                             'glyphicon-ok' : item.completed,
                                             'glyphicon-option-horizontal' : !item.completed
                                         }"></span>
-                                        <span>&nbsp;&nbsp;{{item.type}}</span>
+                                            <span>&nbsp;&nbsp;{{item.type}}</span>
+                                        </span>
                                     </div>
                                 </small>
                                 <div *ngIf="!progressData[problem.id]">
