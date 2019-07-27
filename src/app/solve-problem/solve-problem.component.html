@@ -21,7 +21,7 @@
             <div style="clear: both"></div>
         </mat-card>
     </div>
-    <div id="input-and-table-container" class="col-xs-12 col-md-6" *ngIf="problemDefined">
+    <div id="input-container" class="col-xs-12 col-md-12" *ngIf="problemDefined">
         <div class="problem-definition-panel">
             <mat-expansion-panel [expanded]="true">
                 <mat-expansion-panel-header>
@@ -83,7 +83,9 @@
                 </div>
             </mat-expansion-panel>
         </div>
-        <mat-card class="test-cases-card">
+    </div>
+    <div id="table-container" class="col-xs-12 col-md-6" *ngIf="problemDefined">
+        <mat-card class="half-page-card">
             <mat-card-content>
                 <p class="section-header">Test Cases</p>
                 <mat-tab-group id="test-case-group" [(selectedIndex)]="testCaseSelectedTab">
@@ -210,7 +212,7 @@
                                             {{((customInputTestResult['result'] === null ||
                                             customInputTestResult['result'] === undefined)
                                             && approach === approaches[1]) ? ' - Make sure you\'re using getTableEntry'
-                                            + ' when accessing table entries': ''}}
+                                            + ' when accessing table entries' : ''}}
                                         </b>
                                     </div>
                                     <div *ngIf="expectDetailedSolution">
@@ -681,7 +683,7 @@
                                             {{((testResults[testCaseIndex]['result'] === null ||
                                             testResults[testCaseIndex]['result'] === undefined)
                                             && approach === approaches[1]) ? ' - Make sure you\'re using getTableEntry'
-                                            + ' when accessing table entries': ''}}
+                                            + ' when accessing table entries' : ''}}
                                         </b>
                                     </div>
                                     <div *ngIf="expectDetailedSolution">
@@ -1064,7 +1066,7 @@
         </mat-card>
     </div>
     <div id="editor-container" class="col-xs-12 col-md-6">
-        <mat-card>
+        <mat-card class="half-page-card">
             <mat-card-header>
             </mat-card-header>
             <b class="section-header">Solution Table Shape</b>
@@ -1124,7 +1126,7 @@
                 <!--<mat-card id="code-card">-->
                 <!--<mat-card-content>-->
                 <p class="code" *ngIf="problemDefined">function {{camelCase(problem['name']) + '(' +
-                    (objectKeys(problem['input'])).join(', ') + ') {'}}
+                (objectKeys(problem['input'])).join(', ') + ') {'}}
                 </p>
                 <p class="code" *ngIf="solution.tableShape === '1d'">&nbsp;&nbsp;T = A table of size
                     {{solution.tableDimension1 || '?'}}</p>
@@ -1316,18 +1318,19 @@
                 <div *ngIf="!testsCurrentlyRunning && numRunTestCases > 0">
                     <br>
                     <p class="section-header">Test Results</p>
-                    <span><b>Ran {{numRunTestCases}} test case{{numRunTestCases === 1? '' : 's'}}</b> (Did not run
+                    <span><b>Ran {{numRunTestCases}} test case{{numRunTestCases === 1 ? '' : 's'}}</b> (Did not run
                         custom input)</span>
                     <br>
                     <b [ngClass]="{
                         'text-green': numCorrectFinalAnswerTestCases === numRunTestCases,
                         'text-yellow': numCorrectFinalAnswerTestCases < numRunTestCases
-                    }"><span *ngIf="numCorrectFinalAnswerTestCases === numRunTestCases">&#x2714; </span>{{numCorrectFinalAnswerTestCases}}
-                        correct final result{{numCorrectFinalAnswerTestCases === 1? '' : 's'}}</b>
+                    }"><span
+                        *ngIf="numCorrectFinalAnswerTestCases === numRunTestCases">&#x2714; </span>{{numCorrectFinalAnswerTestCases}}
+                        correct final result{{numCorrectFinalAnswerTestCases === 1 ? '' : 's'}}</b>
                     <br>
                     <b class="text-red" *ngIf="numIncorrectFinalAnswerTestCases > 0">
                         &#x2718; {{numIncorrectFinalAnswerTestCases}} incorrect final
-                        result{{numIncorrectFinalAnswerTestCases === 1? '' : 's'}}
+                        result{{numIncorrectFinalAnswerTestCases === 1 ? '' : 's'}}
                     </b>
                     <br *ngIf="numIncorrectFinalAnswerTestCases > 0">
                     <div *ngIf="expectDetailedSolution">
@@ -1335,10 +1338,10 @@
                         'text-green': numCorrectSolutions === numRunTestCases,
                         'text-yellow': numCorrectSolutions < numRunTestCases
                     }"><span *ngIf="numCorrectSolutions === numRunTestCases">&#x2714; </span>{{numCorrectSolutions}}
-                            matching solution{{numCorrectSolutions === 1? '' : 's'}}</b>
+                            matching solution{{numCorrectSolutions === 1 ? '' : 's'}}</b>
                         <br>
                         <b class="text-yellow" *ngIf="numIncorrectSolutions > 0">
-                            {{numIncorrectSolutions}} non matching solution{{numIncorrectSolutions === 1? '' :
+                            {{numIncorrectSolutions}} non matching solution{{numIncorrectSolutions === 1 ? '' :
                             's'}}
                         </b>
                         <br *ngIf="numIncorrectSolutions > 0">
@@ -1349,33 +1352,35 @@
                         </span>
                     </div>
                     <b class="text-red" *ngIf="numCrashedTestCases > 0">
-                        &#x2718; {{numCrashedTestCases}} test{{numCrashedTestCases === 1? '' : 's'}} crashed
+                        &#x2718; {{numCrashedTestCases}} test{{numCrashedTestCases === 1 ? '' : 's'}} crashed
                     </b>
                     <br *ngIf="numCrashedTestCases > 0">
                     <b class="text-orange" *ngIf="numTimedOutTestCases > 0">
                         <span class="glyphicon glyphicon-time"></span>
-                        <span class="test-result-label">{{numTimedOutTestCases}} test{{numTimedOutTestCases === 1? '' :
+                        <span class="test-result-label">{{numTimedOutTestCases}} test{{numTimedOutTestCases === 1 ? '' :
                             's'}} timed out</span>
                     </b>
                     <br *ngIf="numTimedOutTestCases > 0">
                     <b [ngClass]="{
                         'text-green': numMatchingTableDimensions === numRunTestCases,
                         'text-yellow': numMatchingTableDimensions < numRunTestCases
-                    }"><span *ngIf="numMatchingTableDimensions === numRunTestCases">&#x2714; </span>{{numMatchingTableDimensions}}
-                        table{{numMatchingTableDimensions === 1? '' : 's'}} with matching dimensions</b>
+                    }"><span
+                        *ngIf="numMatchingTableDimensions === numRunTestCases">&#x2714; </span>{{numMatchingTableDimensions}}
+                        table{{numMatchingTableDimensions === 1 ? '' : 's'}} with matching dimensions</b>
                     <br>
                     <b [ngClass]="{
                         'text-green': numExpectedTables === numRunTestCases,
                         'text-yellow': numExpectedTables < numRunTestCases
                     }"><span *ngIf="numExpectedTables === numRunTestCases">&#x2714; </span>{{numExpectedTables}}
-                        table{{numExpectedTables === 1? '' : 's'}} with matching entries</b>
+                        table{{numExpectedTables === 1 ? '' : 's'}} with matching entries</b>
                     <br>
                     <div *ngIf="expectDetailedSolution && providedSolution.useAuxiliaryTableWithDetailedSolution">
                         <b [ngClass]="{
                             'text-green': numExpectedAuxiliaryTables === numRunTestCases,
                             'text-yellow': numExpectedAuxiliaryTables < numRunTestCases
-                        }"><span *ngIf="numExpectedAuxiliaryTables === numRunTestCases">&#x2714; </span>{{numExpectedAuxiliaryTables}}
-                            secondary table{{numExpectedAuxiliaryTables === 1? '' : 's'}} with matching entries</b>
+                        }"><span
+                            *ngIf="numExpectedAuxiliaryTables === numRunTestCases">&#x2714; </span>{{numExpectedAuxiliaryTables}}
+                            secondary table{{numExpectedAuxiliaryTables === 1 ? '' : 's'}} with matching entries</b>
                         <br>
                     </div>
                     <span>
