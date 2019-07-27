@@ -113,7 +113,6 @@ export class SelectProblemComponent implements OnInit {
                                 'completed': basicSolved
                             };
                             progressArray.unshift(basicProgressObject);
-                            console.log(progressData);
                             component.progressData[problem['id']] =
                                 {
                                     hasRevealedSolution: progressData.hasRevealedSolution,
