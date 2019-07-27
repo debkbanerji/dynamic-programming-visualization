@@ -99,6 +99,9 @@ input {
 
 .section-title {
     font-weight: bold;
+    margin-left: 5px;
+    margin-top: 10px;
+    margin-bottom: 5px;
 }
 
 .problem-link {
@@ -113,6 +116,10 @@ input {
 
 .custom-problem-card {
     margin: 10px;
+}
+
+.custom-problem-container {
+    margin-left: 5px;
 }
 
 .progress-container {

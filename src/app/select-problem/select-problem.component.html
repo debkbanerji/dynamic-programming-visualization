@@ -39,16 +39,16 @@
         </div>
     </mat-card>
     <mat-card>
-        <p class="problem-count-summary">
-            <span>
-                {{totalProblems}} total problems across {{sections.length}} sections
-            </span>
-            <br *ngIf="problemFileVersion">
-            <small class="problem-file-version" *ngIf="problemFileVersion">
-                Problem file version: {{problemFileVersion}}
-            </small>
-        </p>
-        <mat-card *ngFor="let section of sections">
+<!--        <p class="problem-count-summary">-->
+<!--            <span>-->
+<!--                {{totalProblems}} total problems across {{sections.length}} sections-->
+<!--            </span>-->
+<!--            <br *ngIf="problemFileVersion">-->
+<!--            <small class="problem-file-version" *ngIf="problemFileVersion">-->
+<!--                Problem file version: {{problemFileVersion}}-->
+<!--            </small>-->
+<!--        </p>-->
+        <div *ngFor="let section of sections">
             <h4 class="section-title" [innerHTML]="section.name"></h4>
             <div class="row">
                 <div *ngFor="let problem of section.problems" class="col-xs-12 col-sm-6 col-md-4">
@@ -61,7 +61,7 @@
                                 <div>
                                     <div *ngFor="let item of progressData[problem.id]['progressArray']">
                                         <small *ngIf="!progressData[problem.id]['hasRevealedSolution']"
-                                            [ngClass]="{
+                                               [ngClass]="{
                                             'text-green' : item.completed,
                                             'text-yellow' : !item.completed
                                         }">
@@ -85,16 +85,19 @@
                     </mat-card>
                 </div>
             </div>
-        </mat-card>
-        <mat-card>
+            <hr>
+        </div>
+        <div>
             <h4 class="section-title">Custom Problem</h4>
-            <p>Here you can solve a problem from a file on your computer</p>
-            <p>Be careful when choosing a file, as depending on where it came from, it may contain
-                mistakes or try to do sketchy things</p>
-            <input id="custom-problem-file-select" [(ngModel)]="customProblemFile" type="file"
-                   (change)="solveCustomProblem()">
-            <span id="custom-problem-error-text">{{customProblemErrorText}}</span>
-        </mat-card>
+            <div class="custom-problem-container">
+                <p>Here you can solve a problem from a file on your computer</p>
+                <p>Be careful when choosing a file, as depending on where it came from, it may contain
+                    mistakes or try to do sketchy things</p>
+                <input id="custom-problem-file-select" [(ngModel)]="customProblemFile" type="file"
+                       (change)="solveCustomProblem()">
+                <span id="custom-problem-error-text">{{customProblemErrorText}}</span>
+            </div>
+        </div>
     </mat-card>
     <div class="page-footer">
         <small>
