@@ -927,7 +927,7 @@ export class SolveProblemComponent implements OnInit {
         const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
             data: {
                 'title': 'Are you sure?',
-                'info': 'Showing the solution will overwrite the code you wrote',
+                'info': 'Showing the solution will overwrite the code you wrote, and mark the solution as revealed on the home page',
                 'cancelText': 'Go Back',
                 'acceptText': 'Show Solution',
                 'acceptColor': 'warn',
