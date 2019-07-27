@@ -58,9 +58,9 @@
                         </div>
                         <div *ngIf="progressService.getHasLocalStorage()" class="progress-container">
                             <div *ngIf="progressData[problem.id]">
-                                <div *ngIf="!progressData[problem.id]['hasRevealedSolution']">
+                                <div>
                                     <div *ngFor="let item of progressData[problem.id]['progressArray']">
-                                        <small
+                                        <small *ngIf="!progressData[problem.id]['hasRevealedSolution']"
                                             [ngClass]="{
                                             'text-green' : item.completed,
                                             'text-yellow' : !item.completed
@@ -71,13 +71,11 @@
                                         }"></span>
                                             <span>&nbsp;&nbsp;{{item.type}}</span>
                                         </small>
+                                        <small *ngIf="progressData[problem.id]['hasRevealedSolution']">
+                                            <del class="text-grey">{{item.type}}</del>
+                                            <span class="text-yellow">&nbsp;Solution Revealed</span>
+                                        </small>
                                     </div>
-                                </div>
-                                <div *ngIf="progressData[problem.id]['hasRevealedSolution']">
-                                    <small class="text-yellow">
-                                        <span class="glyphicon glyphicon-eye-open"></span>
-                                        &nbsp;&nbsp;Solution Revealed
-                                    </small>
                                 </div>
                             </div>
                             <div *ngIf="!progressData[problem.id]">

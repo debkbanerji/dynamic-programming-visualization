@@ -100,7 +100,7 @@ export class SelectProblemComponent implements OnInit {
                             const progressArray = [];
                             let basicSolved = progressMap['bottomUp'] || progressMap['topDown'];
                             if (progressMap.hasOwnProperty('detailedBottomUp') || progressMap.hasOwnProperty('detailedTopDown')) {
-                                const detailedSolved = progressMap['detailedBottomUp'] || progressMap['detailedTopDown'];
+                                const detailedSolved = progressMap['detailedBottomUp'] || progressMap['detailedTopDown'] && !progressData.hasRevealedSolution;
                                 const detailedProgressObject = {
                                     'type': detailedSolved ? 'Full Solution Found' : 'Full Solution Not Yet Found',
                                     'completed': detailedSolved
@@ -108,9 +108,10 @@ export class SelectProblemComponent implements OnInit {
                                 basicSolved = basicSolved || detailedSolved;
                                 progressArray.push(detailedProgressObject);
                             }
+                            basicSolved = basicSolved && !progressData.hasRevealedSolution;
                             const basicProgressObject = {
                                 'type': basicSolved ? 'Solution Found' : 'Solution Not Yet Found',
-                                'completed': basicSolved
+                                'completed': basicSolved && !progressData.hasRevealedSolution
                             };
                             progressArray.unshift(basicProgressObject);
                             component.progressData[problem['id']] =
