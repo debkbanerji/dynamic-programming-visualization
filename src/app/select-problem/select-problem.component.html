@@ -39,53 +39,65 @@
         </div>
     </mat-card>
     <mat-card>
-        <p class="problem-count-summary">
-            <span>
-                {{totalProblems}} total problems across {{sections.length}} sections
-            </span>
-            <br *ngIf="problemFileVersion">
-            <small class="problem-file-version" *ngIf="problemFileVersion">
-                Problem file version: {{problemFileVersion}}
-            </small>
-        </p>
-        <mat-accordion>
-            <mat-expansion-panel *ngFor="let section of sections"
-                                 (opened)="section.panelOpenState = true"
-                                 (closed)="section.panelOpenState = false"
-                                 [ngClass]="{
-                                                'expanded-panel':section.panelOpenState
-                                            }">
-                <mat-expansion-panel-header>
-                    <h4 class="section-title" [innerHTML]="section.name"></h4>
-                </mat-expansion-panel-header>
-                <div class="row">
-                    <div *ngFor="let problem of section.problems" class="col-xs-12 col-sm-6 col-md-4">
-                        <mat-card class="problem-link"
-                                  (click)="openProblem(problem.id)">
-                            <span>
-                                <span [innerHTML]="problem.name">
-                                </span>
-                            </span>
-                        </mat-card>
-                    </div>
+<!--        <p class="problem-count-summary">-->
+<!--            <span>-->
+<!--                {{totalProblems}} total problems across {{sections.length}} sections-->
+<!--            </span>-->
+<!--            <br *ngIf="problemFileVersion">-->
+<!--            <small class="problem-file-version" *ngIf="problemFileVersion">-->
+<!--                Problem file version: {{problemFileVersion}}-->
+<!--            </small>-->
+<!--        </p>-->
+        <div *ngFor="let section of sections">
+            <h4 class="section-title" [innerHTML]="section.name"></h4>
+            <div class="row">
+                <div *ngFor="let problem of section.problems" class="col-xs-12 col-sm-6 col-md-4">
+                    <mat-card class="problem-link"
+                              (click)="openProblem(problem.id)">
+                        <div [innerHTML]="problem.name">
+                        </div>
+                        <div *ngIf="progressService.getHasLocalStorage()" class="progress-container">
+                            <div *ngIf="progressData[problem.id]">
+                                <div>
+                                    <div *ngFor="let item of progressData[problem.id]['progressArray']">
+                                        <small *ngIf="!progressData[problem.id]['hasRevealedSolution']"
+                                               [ngClass]="{
+                                            'text-green' : item.completed,
+                                            'text-yellow' : !item.completed
+                                        }">
+                                            <span class="glyphicon" [ngClass]="{
+                                            'glyphicon-ok' : item.completed,
+                                            'glyphicon-option-horizontal' : !item.completed
+                                        }"></span>
+                                            <span>&nbsp;&nbsp;{{item.type}}</span>
+                                        </small>
+                                        <small *ngIf="progressData[problem.id]['hasRevealedSolution']">
+                                            <del class="text-grey">{{item.type}}</del>
+                                            <span class="text-yellow">&nbsp;Solution Revealed</span>
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="!progressData[problem.id]">
+                                <small class="text-yellow">Not yet attempted</small>
+                            </div>
+                        </div>
+                    </mat-card>
                 </div>
-            </mat-expansion-panel>
-            <mat-expansion-panel (opened)="customPanelOpenState = true"
-                                 (closed)="customPanelOpenState = false"
-                                 [ngClass]="{
-                                                'expanded-panel':customPanelOpenState
-                                            }">
-                <mat-expansion-panel-header>
-                    <h4 class="section-title">Custom Problem</h4>
-                </mat-expansion-panel-header>
+            </div>
+            <hr>
+        </div>
+        <div>
+            <h4 class="section-title">Custom Problem</h4>
+            <div class="custom-problem-container">
                 <p>Here you can solve a problem from a file on your computer</p>
-                <p class="text-red">Be careful when choosing a file, as depending on where it came from, it may contain
+                <p>Be careful when choosing a file, as depending on where it came from, it may contain
                     mistakes or try to do sketchy things</p>
                 <input id="custom-problem-file-select" [(ngModel)]="customProblemFile" type="file"
                        (change)="solveCustomProblem()">
                 <span id="custom-problem-error-text">{{customProblemErrorText}}</span>
-            </mat-expansion-panel>
-        </mat-accordion>
+            </div>
+        </div>
     </mat-card>
     <div class="page-footer">
         <small>

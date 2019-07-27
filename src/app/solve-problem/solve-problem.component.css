@@ -9,6 +9,11 @@
     text-align: center;
 }
 
+.page-container {
+    min-height: 100vh;
+    /*width: 100vw;*/
+}
+
 .page-loading-spinner {
     text-align: center;
     margin: 25vh auto auto;
@@ -109,7 +114,7 @@
     padding-bottom: 5px;
 }
 
-.test-cases-card {
+.half-page-card {
     margin-top: 0;
 }
 

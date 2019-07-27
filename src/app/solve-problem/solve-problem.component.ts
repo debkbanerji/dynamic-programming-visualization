@@ -7,6 +7,7 @@ import {Title} from '@angular/platform-browser';
 import {CustomProblemService} from '../providers/custom-problem.service';
 import {AnimationDataService} from '../providers/animation-data.service';
 import {AnimationDialogComponent} from '../dialogs/animation-dialog/animation-dialog.component';
+import {ProgressService} from '../providers/progress.service';
 
 const encodedTableName = '___TABLE___';
 const auxiliaryTableName = '___AUX_TABLE___';
@@ -117,13 +118,17 @@ export class SolveProblemComponent implements OnInit {
 
     initialShowedSolutionFlag = false;
 
+    recordProgress: boolean = false;
+    defaultProgressObject: any = {};
+
     constructor(private route: ActivatedRoute,
                 private router: Router,
                 private http: HttpClient,
                 private titleService: Title,
                 public dialog: MatDialog,
                 private customProblemService: CustomProblemService,
-                private animationDataService: AnimationDataService
+                private animationDataService: AnimationDataService,
+                private progressService: ProgressService
     ) {
     }
 
@@ -136,7 +141,7 @@ export class SolveProblemComponent implements OnInit {
                     component.setProblem(component, component.customProblemService.popCustomProblem());
                     component.makeInputsResizable(component);
                 } else {
-                    component.router.navigate(['select-problem'], {queryParams: {'dark-mode': this.isDarkTheme}});
+                    component.router.navigate(['select-problem']);
                 }
             } else {
                 component.problemFileName = problemFileName;
@@ -144,9 +149,9 @@ export class SolveProblemComponent implements OnInit {
                 component.makeInputsResizable(component);
             }
         });
-        component.route.queryParams.subscribe(params => {
-            component.isDarkTheme = (params['dark-mode'] == 'true');
-        });
+        if (component.progressService.getHasLocalStorage()) {
+            component.isDarkTheme = component.progressService.getDarkModeStatus();
+        }
         component.initializeEditors();
     }
 
@@ -169,7 +174,10 @@ export class SolveProblemComponent implements OnInit {
     }
 
     onDarkModeChange() {
-        this.router.navigate(['problem/' + this.problemFileName], {queryParams: {'dark-mode': this.isDarkTheme}});
+        const component = this;
+        if (component.progressService.getHasLocalStorage()) {
+            component.progressService.setDarkModeStatus(component.isDarkTheme);
+        }
     }
 
     populateCodeEditors(): void {
@@ -222,10 +230,35 @@ export class SolveProblemComponent implements OnInit {
 
     loadProblem(problemFileName: string, component: SolveProblemComponent): void {
         component.http.get('../assets/problems/' + problemFileName + '.dp.json').subscribe(data => {
-            this.setProblem(component, data);
+            component.recordProgress = component.progressService.getHasLocalStorage();
+            component.setProblem(component, data);
+            component.calculateDefaultProgressObject();
         }, _ => {
-            component.router.navigate(['select-problem'], {queryParams: {'dark-mode': this.isDarkTheme}});
+            component.router.navigate(['select-problem']);
         });
+    }
+
+    private calculateDefaultProgressObject() {
+        const component = this;
+        const data = component.problem;
+        const solutionTypes = ['bottomUp']; // Bottom up solution should always exist
+        if (data['provided-solution'].returnValueTopDownCode) {
+            solutionTypes.push('topDown');
+        }
+        if (data['output'].solution) {
+            solutionTypes.push('detailedBottomUp');
+            if (data['provided-solution'].returnValueTopDownCode) {
+                solutionTypes.push('detailedTopDown');
+            }
+        }
+        const hasSolvedSolutionTypes = {};
+        solutionTypes.forEach((type) => {
+            hasSolvedSolutionTypes[type] = false;
+        });
+        component.defaultProgressObject = {
+            hasRevealedSolution: false,
+            hasSolvedSolutionTypes
+        };
     }
 
     private setProblem(component: SolveProblemComponent, data) {
@@ -520,9 +553,9 @@ export class SolveProblemComponent implements OnInit {
     }
 
     runTestsWithUserSolution(component: SolveProblemComponent, testCaseIndex: number, code: string) {
+        const useDetailedSolution = component.expectDetailedSolution;
         if (testCaseIndex < component.testCases.length) {
             let topDown = component.approach === component.approaches[1];
-            let useDetailedSolution = component.expectDetailedSolution;
             let useAuxiliaryTable = useDetailedSolution && component.providedSolution.useAuxiliaryTableWithDetailedSolution;
             component.runTest(component.testCases[testCaseIndex]['input'], code, component, topDown, useDetailedSolution, useAuxiliaryTable, function (testResult) {
                 let testCase = component.testCases[testCaseIndex];
@@ -565,8 +598,30 @@ export class SolveProblemComponent implements OnInit {
                 }
                 component.runTestsWithUserSolution(component, testCaseIndex + 1, code);
             });
-        }
-        else {
+        } else {
+            if (component.recordProgress
+                && component.numCorrectFinalAnswerTestCases === component.numRunTestCases
+                && (!useDetailedSolution || component.numCorrectSolutions === component.numRunTestCases)) {
+                let solutionType: string;
+                if (!useDetailedSolution) {
+                    if (component.approach === component.approaches[0]) {
+                        solutionType = 'bottomUp';
+                    } else {
+                        solutionType = 'topDown';
+                    }
+                } else {
+                    if (component.approach === component.approaches[0]) {
+                        solutionType = 'detailedBottomUp';
+                    } else {
+                        solutionType = 'detailedTopDown';
+                    }
+                }
+                component.progressService.setProblemProgressObjectAsCompletedSetIfNotExists(
+                    component.problemFileName,
+                    solutionType,
+                    component.defaultProgressObject
+                );
+            }
             setTimeout(() => {
                 component.testsCurrentlyRunning = false;
             }, 250);
@@ -875,7 +930,7 @@ export class SolveProblemComponent implements OnInit {
         const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
             data: {
                 'title': 'Are you sure?',
-                'info': 'Showing the solution will overwrite the code you wrote',
+                'info': 'Showing the solution will overwrite the code you wrote, and mark the solution as revealed on the home page',
                 'cancelText': 'Go Back',
                 'acceptText': 'Show Solution',
                 'acceptColor': 'warn',
@@ -894,6 +949,9 @@ export class SolveProblemComponent implements OnInit {
 
     private revealSolution() {
         const component = this;
+        if (component.recordProgress) {
+            component.progressService.markProblemAsSolutionRevealedSetIfNotExists(component.problemFileName, component.defaultProgressObject);
+        }
         component.revealedProvidedSolution = true;
         // component.solution = Object.assign({}, component.providedSolution);
         // deep copy just in case solution format is changed in the future
@@ -1188,7 +1246,7 @@ export class SolveProblemComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                component.router.navigate(['select-problem'], {queryParams: {'dark-mode': this.isDarkTheme}});
+                component.router.navigate(['select-problem']);
             }
         });
     }

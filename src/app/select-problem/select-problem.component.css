@@ -98,7 +98,10 @@ input {
 }
 
 .section-title {
-    font-weight: bolder;
+    font-weight: bold;
+    margin-left: 5px;
+    margin-top: 10px;
+    margin-bottom: 5px;
 }
 
 .problem-link {
@@ -109,6 +112,18 @@ input {
 
 .problem-link:hover {
     background-color: rgba(0.7, 0.7, 0.7, 0.1);
+}
+
+.custom-problem-card {
+    margin: 10px;
+}
+
+.custom-problem-container {
+    margin-left: 5px;
+}
+
+.progress-container {
+    font-weight: normal;
 }
 
 .page-footer {
