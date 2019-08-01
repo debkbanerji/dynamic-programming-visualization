@@ -114,6 +114,10 @@ input {
     background-color: rgba(0.7, 0.7, 0.7, 0.1);
 }
 
+.section-separator {
+    border-top-color: gray;
+}
+
 .custom-problem-card {
     margin: 10px;
 }
