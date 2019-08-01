@@ -1,6 +1,6 @@
 {
     "name": "Levenshtein Distance",
-    "problem-statement": "TODO: write",
+    "problem-statement": "You are given as input two arrays of characters, <b>arr1[0], . . . , arr1[n1 - 1]</b> and <b>arr2[0], . . . , arr2[n2 - 1]</b>, which represent strings. The goal of this problem is to find the Levenshtein distance between the two input strings, which is defined as the number of edits it takes to transform one string into another. Here, an edit is defined as either an insertion of a character, deletion of a character, or substitution of a character with another character.",
     "input": {
         "arr1": "First Input Array",
         "arr2": "Second Input Array",
@@ -31,8 +31,8 @@
         "nextEntryIndex2": "j",
         "setNextEntryTopDownCode": "if (i === 0) {\n    entry = j;\n} else if (j === 0) {\n    entry = i;\n} else if(arr1[i - 1] === arr2[j - 1]) {\n    entry = getTableEntry(i - 1, j - 1);\n} else {\n    entry = 1 + Math.min(\n        getTableEntry(i, j - 1),\n        getTableEntry(i - 1, j),\n        getTableEntry(i - 1, j - 1)\n    );\n}",
         "returnValueTopDownCode": "result = getTableEntry(n1, n2);",
-        "tableEntryDefinition": "TODO: Write",
-        "solutionNotes": "TODO: Write"
+        "tableEntryDefinition": "<b>T[ i ][ j ]</b> Is the Levenshtein Distance between <b>arr1[0], . . . , arr1[i - 1]</b> and <b>arr2[0], . . . , arr2[j - 1]</b>.",
+        "solutionNotes": "This solution runs in <b>O(n1 * n2)</b> time. When populating <b>T[ i ][ j ]</b>, we consider the three possible edit operations that could be used to reduce the problem to that involving shorter prefixes."
     },
     "test-cases": [
         {
