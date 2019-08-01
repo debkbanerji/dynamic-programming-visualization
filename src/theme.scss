@@ -61,3 +61,7 @@ app-animation-dialog {
 .text-green {
     color: #28A745;
 }
+
+.mat-progress-bar .mat-progress-bar-fill {
+    transition-duration: 50ms !important;
+}
