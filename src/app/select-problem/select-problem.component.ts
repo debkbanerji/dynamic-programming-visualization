@@ -101,7 +101,7 @@ export class SelectProblemComponent implements OnInit {
                             if (progressMap.hasOwnProperty('detailedBottomUp') || progressMap.hasOwnProperty('detailedTopDown')) {
                                 const detailedSolved = progressMap['detailedBottomUp'] || progressMap['detailedTopDown'] && !progressData.hasRevealedSolution;
                                 const detailedProgressObject = {
-                                    'type': detailedSolved ? 'Full Solution Found' : 'Full Solution Not Yet Found',
+                                    'type': detailedSolved ? 'Solution with Reconstruction Found' : 'Solution with Reconstruction Not Yet Found',
                                     'completed': detailedSolved
                                 };
                                 basicSolved = basicSolved || detailedSolved;
