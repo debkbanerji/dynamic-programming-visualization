@@ -1,8 +1,8 @@
 {
-    "version":"2019.4.11-master",
+    "version":"2019.7.27-master",
     "sections": [
         {
-            "name": "Subsequences",
+            "name": "Strings and Subsequences",
             "problems": [
                 {
                     "name": "Longest Increasing Subsequence",
@@ -11,6 +11,10 @@
                 {
                     "name": "Longest Common Subsequence",
                     "id": "longest-common-subsequence"
+                },
+                {
+                    "name": "Levenshtein Distance",
+                    "id": "levenshtein-distance"
                 }
             ]
         },
