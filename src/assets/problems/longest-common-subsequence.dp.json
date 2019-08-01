@@ -1,6 +1,6 @@
 {
     "name": "Longest Common Subsequence",
-    "problem-statement": "For an array of the form <b>arr[0], . . . , arr[n - 1]</b>, a subsequence is any subset of <b>arr[0], . . . , arr[n - 1]</b> taken in order, of the form <b>arr[i0], arr[i1], ... , arr[ik]</b> where <b>0 <= i0 < i1 < · · · < ik < n</b>. The goal of the problem is to find the longest common subsequence between two input arrays, <b>arr1</b> and <b>arr1</b>.",
+    "problem-statement": "For an array of the form <b>arr[0], . . . , arr[n - 1]</b>, a subsequence is any subset of <b>arr[0], . . . , arr[n - 1]</b> taken in order, of the form <b>arr[i<sub>0</sub>], arr[i<sub>1</sub>], ... , arr[i<sub>k</sub>]</b> where <b>0 <= i<sub>0</sub> < i<sub></sub>1 < · · · < i<sub>k</sub> < n</b>. The goal of the problem is to find the longest common subsequence between two input arrays, <b>arr1</b> and <b>arr2</b>.",
     "input": {
         "arr1": "First Input Array",
         "arr2": "Second Input Array",
