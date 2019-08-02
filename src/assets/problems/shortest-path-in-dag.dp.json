@@ -6,7 +6,8 @@
         "adj": "The adjacency matrix"
     },
     "output": {
-        "result": "The length of the shortest path from vertex <b>0</b> to vertex <b>n - 1</b>, or Infinity if no path exists"
+        "result": "The length of the shortest path from vertex <b>0</b> to vertex <b>n - 1</b>, or Infinity if no path exists",
+        "solution": "An array of the vertices along this path, including the start and end vertices, or an empty array if no path exists"
     },
     "provided-solution": {
         "tableShape": "1d",
@@ -22,8 +23,9 @@
         "returnValueCode": "result = T(n - 1);",
         "nextEntryIndex1": "i",
         "nextEntryIndex2": "j",
-        "useAuxiliaryTableWithDetailedSolution": false,
-
+        "useAuxiliaryTableWithDetailedSolution": true,
+        "detailedSetNextEntryCode": "let secondaryEntry = null;\nif (i === 0) {\n    entry = 0;\n} else {\n    // For every vertex, j before i\n    for (let j = 0; j < i; j = j + 1) {\n        // If there is an edge from j to i\n        if (adj[j][i] !== null) {\n            if (T(j) + adj[j][i] < entry) {\n                entry = T(j) + adj[j][i];\n                secondaryEntry = j;\n            }\n        }\n    }\n}",
+        "detailedReturnValueCode": "let solution = [];\nif (T(n - 1) !== Infinity) {\n    let i = n - 1;\n    while (i !== null) {\n        // Append to the front of solution\n        solution.unshift(i);\n        i = T2(i);\n    }\n}\nlet result = T(n - 1);",
         "tableEntryDefinition": "TODO: Write",
         "solutionNotes": "TODO: Write"
     },
