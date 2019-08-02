@@ -1,0 +1,47 @@
+{
+    "name": "Shortest Path in DAG",
+    "problem-statement": "You are given as input an <b>n &times; n</b> adjacency matrix, <b>adj</b> that represents a DAG (directed acyclic graph) with vertices labelled <b>0 ... n-1</b>. The vertices are labelled in topological order, and <b>adj[ i ][ j ]</b> contains the weight of the edge from vertex <b>i</b> to vertex <b>j</b>, or null if no such edge exists. The goal of this problem is to find the shortest path from vertex <b>0</b> to vertex <b>n - 1</b>.",
+    "input": {
+        "n": "Number of vertices",
+        "adj": "The adjacency matrix"
+    },
+    "output": {
+        "result": "The length of the shortest path from vertex <b>0</b> to vertex <b>n - 1</b>, or Infinity if no path exists"
+    },
+    "provided-solution": {
+        "tableShape": "1d",
+        "tableDimension1": "n",
+        "initializationCode": "// No other initialization necessary",
+        "for1Variable": "i",
+        "for1Init": "0",
+        "for1Condition": "i < n",
+        "for1Update": "i = i + 1",
+        "setNextEntryCode": "if (i === 0) {\n    entry = 0;\n} else {\n    // For every vertex, j before i\n    for (let j = 0; j < i; j = j + 1) {\n        // If there is an edge from j to i\n        if (adj[j][i] !== null) {\n            entry = Math.min(entry, T(j) + adj[j][i]);\n        }\n    }\n}",
+        "defaultTableEntry": "Infinity",
+        "useDefaultTableEntry": true,
+        "returnValueCode": "result = T(n - 1);",
+        "nextEntryIndex1": "i",
+        "nextEntryIndex2": "j",
+        "useAuxiliaryTableWithDetailedSolution": false,
+
+        "tableEntryDefinition": "TODO: Write",
+        "solutionNotes": "TODO: Write"
+    },
+    "test-cases": [
+        {
+            "name": "Test Case 1",
+            "input": {
+                "n": 6,
+                "adj":
+                [
+                    [null,2,1,null,null,null],
+                    [null,null,4,null,3,null],
+                    [null,null,null,6,null,null],
+                    [null,null,null,null,1,2],
+                    [null,null,null,null,null,1],
+                    [null,null,null,null,null,null]
+                ]
+            }
+        }
+    ]
+}

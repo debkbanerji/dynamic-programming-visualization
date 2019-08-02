@@ -39,6 +39,15 @@
                     "id": "chain-matrix-multiplication"
                 }
             ]
+        },
+        {
+            "name": "Directed Acyclic Graphs",
+            "problems": [
+                {
+                    "name": "Shortest Path in DAG",
+                    "id": "shortest-path-in-dag"
+                }
+            ]
         }
     ]
 }
