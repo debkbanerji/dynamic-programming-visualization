@@ -48,6 +48,57 @@
                     [null,null,null,null,null,null]
                 ]
             }
+        },
+        {
+            "name": "Edge Case 1",
+            "input": {
+                "n": 1,
+                "adj":
+                [
+                    [null]
+                ]
+            }
+        },
+        {
+            "name": "Edge Case 2",
+            "input": {
+                "n": 2,
+                "adj":
+                [
+                    [null, 1],
+                    [null,null]
+                ]
+            }
+        },
+        {
+            "name": "Edge Case 3",
+            "input": {
+                "n": 6,
+                "adj":
+                [
+                    [null,null,null,null,null,null],
+                    [null,null,null,null,null,null],
+                    [null,null,null,null,null,null],
+                    [null,null,null,null,null,null],
+                    [null,null,null,null,null,null],
+                    [null,null,null,null,null,null]
+                ]
+            }
+        },
+        {
+            "name": "Edge Case 4",
+            "input": {
+                "n": 6,
+                "adj":
+                [
+                    [null,1,1,1,1,1],
+                    [null,null,1,1,1,1],
+                    [null,null,null,1,1,1],
+                    [null,null,null,null,1,1],
+                    [null,null,null,null,null,1],
+                    [null,null,null,null,null,null]
+                ]
+            }
         }
     ]
 }
