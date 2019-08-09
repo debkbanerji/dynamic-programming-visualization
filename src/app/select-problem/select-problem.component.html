@@ -63,7 +63,7 @@
                                         <small *ngIf="!progressData[problem.id]['hasRevealedSolution']"
                                                [ngClass]="{
                                             'text-green' : item.completed,
-                                            'text-yellow' : !item.completed
+                                            'text-grey' : !item.completed
                                         }">
                                             <span class="glyphicon" [ngClass]="{
                                             'glyphicon-ok' : item.completed,
@@ -73,13 +73,13 @@
                                         </small>
                                         <small *ngIf="progressData[problem.id]['hasRevealedSolution']">
                                             <del class="text-grey">{{item.type}}</del>
-                                            <span class="text-yellow">&nbsp;&nbsp;Solution Revealed</span>
+                                            <span class="text-grey">&nbsp;&nbsp;Solution Revealed</span>
                                         </small>
                                     </div>
                                 </div>
                             </div>
                             <div *ngIf="!progressData[problem.id]">
-                                <small class="text-yellow">Not yet attempted</small>
+                                <small class="text-grey">Not yet attempted</small>
                             </div>
                         </div>
                     </mat-card>
