@@ -50,6 +50,36 @@
             }
         },
         {
+            "name": "Test Case 2",
+            "input": {
+                "n": 6,
+                "adj":
+                [
+                    [null,2,1,null,null,null],
+                    [null,null,4,null,3,null],
+                    [null,null,null,-6,null,null],
+                    [null,null,null,null,1,2],
+                    [null,null,null,null,null,1],
+                    [null,null,null,null,null,null]
+                ]
+            }
+        },
+        {
+            "name": "Test Case 3",
+            "input": {
+                "n": 6,
+                "adj":
+                [
+                    [null,5,1,2,null,null],
+                    [null,null,4,8,null,null],
+                    [null,null,null,6,null,null],
+                    [null,null,null,null,4,2],
+                    [null,null,null,null,null,3],
+                    [null,null,null,null,null,null]
+                ]
+            }
+        },
+        {
             "name": "Edge Case 1",
             "input": {
                 "n": 1,
@@ -96,6 +126,21 @@
                     [null,null,null,1,1,1],
                     [null,null,null,null,1,1],
                     [null,null,null,null,null,1],
+                    [null,null,null,null,null,null]
+                ]
+            }
+        },
+        {
+            "name": "Edge Case 5",
+            "input": {
+                "n": 6,
+                "adj":
+                [
+                    [null,-1,-1,-1,-1,-1],
+                    [null,null,-1,-1,-1,-1],
+                    [null,null,null,-1,-1,-1],
+                    [null,null,null,null,-1,-1],
+                    [null,null,null,null,null,-1],
                     [null,null,null,null,null,null]
                 ]
             }
