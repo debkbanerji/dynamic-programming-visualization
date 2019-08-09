@@ -1,5 +1,5 @@
 {
-    "version":"2019.7.31-master",
+    "version":"2019.8.8-master",
     "sections": [
         {
             "name": "Strings and Subsequences",
@@ -46,6 +46,10 @@
                 {
                     "name": "Shortest Path in DAG",
                     "id": "shortest-path-in-dag"
+                },
+                {
+                    "name": "Longest Path in DAG",
+                    "id": "longest-path-in-dag"
                 }
             ]
         }

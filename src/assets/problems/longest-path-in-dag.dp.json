@@ -1,12 +1,12 @@
 {
-    "name": "Shortest Path in DAG",
-    "problem-statement": "You are given as input an <b>n &times; n</b> adjacency matrix, <b>adj</b> that represents a DAG (directed acyclic graph) with vertices labelled <b>0 ... n-1</b>. The vertices are labelled in topological order, and <b>adj[ i ][ j ]</b> contains the weight of the edge from vertex <b>i</b> to vertex <b>j</b>, or null if no such edge exists. The goal of this problem is to find the shortest path from vertex <b>0</b> to vertex <b>n - 1</b>.",
+    "name": "Longest Path in DAG",
+    "problem-statement": "You are given as input an <b>n &times; n</b> adjacency matrix, <b>adj</b> that represents a DAG (directed acyclic graph) with vertices labelled <b>0 ... n-1</b>. The vertices are labelled in topological order, and <b>adj[ i ][ j ]</b> contains the weight of the edge from vertex <b>i</b> to vertex <b>j</b>, or null if no such edge exists. The goal of this problem is to find the longest path from vertex <b>0</b> to vertex <b>n - 1</b>.",
     "input": {
         "n": "Number of vertices",
         "adj": "The adjacency matrix"
     },
     "output": {
-        "result": "The length of the shortest path from vertex <b>0</b> to vertex <b>n - 1</b>, or infinity if no path exists",
+        "result": "The length of the longest path from vertex <b>0</b> to vertex <b>n - 1</b>, or negative infinity if no path exists",
         "solution": "An array of the vertices along this path, including the start and end vertices, or an empty array if no path exists"
     },
     "provided-solution": {
@@ -17,20 +17,20 @@
         "for1Init": "0",
         "for1Condition": "i < n",
         "for1Update": "i = i + 1",
-        "setNextEntryCode": "if (i === 0) {\n    entry = 0;\n} else {\n    // For every vertex, j before i\n    for (let j = 0; j < i; j = j + 1) {\n        // If there is an edge from j to i\n        if (adj[j][i] !== null) {\n            entry = Math.min(entry, T(j) + adj[j][i]);\n        }\n    }\n}",
-        "defaultTableEntry": "Infinity",
+        "setNextEntryCode": "if (i === 0) {\n    entry = 0;\n} else {\n    // For every vertex, j before i\n    for (let j = 0; j < i; j = j + 1) {\n        // If there is an edge from j to i\n        if (adj[j][i] !== null) {\n            entry = Math.max(entry, T(j) + adj[j][i]);\n        }\n    }\n}",
+        "defaultTableEntry": "-Infinity",
         "useDefaultTableEntry": true,
         "returnValueCode": "result = T(n - 1);",
         "nextEntryIndex1": "i",
-        "setNextEntryTopDownCode": "if (i === 0) {\n    entry = 0;\n} else {\n    // For every vertex, j before i\n    for (let j = 0; j < i; j = j + 1) {\n        // If there is an edge from j to i\n        if (adj[j][i] !== null) {\n            entry = Math.min(entry, getTableEntry(j) + adj[j][i]);\n        }\n    }\n}",
+        "setNextEntryTopDownCode": "if (i === 0) {\n    entry = 0;\n} else {\n    // For every vertex, j before i\n    for (let j = 0; j < i; j = j + 1) {\n        // If there is an edge from j to i\n        if (adj[j][i] !== null) {\n            entry = Math.max(entry, getTableEntry(j) + adj[j][i]);\n        }\n    }\n}",
         "returnValueTopDownCode": "result = getTableEntry(n - 1);",
         "useAuxiliaryTableWithDetailedSolution": true,
-        "detailedSetNextEntryCode": "let secondaryEntry = null;\nif (i === 0) {\n    entry = 0;\n} else {\n    // For every vertex, j before i\n    for (let j = 0; j < i; j = j + 1) {\n        // If there is an edge from j to i\n        if (adj[j][i] !== null) {\n            if (T(j) + adj[j][i] < entry) {\n                entry = T(j) + adj[j][i];\n                secondaryEntry = j;\n            }\n        }\n    }\n}",
-        "detailedReturnValueCode": "let solution = [];\nif (T(n - 1) !== Infinity) {\n    let i = n - 1;\n    while (i !== null) {\n        // Append to the front of solution\n        solution.unshift(i);\n        i = T2(i);\n    }\n}\nlet result = T(n - 1);",
-        "detailedSetNextEntryTopDownCode": "let secondaryEntry = null;\nif (i === 0) {\n    entry = 0;\n} else {\n    // For every vertex, j before i\n    for (let j = 0; j < i; j = j + 1) {\n        // If there is an edge from j to i\n        if (adj[j][i] !== null) {\n            if (getTableEntry(j) + adj[j][i] < entry) {\n                entry = getTableEntry(j) + adj[j][i];\n                secondaryEntry = j;\n            }\n        }\n    }\n}",
-        "detailedReturnValueTopDownCode":  "let solution = [];\nif (getTableEntry(n - 1) !== Infinity) {\n    let i = n - 1;\n    while (i !== null) {\n        // Append to the front of solution\n        solution.unshift(i);\n        i = T2(i);\n    }\n}\nlet result = T(n - 1);",
-        "tableEntryDefinition": "<b>T[ i ]</b> is the length of the shortest path from vertex <b>0</b> to vertex <b>i</b>, or infinity if no such path exists",
-        "auxiliaryTableEntryDefinition": "<b>T2[ i ]</b> is the index of the second last vertex along the shortest path from vertex <b>0</b> to vertex <b>i</b>, or null if vertex <b>i</b> has no incoming edges",
+        "detailedSetNextEntryCode": "let secondaryEntry = null;\nif (i === 0) {\n    entry = 0;\n} else {\n    // For every vertex, j before i\n    for (let j = 0; j < i; j = j + 1) {\n        // If there is an edge from j to i\n        if (adj[j][i] !== null) {\n            if (T(j) + adj[j][i] > entry) {\n                entry = T(j) + adj[j][i];\n                secondaryEntry = j;\n            }\n        }\n    }\n}",
+        "detailedReturnValueCode": "let solution = [];\nif (T(n - 1) !== -Infinity) {\n    let i = n - 1;\n    while (i !== null) {\n        // Append to the front of solution\n        solution.unshift(i);\n        i = T2(i);\n    }\n}\nlet result = T(n - 1);",
+        "detailedSetNextEntryTopDownCode": "let secondaryEntry = null;\nif (i === 0) {\n    entry = 0;\n} else {\n    // For every vertex, j before i\n    for (let j = 0; j < i; j = j + 1) {\n        // If there is an edge from j to i\n        if (adj[j][i] !== null) {\n            if (getTableEntry(j) + adj[j][i] > entry) {\n                entry = getTableEntry(j) + adj[j][i];\n                secondaryEntry = j;\n            }\n        }\n    }\n}",
+        "detailedReturnValueTopDownCode":  "let solution = [];\nif (getTableEntry(n - 1) !== -Infinity) {\n    let i = n - 1;\n    while (i !== null) {\n        // Append to the front of solution\n        solution.unshift(i);\n        i = T2(i);\n    }\n}\nlet result = T(n - 1);",
+        "tableEntryDefinition": "<b>T[ i ]</b> is the length of the longest path from vertex <b>0</b> to vertex <b>i</b>, or negative infinity if no such path exists",
+        "auxiliaryTableEntryDefinition": "<b>T2[ i ]</b> is the index of the second last vertex along the longest path from vertex <b>0</b> to vertex <b>i</b>, or null if vertex <b>i</b> has no incoming edges",
         "solutionNotes": "This solution runs in <b>O(n<sup>2</sup>)</b> time, since the graph is represented using an adjacency matrix. This is because we need to check all vertices before vertex <b>i</b> when populating <b>T[ i ]</b>. If the DAG is instead represented as an adjacency list, this can be improved to <b>O(m + n)</b>, where <b>m</b> is the number of edges in the DAG, with preprocessing that doesn't affect the asymptotic time complexity. Note that the time taken to topologically sort a DAG is linear in the size of its representation (assuming it's an adjacency list or an adjacency matrix)."
     },
     "test-cases": [
